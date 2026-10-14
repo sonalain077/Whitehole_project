@@ -20,7 +20,7 @@ published here) and set `OPENAI_API_KEY` (environment variable or `.env`, see `.
 ```bash
 python -m venv .venv                      # Windows: use .venv\Scripts\python.exe below
 .venv/bin/python -m pip install -r requirements.txt  # tzdata + this project
-.venv/bin/python -m unittest discover -s tests       # 100 offline tests, no key needed
+.venv/bin/python -m unittest discover -s tests       # 101 offline tests, no key needed
 .venv/bin/python -m aie2609 run --max-cost-usd 10    # end to end, ~4.5 USD, ~25 min
 ```
 
