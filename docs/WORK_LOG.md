@@ -636,6 +636,22 @@ log) and updated to the current state where it was out of date. The French texts
 prompt would change the cache key and the delivered results would no longer be reproduced by
 `run`.
 
+## 2026-10-14 — agent files and a shorter entry point
+
+**Request:** make `AGENTS.md` and `CLAUDE.md` follow the usual conventions and state clearly
+that the project was started with Codex under `AGENTS.md`, then taken over by Claude Code with
+a fresh context acting as a second opinion (reviewer of Codex's work, judge of the model's
+outputs); make the repository understandable in about 15 minutes.
+
+**Done:** `AGENTS.md` condensed into the standard sections (project, setup and commands,
+rules, model and budget, code and tests, security, working loop) without changing its intent.
+`CLAUDE.md` imports it and states Claude Code's role, what to read on demand, environment,
+commands, known traps and the definition of done. `README.md` reduced to what it does, how to
+run it, results, how it works and a repository map. `ARCHITECTURE.md` now opens with a Mermaid
+diagram of the pipeline and ends with a diagram of how the project was built with the two
+agents. `IMPLEMENTATION_PLAN.md` reduced to the batch table (with the agent of each batch),
+the main decisions and the budget; the detailed history stays in this log.
+
 ## Format of the next entries
 
 For each batch: goal; changes; decisions and useful alternatives; verification commands actually

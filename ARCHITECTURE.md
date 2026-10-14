@@ -1,158 +1,102 @@
 # Architecture
 
-Requirements come from the assignment (pages 2 to 5). Choices: a sequential
-command-line pipeline, local files, one runtime dependency (`tzdata`), no web
-interface or long-running service. History of how each part was reached is in
-[`docs/WORK_LOG.md`](docs/WORK_LOG.md).
+## 1. Pipeline
 
-## Flow
-
-```text
-news.json + sp500.csv → strict loading / normalisation → canonical universe
-   → per pass: classify every article → validate → targeted review of alerted
-     articles → deterministic composition with quality alerts
-   → majority vote over passes → composition check → time-decay scoring
-   → entities.csv + scores.csv + manifests + usage report
-                       ↕
-        local cache of validated answers (one replica per pass)
+```mermaid
+flowchart TD
+    IN["news.json + sp500.csv"] --> LOAD["Strict loading and normalisation<br/>(code)"]
+    LOAD --> PASS["Pass 1, 2, 3 — independent samples"]
+    PASS --> LLM["Classify each article: company, role, label, exact quote<br/>(gpt-5.6-terra, strict JSON schema)"]
+    LLM --> VAL{"Valid?<br/>(code)"}
+    VAL -- "no: retry with the validator's reason" --> LLM
+    VAL -- yes --> ALERT{"Likely omission or<br/>false match? (code)"}
+    ALERT -- yes --> REV["Targeted review of that article<br/>(gpt-5.6-terra, constrained by code)"]
+    ALERT -- no --> COMP["Composition with provenance (code)"]
+    REV --> COMP
+    COMP --> VOTE["Majority vote across the 3 passes (code)"]
+    VOTE --> SCORE["Time-decay scoring (code)"]
+    SCORE --> OUT["entities.csv + scores.csv<br/>+ run_report.json (calls, tokens, cost)"]
 ```
 
-## What the code does, what the model does, and why
+### What the code does, what the model does, and why
 
 | Step | Owner | Why |
 | --- | --- | --- |
-| Reading, input schemas, Unicode, dates | Code | Deterministic, testable rules |
-| Allowed universe and dual share classes | Code | Prevents invented tickers and double counting |
-| Finding the companies an article mentions, brands/subsidiaries to parent, role of each company (subject versus mention), label per company | `gpt-5.6-terra` | Needs reading comprehension of the article in context |
-| Neutral label for roles the assignment defines as neutral | Code (JSON schema) and model | The schema makes a directional label impossible for those roles |
-| Schema, tickers, labels, roles, exact evidence, duplicates | Code | A model answer is not trusted data |
-| Detecting likely omissions and forbidden aliases (`entity_aliases.json`) | Code | Lexical checks are cheap and reproducible; they only trigger a review |
-| Reviewing an alerted article | Model, constrained by code | Code rejects removals or label changes in `additions-only` mode |
-| Combining passes (majority vote), weighting, summing, sorting, writing | Code | Fixed formula; reproducible arithmetic |
-| Measuring accuracy | Human/agent adjudication, scored by code | Structure does not prove semantic correctness |
+| Reading, schemas, dates, Unicode, share classes | Code | Deterministic and testable |
+| Finding the companies, brand → parent, role, label | `gpt-5.6-terra` | Needs reading comprehension in context |
+| Neutral label for "rating issuer", "source", "comparison", "other mention" | Schema + model | The assignment defines these as neutral; the schema makes another label impossible |
+| Validation of every answer (universe, roles, exact quote, duplicates) | Code | A model answer is not trusted data |
+| Flagging likely omissions and false matches (`entity_aliases.json`) | Code | Cheap and reproducible; only triggers a review |
+| Vote, weights, sums, CSV writing | Code | Fixed formula, reproducible arithmetic |
+| Measuring accuracy | Second-model judge + user, scored by code | Structure does not prove a label is right |
 
 The model never computes the score, never sees other articles and has no tools.
 
-## Modules (`src/aie2609/`)
+### Key design choices
 
-- `cli.py` — subcommands; data errors map to exit code 2.
-- `ingestion.py`, `normalization.py`, `dates.py`, `audit.py` — strict loading of both
-  inputs (duplicate keys and ids, missing fields, malformed rows), NFC and U+200B
-  removal on an in-memory copy, New York times with ambiguous or nonexistent local
-  times rejected, read-only audit report.
-- `classification.py` — prompt (`SYSTEM_PROMPT`, `PROMPT_VERSION`), strict JSON schema
-  and `validate_entities`.
-- `llm.py` — HTTPS Responses client on the standard library (`urllib`): fixed OpenAI
-  endpoint, redirects refused, response size capped, no fallback model.
-- `runner.py` — `Classifier`: cache, bounded attempts with validator feedback, budget
-  reservation, durable checkpoints, manifest.
-- `review.py` — lexical coverage hints and `ReviewClassifier` (second pass on
-  alerted articles, same model, `additions-only` mode enforced by code).
-- `composition.py` — applies validated review overlays, keeps provenance, raises
-  blocking and advisory alerts.
-- `pipeline.py` — the `run` command: passes, reviews, composition, `majority_vote`,
-  export, run report.
-- `scoring.py` — time-decay formula and CSV export with manifest.
-- `usage.py` — prices, token accounting, budget, usage summary.
-- `reference.py` — blind adjudication cases and per-version accuracy;
-  `evaluation.py` — earlier two-version review sample.
-- `entity_aliases.json` — versioned configuration: brands, publications,
-  subsidiaries, ambiguous names and forbidden associations observed in the data.
+- **Whole article + full company list per request**, no lexical prefilter: a prefilter
+  would lose brands and subsidiaries (Waymo, CNBC, iShares…).
+- **Roles before labels** (prompt `entity-sentiment-v6-roles`): most errors of earlier
+  prompts were on the border between "implication" and "mere mention" (a bank issuing a
+  downgrade labelled negative, a peer's small move labelled positive).
+- **Fail closed**: invalid answers are retried with a bounded number of attempts, never
+  replaced by `neutral`; a network error or unknown cost stops the run; reviews in
+  `additions-only` mode cannot remove or relabel anything.
+- **Three passes and a vote**: the three passes agree on 93.7 % of pairs; the vote removes
+  one-off mistakes and gives an agreement level per pair, for about 1.5 times the cost of one
+  pass (passes 2–3 reuse the provider's prompt cache).
+- **Everything traceable**: each run directory keeps every pass, review, vote and manifest
+  with input hashes; `results/` is a byte-identical copy of the delivered run.
 
-## Model strategy
+### Modules (`src/aie2609/`)
 
-One complete article per request, together with the full canonical universe (no
-lexical prefilter, which could lose brands and subsidiaries). Responses API with a
-strict JSON-schema `text.format`, `reasoning.effort=low`, `store=false`,
-`service_tier=default` and at most 4,096 output tokens. Instructions and data are in
-separate messages; article text is treated as untrusted data.
+| Module | Responsibility |
+| --- | --- |
+| `cli.py` | Subcommands (`run`, `usage`, `audit`, diagnosis and review tools) |
+| `ingestion.py`, `normalization.py`, `dates.py`, `audit.py` | Strict loading, U+200B removal on a copy, New York time |
+| `classification.py` | Prompt, JSON schema, `validate_entities` |
+| `llm.py` | Minimal HTTPS client (standard library), no redirects, no fallback model |
+| `runner.py` | Cache, bounded retries with validator feedback, budget, checkpoints |
+| `review.py`, `composition.py`, `entity_aliases.json` | Coverage alerts, targeted review, composition |
+| `pipeline.py` | The `run` command: passes, vote, export, run report |
+| `scoring.py` | Time-decay formula and CSV export |
+| `usage.py` | Prices, token accounting, budget, usage summary |
+| `reference.py`, `evaluation.py` | Accuracy reference and per-version scoring |
 
-Prompt `entity-sentiment-v6-roles` (details in
-[`docs/PROMPT_DESIGN.md`](docs/PROMPT_DESIGN.md)) asks first for the role of every
-company: `subject`, `counterparty` and `affected_peer` may carry any label;
-`rating_issuer`, `source`, `comparison` and `other_mention` are always neutral, as the
-assignment defines neutral ("the bank issuing the rating, a media source, a customer,
-a location, a size comparison"). The schema has two `anyOf` branches, so the decoder
-cannot pair those roles with a directional label, and the validator checks it again.
-Thirteen synthetic examples are checked by the tests. Each entity carries an exact
-evidence excerpt; this improves traceability but proves neither the right parent nor
-completeness.
+### Cost
 
-## Reliability mechanisms
+Measured per attempt from the API's own token counts, priced at 2 / 0.20 / 2.50 / 12 USD per
+million tokens (input / cache read / cache write / output, checked 12 October). One cold pass
+costs **0.030 USD per article**, 86 % of it writing the ~14k-token common prefix to the
+provider cache; passes 2–3 read it back for ~0.006 USD per article. A budget is reserved
+before each call and the run stops before exceeding `--max-cost-usd`.
 
-- **Validation**: unknown keys, tickers outside the universe, invalid labels or roles,
-  duplicates, evidence that is not an exact excerpt, incomplete or refused responses
-  are all errors; nothing is converted to `neutral`.
-- **Validator feedback**: a rejected answer is retried with the fixed rejection reason
-  (never the rejected text). Attempts are bounded (3 by default in `run`) and billed.
-- **Coverage checks**: a reliable alias missing from the answer (for example the Wall
-  Street Journal → NWSA) triggers an `additions-only` review; a forbidden association
-  (social network X → Block, SpaceX → Exxon) triggers a targeted review that may
-  remove it. Hints never add an entity or a label by themselves.
-- **Independent passes and vote**: with `--passes 3` each pass uses its own cache
-  replica (`replica` enters the cache key; replica 0 shares the ordinary cache).
-  `majority_vote` keeps pairs proposed by a strict majority with their majority label;
-  a label tie becomes `neutral` and is counted. This trades about 1.5 times the cost
-  for less sampling variance and a per-pair agreement level.
-- **Fail closed**: an unresolved blocking alert is exported only by `run`, with status
-  `completed_with_alerts` and `ready_for_scoring: false`; `export` alone refuses it.
-  A transport error, an exhausted budget or an unknown cost stops the run.
+## 2. How the project was built
 
-## Reproducibility and errors
-
-The SHA-256 cache key covers normalised content, date, canonical universe,
-normalisation version, prompt, schema, model, parameters and replica. The article id
-is excluded: two ids with identical content and date may share an analysis while
-remaining two articles for scoring. A cached answer is validated again on replay; a
-corrupted cache entry stops the run. Outputs are sorted and sums use `math.fsum`. A new
-API call may vary; the cache replays a validated result exactly.
-
-A 429 error explicitly coded `rate_limit_exceeded` allows a bounded wait and retry
-without releasing the reserved cost. A network interruption, a key or quota error or
-unverifiable consumption stops the run; there is no implicit transport retry.
-Validation errors are recorded as fixed reasons in `validation_error`, never with the
-rejected content. Final exports are written only after complete processing.
-
-## Usage and cost
-
-Every attempt records article, status, model, response id, input tokens, provider
-cache reads and writes, output tokens (reasoning included) and duration. API usage is
-authoritative; missing values stay unknown, never zero. Prices for the standard tier
-and short context, checked on 2026-10-12: input 2 USD per million tokens, cache read
-0.20, cache write 2.50, output 12
-([model page](https://developers.openai.com/api/docs/models/gpt-5.6-terra),
-[prompt caching](https://developers.openai.com/api/docs/guides/prompt-caching)).
-
-```text
-cost = ((input - cache_read - cache_write) × input_price
-        + cache_read × cache_read_price
-        + cache_write × cache_write_price
-        + output × output_price) / 1_000_000
+```mermaid
+flowchart LR
+    PDF["Assignment PDF"] --> RULES["AGENTS.md<br/>rules for the agent"]
+    RULES --> CODEX["Codex builds batches 0–4<br/>tests + WORK_LOG"]
+    CODEX --> AUDIT["Claude Code, fresh context<br/>audits Codex's work"]
+    AUDIT --> FIX["Fixes: end-to-end run,<br/>prompt v6 roles, vote, usage"]
+    FIX --> RUNS["Paid runs on<br/>the 100 articles"]
+    RUNS --> JUDGE["Claude as second-model judge<br/>blind reference + user review"]
+    JUDGE --> PICK["Delivered version chosen<br/>by measured accuracy"]
+    USER(("User")) -. "budget, publication,<br/>final decisions" .-> RUNS
+    USER -.-> PICK
 ```
 
-Cost per article of a full run = total cost of its attempts / number of articles.
-`run_report.json` and `aie2609 usage` report calls, retries, local cache replays,
-tokens and cost per category, per step and per article, and warn when replays make
-the figure lower than a cold run. Measured: one cold pass costs 0.030 USD per article
-(`run-final-v1`: 3.02 USD, 86 % of it provider cache writes, because each request
-repeats a ~14,000-token prefix of instructions, universe and schema). Passes 2 and 3
-read that prefix from the provider cache and cost about 0.006 USD per article, so
-three passes cost about 0.045 USD per article. The main lever for further savings is
-reusing that cached prefix, for example by running passes or batches back to back.
+1. **Rules first.** The user gave Codex its rules in `AGENTS.md`, derived from the PDF:
+   business constraints, model and budget rules, a batch loop with tests and a dated log
+   entry for every step.
+2. **Build with Codex** (12–13 October): ingestion, classification client, validation,
+   cache, budget, review, composition and scoring, each batch tested offline and logged.
+3. **Audit with Claude Code** (14 October), deliberately a different agent with a fresh
+   context, like an LLM-as-judge over the first agent's work. It found that the evaluators
+   could not run the pipeline in one command and that the submitted CSV files could not be
+   reproduced by the code; `CLAUDE.md` records that role.
+4. **Fix and measure.** End-to-end `run`, usage reporting, prompt v6 with roles, three passes
+   with a vote; then every version was scored on a blind reference that Claude adjudicated
+   as a second model and the user reviewed. The best measured version was delivered.
 
-Before each call a conservative reservation (UTF-8 bytes of the request plus 4,096,
-plus the maximum output) is checked against the budget and written before sending; it
-is replaced by the measured cost afterwards. Requests above 200,000 estimated tokens
-are refused. After an interruption the reservation remains and `total_cost_usd` is
-`null`, distinct from zero dollars. This local control is not a provider-side ceiling;
-the key's own spend cap is an additional protection.
-
-## Security and proportion
-
-The key comes from `OPENAI_API_KEY` or a local `.env` loaded only by paid commands; an
-existing non-empty variable wins; the loader reads that single key, does no parent
-directory search, interpolation or execution, and never prints it. Caches, run
-outputs and `.env` are ignored by Git. No telemetry and no network access other than
-the required API during an authorised run. Input files are never written; output
-paths that would overwrite an input or the cache are refused. Tests use simulated
-responses and make no network call.
+The full trace (commands, costs, failures, decisions) is in [`docs/WORK_LOG.md`](docs/WORK_LOG.md).
