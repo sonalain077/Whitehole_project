@@ -42,6 +42,9 @@ the same summary later; `aie2609 run --dry-run` previews the requests without a 
 Accuracy is measured on an agent-adjudicated reference, not on human ground truth; method
 and limits in [`review/reference-v1/README.md`](review/reference-v1/README.md).
 
+**Presentation** (approach, decisions, analysis of the results, limits):
+[`docs/presentation.pdf`](docs/presentation.pdf).
+
 ## How it works
 
 1. **Code** loads and checks both files strictly (dates, duplicates, invisible Unicode,
@@ -67,7 +70,7 @@ Diagrams of the pipeline and of how the project was built with two coding agents
 | `review/reference-v1/` | Accuracy measurement of every version |
 | `AGENTS.md`, `CLAUDE.md` | Rules and context given to the coding agents (Codex, then Claude Code) |
 | `ARCHITECTURE.md`, `DATA_MODEL.md`, `IMPLEMENTATION_PLAN.md` | Design, contracts, plan |
-| `docs/` | Deep dive: work log, prompt design, data quality, earlier reviews |
+| `docs/` | Presentation (PDF), work log, prompt design, data quality, earlier reviews |
 
 ## Limits
 
