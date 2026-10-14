@@ -181,7 +181,7 @@ flowchart LR
    set by the user.
 6. **Accuracy measurement** — every version was compared on all the cases where versions
    disagree plus random checks. Here Claude acts as an LLM-as-judge in the strict sense: it judged
-   the model's outputs as a second model, and the user reviewed the debatable ones
+   the model's outputs as a second model, and the user reviewed all 21 debatable cases
    ([`review/reference-v1`](review/reference-v1/README.md)).
 7. **Delivered version** — the one with the best measured accuracy (0.933), copied to
    [`results/`](results/README.md).

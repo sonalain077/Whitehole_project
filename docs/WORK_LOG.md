@@ -664,6 +664,14 @@ project instead of the clone, and the project's `.venv` was re-pointed to the cl
 was found when a new test could not see the new code, and fixed by reinstalling the project in
 editable mode; no file of the project was affected.
 
+## 2026-10-14 — review of every debatable case
+
+**Done (user):** after the four cases discussed earlier (R004, R008, R009, R013), the user
+reviewed the 17 remaining debatable decisions of `review/reference-v1` from a table giving
+each case, the adjudicator's decision and its reason, and approved all of them without change.
+All 21 debatable decisions are now human-reviewed; no score changes. Wording updated in
+`review/reference-v1/README.md`, `ARCHITECTURE.md` and slide 6 of the presentation.
+
 ## Format of the next entries
 
 For each batch: goal; changes; decisions and useful alternatives; verification commands actually

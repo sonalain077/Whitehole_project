@@ -21,9 +21,10 @@ with the tool; every note starts with `agent;`. Safeguards and limits:
 - It is a different model from `gpt-5.6-terra`, hence a different family of errors,
   but it is not human ground truth.
 - 21 decisions are marked `debatable`: a reasonable annotator could decide otherwise.
-  The user read the reasoning for R004 (PCG), R008-R009 (AMZN, HD) and R013 (ADBE),
-  found them debatable but defensible, and approved the whole set without changing a
-  decision.
+  The user reviewed all 21: R004 (PCG), R008-R009 (AMZN, HD) and R013 (ADBE) were
+  discussed in detail, the 17 others were checked against the adjudicator's stated
+  reason. Every decision was approved without change, so the scores below are those of
+  the reviewed reference.
 
 ## Result (`score-reference --dir review/reference-v1`)
 
