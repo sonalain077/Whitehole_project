@@ -1,173 +1,160 @@
-# Contrats de données
+# Data contracts
 
-Statut : contrat d'implémentation initial. Les exigences de sortie et de calcul
-proviennent du sujet, page 4 ; les politiques d'erreur ci-dessous sont nos choix.
+Output and scoring requirements come from the assignment, page 4; the error
+policies below are our choices.
 
-## Entrées
+## Inputs
 
-`news.json` : tableau d'objets avec `id`, `date`, `headline`, `body`, tous chaînes
-non vides. `id` doit être unique ; `date` suit exactement `YYYY-MM-DDTHH:MM`, en
-heure locale de New York. Le jeu fourni contient 100 articles ; le chargeur sera
-générique et ne codera pas ce nombre en dur.
+`news.json`: array of objects with `id`, `date`, `headline`, `body`, all non-empty
+strings. `id` must be unique; `date` follows exactly `YYYY-MM-DDTHH:MM` in New York
+local time. The supplied file has 100 articles; the loader is generic and does not
+hard-code that number.
 
-`sp500.csv` : colonnes `symbol,security,gics_sector,headquarters,date_added`.
-Le ticker et le nom sont requis pour classifier ; les autres colonnes sont des
-métadonnées. Aucun ticker ne peut être déduit de l'appartenance actuelle réelle
-au S&P 500 : le fichier fourni définit l'univers. Il contient 503 lignes.
+`sp500.csv`: columns `symbol,security,gics_sector,headquarters,date_added`. Ticker and
+name are required for classification; the other columns are metadata. No ticker may
+be inferred from real-world S&P 500 membership: the supplied file defines the
+universe. It has 503 rows.
 
-Politiques prévues : UTF-8 (BOM initial toléré), rejet des champs requis manquants,
-des types incorrects, des clés JSON dupliquées, des colonnes CSV dupliquées,
-des lignes mal formées, des symboles dupliqués et des identifiants d'article
-dupliqués. Champs supplémentaires : les signaler et les ignorer explicitement.
-Refuser des entrées vides et toute erreur de date avant de dépenser des tokens.
+Policies: UTF-8 (leading BOM tolerated); reject missing required fields, wrong
+types, duplicate JSON keys, duplicate CSV columns, malformed rows, duplicate symbols
+and duplicate article ids. Extra fields are reported and explicitly ignored. Empty
+inputs and any date error are rejected before any token is spent.
 
-## Normalisation et identité
+## Normalisation and identity
 
-- Conserver les sources ; conserver texte brut et texte normalisé séparément en mémoire.
-- Normaliser en Unicode NFC et les fins de ligne ; retirer U+200B détecté dans
-  les noms/tickers en enregistrant l'anomalie. Ne pas supprimer arbitrairement
-  tous les caractères Unicode de format ni translittérer les noms.
-- Enlever les espaces de bord des champs structurants ; ne pas supprimer la
-  ponctuation du texte ou de tickers tels que `BRK.B`.
-- Détecter des contenus répétés et les signaler. Des identifiants distincts restent
-  des articles distincts dans l'agrégation du sujet ; ne pas les fusionner en silence.
-- Appliquer les correspondances `GOOG → GOOGL`, `FOX → FOXA`, `NWS → NWSA` ;
-  `BRK.B` est la classe imposée. Un alias de classe n'autorise aucune sortie hors univers.
-- Une entreprise canonique ne possède qu'une ligne par article. Les doublons de
-  classification sont des erreurs à résoudre, surtout lorsque les labels diffèrent.
+- Keep the sources; keep raw and normalised text separately in memory.
+- Normalise to Unicode NFC and line endings to LF; remove U+200B found in names or
+  tickers and record the anomaly. Do not strip every Unicode format character and do
+  not transliterate names.
+- Strip surrounding spaces of structural fields; never remove punctuation from text or
+  from tickers such as `BRK.B`.
+- Detect and report repeated content. Distinct ids remain distinct articles for
+  aggregation; never merge them silently.
+- Apply `GOOG → GOOGL`, `FOX → FOXA`, `NWS → NWSA`; `BRK.B` is the designated class.
+  A class alias never authorises an output outside the universe.
+- A canonical company has one row per article. Duplicate classifications are errors,
+  especially when their labels differ.
 
-## Dates et agrégation
+## Dates and aggregation
 
-Interpréter les dates via `America/New_York`. Refuser une heure locale ambiguë ou
-inexistante plutôt que de choisir silencieusement un décalage. Documenter la
-disponibilité de `tzdata` pour Windows. Convertir les instants en UTC avant de
-soustraire afin de mesurer la durée réelle, y compris aux changements d'heure.
+Dates are interpreted in `America/New_York`. Ambiguous or nonexistent local times are
+rejected rather than silently given an offset. `tzdata` provides the zone on Windows.
+Instants are converted to UTC before subtraction to measure real elapsed time,
+including across daylight-saving changes.
 
 ```text
 as_of = 2026-09-29 00:00 America/New_York
 days = (as_of_utc - article_date_utc).total_seconds() / 86400
 weight = 0.5 ** (days / 7)
 label_value = {positive: +1, neutral: 0, negative: -1}
-value(ticker) = somme(label_value × weight)
+value(ticker) = sum(label_value × weight)
 ```
 
-Choix : refuser les articles postérieurs à `as_of` avec une erreur explicite,
-sans tronquer leur âge à zéro. Aucune moyenne, normalisation par nombre d'articles
-ou pondération supplémentaire. Ne pas arrondir les contributions intermédiaires.
-Addition stable avec `math.fsum` ; sérialisation décimale de précision suffisante
-pour reconstruire le flottant, jamais `NaN`/infini et pas de zéro négatif.
+Choice: an article later than `as_of` is rejected with an explicit error rather than
+having its age truncated to zero. No averaging, normalisation by article count or extra
+weighting. Intermediate contributions are not rounded. Stable summation with
+`math.fsum`; decimal serialisation precise enough to rebuild the float, never
+`NaN`/infinity and no negative zero.
 
-## Réponse modèle interne — lot 2
+## Model answer
 
-Objet strict contenant une liste `entities`. Chaque élément : `ticker`, `label`
-et `evidence` (court extrait exact du texte normalisé). L'identifiant d'article
-vient du code, pas du modèle. Une liste vide est autorisée lorsqu'aucune entreprise
-de l'univers n'est identifiée ; elle doit apparaître comme article traité dans le
-manifeste. Valider tous les champs et refuser les champs inattendus du modèle.
+A strict object containing a list `entities`. Each item: `ticker`, `role`, `label` and
+`evidence` (a short exact excerpt of the normalised headline or body). The article id
+comes from the code, not the model. An empty list is allowed when no company of the
+universe is identified; it still appears as a processed article. All fields are
+validated and unexpected fields are rejected.
 
-L'extrait reste interne ; le CSV final ne gagne aucune colonne. Il peut documenter
-une mention neutre. La présence de l'extrait ne prouve pas la relation filiale/parent
-ni la classification ; ces points font partie de la revue humaine.
+| Field | Values |
+| --- | --- |
+| `ticker` | canonical ticker of the supplied universe (enforced by the schema) |
+| `role` | `subject`, `counterparty`, `affected_peer` (any label); `rating_issuer`, `source`, `comparison`, `other_mention` (always `neutral`) |
+| `label` | `positive`, `neutral`, `negative` |
+| `evidence` | 1 to 500 characters, an exact substring of the headline or the body |
 
-Le schéma transmis impose les tickers canoniques autorisés et les trois labels.
-Le validateur vérifie également que l'extrait fait entre 1 et 500 caractères et
-figure tel quel dans le titre ou le corps normalisé ; un doublon canonique est
-refusé. Le tri final des entités est par ticker. Le prompt initial est versionné
-`entity-sentiment-v1` ; le pilote retenu utilise `entity-sentiment-v2`.
-Le prompt actif est `entity-sentiment-v5-rcorcf`, vérifié hors réseau et exécuté
-sur les 100 articles, avec le même contrat de sortie. Les réponses incomplètes
-et refus du modèle sont des erreurs. Le validateur structurel ne détecte pas les omissions.
+The schema has two `anyOf` branches so that an always-neutral role cannot be generated
+with a directional label; the validator checks the same rule, including on cached
+answers. A duplicate canonical company is rejected. Entities are sorted by ticker.
+Incomplete answers and refusals are errors. Answers produced before prompt v6 have no
+`role` and remain readable; live answers must have one. The evidence and the role stay
+internal; the submitted CSV files gain no column. The structural validator does not
+detect omissions; that is the job of the coverage checks and the reference.
 
-## Artefacts de classification — lot 2
+## Classification run artifacts
 
-- `classifications.json` : `schema_version: 1`, tableau `articles`, chaque article
-  ayant `id` et `entities`. Une liste vide y est conservée. Ce fichier n'est écrit
-  qu'après validation de toute la sélection ; il ne remplace pas les CSV à livrer.
-- `usage.json` : `schema_version: 1`, tarifs et date de vérification, compteurs
-  d'appels et de cache local, tokens connus, coûts connus, coûts inconnus, budget
-  et détail par tentative. Les montants USD sont des chaînes décimales ou `null`.
-  Le coût par article sans cache n'est calculé que pour une sélection entièrement
-  traitée sans cache local et sans coût inconnu.
-- `run_manifest.json` : `schema_version: 1`, statut `running`, `completed` ou
-  `failed`, modèle, version du prompt, empreintes des deux sources, identifiants
-  sélectionnés et prévisualisation des réservations et clés de cache.
+- `classifications.json`: `schema_version: 1`, array `articles`, each with `id` and
+  `entities`; an empty list is kept. Written only after the whole selection is valid.
+- `usage.json`: `schema_version: 1`, prices and their check date, call and local cache
+  counters, known tokens, known and unknown costs, budget, and the detail of every
+  attempt. USD amounts are decimal strings or `null`. The uncached cost per article is
+  computed only for a selection fully processed without local cache or unknown cost.
+- `run_manifest.json`: `schema_version: 1`, status `running`, `completed` or `failed`,
+  model, prompt version, replica, SHA-256 of the sources, selected ids and a preview of
+  reservations and cache keys.
 
-Le manifeste fait foi pour le succès. Les écritures utilisent un fichier temporaire
-puis un remplacement atomique par fichier. Un arrêt brutal peut laisser `running`
-et une tentative `in_flight` : ce n'est pas un résultat complet. Les dossiers de
-run doivent être nouveaux et distincts du cache et des entrées.
+The manifest is authoritative for success. Writes go to a temporary file followed by
+an atomic replace. A hard stop may leave `running` and an `in_flight` attempt: that is
+not a complete result. Run directories must be new and separate from cache and inputs.
 
-## Relecture expérimentale — extension du lot 2
+## Targeted review
 
-La commande `review` accepte un `classifications.json` initial, strictement validé
-contre les articles et l'univers courants. C'est un artefact dérivé des deux
-sources, pas un enrichissement métier externe. Son empreinte est ajoutée au
-manifeste. Le résultat conserve le même schéma de classification dans un nouveau
-dossier ; il n'écrase ni ne fusionne la première analyse.
+`review` reads an initial `classifications.json`, strictly validated against the
+current articles and universe, and writes the same classification schema into a new
+directory plus `review_changes.json` (`schema_version: 2`): for each id the coverage
+hints, review reasons, `missing_before`, `unresolved_hints_after`, `added`, `removed`
+and `label_changes`. Several `candidate_tickers` in a hint mean an ambiguity to
+resolve, not several additions. In `additions-only` mode the validator rejects any
+removal or label change, including from the cache.
 
-La version ciblée produit `review_changes.json` avec `schema_version: 2`,
-`review_version`, `coverage_version`, `alias_version` et `articles`. Pour chaque
-`id` : `coverage_hints` (`candidate_tickers`, `kind`, `field`, `mention`, `excerpt`
-et éventuellement `alias_type`), `review_reasons`, `missing_before`,
-`unresolved_hints_after`, `added`, `removed` et `label_changes` (`ticker`, `before`,
-`after`). Plusieurs `candidate_tickers` signifient une ambiguïté à résoudre, pas
-plusieurs ajouts. Les listes d'indices manquants sont des alertes lexicales, pas
-une liste d'erreurs certifiées. Les changements d'extrait seuls ne sont pas
-répertoriés comme changements de label ; chaque version conserve ses preuves.
+## Composition
 
-La réussite du run atteste la validation structurelle ; la justesse et l'intérêt
-de la proposition doivent être évalués séparément avant de la retenir.
+`compose` reads a complete baseline, zero or more completed review directories and
+optionally a complete candidate. A review is applied only if its manifest references
+the baseline hash, its ids match `review_changes.json`, its declared changes match the
+classifications exactly and no reliable hint remains unresolved; two reviews cannot
+replace the same article. Output: `classifications.json` and `composition_report.json`
+(version, hashes, provenance per article, blocking and advisory alerts, differences
+with the candidate). Omissions of a reliable alias and forbidden aliases are blocking;
+missing anchors, ambiguity and a possible analyst role transfer are advisory.
+`ready_for_scoring` is true only without blocking alerts and, when a candidate is
+given, without disagreement with it.
 
-Avec `review --additions-only`, le prompt demande de préserver toutes les entités
-et tous les labels initiaux, puis le validateur impose cette propriété sur la
-réponse et sur tout cache relu. Une suppression ou un changement de label est une
-réponse invalide, jamais une correction silencieuse.
+## End-to-end run (`run`)
 
-## Composition contrôlée — lot 3
+`output/run-<timestamp>/` contains, for each pass `pass-N/` (or directly at the root
+with `--passes 1`), `classify/`, `review/<ID>/` and `compose/`; then `vote/`
+(`classifications.json` and `vote_report.json`), `compose/` (check of the vote),
+`final/` and `run_report.json`.
 
-`compose` lit une classification complète de référence, zéro ou plusieurs dossiers
-de revue terminés et, facultativement, une classification candidate complète.
-Une revue n'est appliquée que si son manifeste référence l'empreinte de la base,
-si ses IDs correspondent à `review_changes.json` et si aucune alerte fiable n'y
-reste non résolue. Deux revues ne peuvent pas remplacer le même article.
+- `vote_report.json`: `schema_version: 1`, `vote_version`, number of passes, counts
+  (`unanimous`, `majority`, `label_tie`, `dropped_minority`) and, for each proposed
+  pair, its votes per pass, final label (or `absent`) and agreement level.
+- `run_report.json`: pipeline and prompt versions, budget, per-pass classification
+  usage, reviews (mode, blocking alerts before, status, cost), vote counts,
+  composition counts, output paths and the usage summary (calls, retries, tokens and
+  cost per category, per step and per article). Status `completed`,
+  `completed_with_alerts` or `failed` with the failing step.
 
-Le dossier produit contient :
+## Submitted exports
 
-- `classifications.json`, schéma 1, résultat complet composé sans retouche manuelle ;
-- `composition_report.json`, schéma 1, version de composition, empreintes et
-  provenance par article, alertes bloquantes ou consultatives, et différences
-  de tickers/labels avec la candidate.
-
-Les omissions issues d'un alias certain et les alias explicitement interdits sont
-bloquants. L'absence d'ancrage exact, l'ambiguïté et un possible transfert de rôle
-analyste sont consultatifs car le langage peut employer un nom abrégé ou un pronom.
-`ready_for_scoring` n'est vrai que sans alerte bloquante dans la composition ou
-la candidate et sans désaccord avec cette candidate lorsqu'elle est fournie.
-La composition vérifie également que `added`, `removed` et `label_changes` dans
-chaque rapport de revue correspondent exactement aux classifications associées.
-
-## Exports imposés
-
-| Fichier | Colonnes exactes | Contraintes |
+| File | Exact columns | Constraints |
 | --- | --- | --- |
-| `entities.csv` | `id,ticker,label` | Une ligne par paire article/entreprise canonique ; identifiant existant ; ticker autorisé ; label `positive`, `neutral` ou `negative` |
-| `scores.csv` | `ticker,value` | Une ligne pour chaque ticker présent dans `entities.csv`, y compris ceux dont le score vaut zéro |
+| `entities.csv` | `id,ticker,label` | One row per canonical article/company pair; existing id; allowed ticker; label `positive`, `neutral` or `negative` |
+| `scores.csv` | `ticker,value` | One row for every ticker present in `entities.csv`, including zero scores |
 
-Écrire en UTF-8, en-tête obligatoire, sans index ajouté, avec le module CSV pour
-gérer l'échappement. Ordre : `(id, ticker)` pour entities, `ticker` pour scores.
-Un run valide sans entité produit deux fichiers contenant leurs seuls en-têtes.
-Une erreur ne doit jamais être confondue avec ce cas valide.
+UTF-8 with a header, no added index, written with the `csv` module. Order: `(id,
+ticker)` for entities, `ticker` for scores. A valid run with no entity produces two
+header-only files, never confused with an error. `export` requires a composition with
+`ready_for_scoring=true` whose `classifications.json` hash matches; `run` may export a
+composition with alerts and then records `ready_for_scoring: false`. The export
+manifest records reference time, time zone, half-life, counts and the SHA-256 of
+sources and both CSV files.
 
-Les exports sont implémentés par `time-decay-v1`. `export` exige une composition
-avec `ready_for_scoring=true` et une empreinte de `classifications.json` conforme.
-Le manifeste final enregistre la référence, le fuseau, la demi-vie, les comptages
-et les empreintes SHA-256 des sources et des deux CSV.
+## Accuracy reference
 
-## Évaluation humaine
-
-`prepare-evaluation` développe chaque différence de présence ou de label entre
-deux classifications complètes en une décision `(id, ticker)`. `sample.csv`
-contient le titre, l'article, les deux propositions et deux colonnes éditables :
-`human_decision` et `human_notes`. Une décision vaut `positive`, `neutral`,
-`negative`, `absent`, `uncertain` ou reste vide. `evaluate` ignore les valeurs
-vides et incertaines pour le calcul d'accord et ne modifie aucun résultat.
+`prepare-reference` writes `cases.csv` (`case,id,ticker,company,human_decision,
+human_notes`), `GUIDE.md` (article text and excerpts, without version labels),
+`key.json` (labels of every version per case, kind `disputed` or `spot_check`) and
+`manifest.json`. Decisions: `positive`, `neutral`, `negative`, `absent`, `uncertain`
+or empty. `score-reference` ignores empty and uncertain decisions, reports any invalid
+value with its case id, and estimates each version's accuracy by scoring unanimous
+pairs at the measured consensus accuracy. It never modifies a classification.

@@ -1,215 +1,158 @@
 # Architecture
 
-Statut : ingestion, audit, classification, composition contrôlée, calcul temporel
-et exports CSV implémentés et testés hors réseau.
-Accès API confirmé le 13 octobre ; 100 articles traités avec v4, puis huit alertes
-relues de façon ciblée. Résultats et limites dans `docs/FULL_100_REVIEW.md`.
-Le lot 3 est terminé ; l'analyse finale et la remise restent à préparer.
-Exigences : sujet local, pages 2 à 5. Choix : pipeline séquentielle, fichiers
-locaux, peu de dépendances, aucune interface web ni service permanent.
+Requirements come from the assignment (pages 2 to 5). Choices: a sequential
+command-line pipeline, local files, one runtime dependency (`tzdata`), no web
+interface or long-running service. History of how each part was reached is in
+[`docs/WORK_LOG.md`](docs/WORK_LOG.md).
 
-## Flux prévu
+## Flow
 
 ```text
-JSON + CSV → validation / normalisation → univers canonique
-          → classification par article → validation des réponses
-          → agrégation déterministe → CSV + métriques + manifeste
-                         ↕
-                    cache local
+news.json + sp500.csv → strict loading / normalisation → canonical universe
+   → per pass: classify every article → validate → targeted review of alerted
+     articles → deterministic composition with quality alerts
+   → majority vote over passes → composition check → time-decay scoring
+   → entities.csv + scores.csv + manifests + usage report
+                       ↕
+        local cache of validated answers (one replica per pass)
 ```
 
-## Répartition des responsabilités
+## What the code does, what the model does, and why
 
-| Étape | Responsable | Justification |
+| Step | Owner | Why |
 | --- | --- | --- |
-| Lecture, schémas d'entrée, Unicode et dates | Code | Règles déterministes et testables |
-| Univers autorisé et doubles classes | Code | Empêcher les tickers inventés et doubles comptes |
-| Identification contextuelle, marques/filiales, sujet versus mention, sentiment par entreprise | `gpt-5.6-terra` | Nécessite une compréhension du contexte de l'article |
-| Validation du schéma, tickers, labels, preuves et doublons | Code | Une réponse du modèle n'est pas une donnée de confiance |
-| Pondération, addition, tri et écriture | Code | Formule imposée ; résultat mathématique reproductible |
-| Arbitrages ambigus et analyse de qualité | Revue humaine assistée | Les contraintes de structure ne prouvent pas la justesse sémantique |
+| Reading, input schemas, Unicode, dates | Code | Deterministic, testable rules |
+| Allowed universe and dual share classes | Code | Prevents invented tickers and double counting |
+| Finding the companies an article mentions, brands/subsidiaries to parent, role of each company (subject versus mention), label per company | `gpt-5.6-terra` | Needs reading comprehension of the article in context |
+| Neutral label for roles the assignment defines as neutral | Code (JSON schema) and model | The schema makes a directional label impossible for those roles |
+| Schema, tickers, labels, roles, exact evidence, duplicates | Code | A model answer is not trusted data |
+| Detecting likely omissions and forbidden aliases (`entity_aliases.json`) | Code | Lexical checks are cheap and reproducible; they only trigger a review |
+| Reviewing an alerted article | Model, constrained by code | Code rejects removals or label changes in `additions-only` mode |
+| Combining passes (majority vote), weighting, summing, sorting, writing | Code | Fixed formula; reproducible arithmetic |
+| Measuring accuracy | Human/agent adjudication, scored by code | Structure does not prove semantic correctness |
 
-## Modules
+The model never computes the score, never sees other articles and has no tools.
 
-Au lot 1, `cli.py` orchestre l'audit et traduit les erreurs de données en code de
-sortie 2 ; `ingestion.py` charge et valide les deux sources, `normalization.py`
-prépare une copie sûre, `dates.py` traite New York et `audit.py` construit le rapport.
+## Modules (`src/aie2609/`)
 
-Au lot 2, `classification.py` porte le prompt, le schéma et les validations ;
-`llm.py` assure le transport HTTPS Responses avec `urllib` de la bibliothèque
-standard, sans dépendance SDK supplémentaire. `usage.py` porte tarifs, tokens et
-budget en `Decimal`. `runner.py` gère la sélection déjà chargée, les tentatives,
-le cache, les résultats internes, le manifeste et les métriques durables.
-`composition.py` valide les superpositions de revue, conserve leur provenance,
-compare une candidate et bloque le scoring sur les alertes fiables. `cli.py`
-expose `classify`, `review`, `compose`, `export` et `--dry-run`. `scoring.py`
-applique la formule fixe, vérifie le rapport de composition et produit les
-livrables CSV avec leur manifeste.
+- `cli.py` — subcommands; data errors map to exit code 2.
+- `ingestion.py`, `normalization.py`, `dates.py`, `audit.py` — strict loading of both
+  inputs (duplicate keys and ids, missing fields, malformed rows), NFC and U+200B
+  removal on an in-memory copy, New York times with ambiguous or nonexistent local
+  times rejected, read-only audit report.
+- `classification.py` — prompt (`SYSTEM_PROMPT`, `PROMPT_VERSION`), strict JSON schema
+  and `validate_entities`.
+- `llm.py` — HTTPS Responses client on the standard library (`urllib`): fixed OpenAI
+  endpoint, redirects refused, response size capped, no fallback model.
+- `runner.py` — `Classifier`: cache, bounded attempts with validator feedback, budget
+  reservation, durable checkpoints, manifest.
+- `review.py` — lexical coverage hints and `ReviewClassifier` (second pass on
+  alerted articles, same model, `additions-only` mode enforced by code).
+- `composition.py` — applies validated review overlays, keeps provenance, raises
+  blocking and advisory alerts.
+- `pipeline.py` — the `run` command: passes, reviews, composition, `majority_vote`,
+  export, run report.
+- `scoring.py` — time-decay formula and CSV export with manifest.
+- `usage.py` — prices, token accounting, budget, usage summary.
+- `reference.py` — blind adjudication cases and per-version accuracy;
+  `evaluation.py` — earlier two-version review sample.
+- `entity_aliases.json` — versioned configuration: brands, publications,
+  subsidiaries, ambiguous names and forbidden associations observed in the data.
 
-`pipeline.py` porte la commande `run` : il enchaîne `Classifier`, une relecture
-par article bloqué (`additions-only` pour une omission, relecture ciblée pour un
-alias interdit), `compose` sans candidate puis l'export. Le budget est commun à
-toutes les étapes. Une relecture rejetée laisse la première passe validée, et
-l'export final accepte des alertes restantes en les inscrivant dans les manifestes
-(`completed_with_alerts`) : un livrable avec alertes visibles vaut mieux qu'une
-absence de CSV pour un évaluateur. Les erreurs de transport, budget et coût
-inconnu restent fatales.
+## Model strategy
 
-Avec `--passes 3`, `pipeline.py` répète trois fois cette chaîne avec des répliques de
-cache distinctes (`replica` entre dans la clé ; la réplique 0 partage le cache
-ordinaire), puis `majority_vote` garde les couples proposés par une majorité stricte
-avec leur label majoritaire. Une égalité de label devient `neutral` et elle est
-comptée. Le vote est ensuite composé et exporté comme une passe unique. C'est un
-choix de fiabilité contre coût : il réduit la variance d'un tirage et donne un
-niveau d'accord par couple, pour environ trois fois le coût.
+One complete article per request, together with the full canonical universe (no
+lexical prefilter, which could lose brands and subsidiaries). Responses API with a
+strict JSON-schema `text.format`, `reasoning.effort=low`, `store=false`,
+`service_tier=default` and at most 4,096 output tokens. Instructions and data are in
+separate messages; article text is treated as untrusted data.
 
-Le prompt v6 ajoute un rôle par entreprise ; le schéma à deux branches `anyOf`
-interdit tout label autre que `neutral` pour les rôles que le sujet définit comme
-neutres. Une réponse refusée est redemandée avec le motif fixe du validateur.
+Prompt `entity-sentiment-v6-roles` (details in
+[`docs/PROMPT_DESIGN.md`](docs/PROMPT_DESIGN.md)) asks first for the role of every
+company: `subject`, `counterparty` and `affected_peer` may carry any label;
+`rating_issuer`, `source`, `comparison` and `other_mention` are always neutral, as the
+assignment defines neutral ("the bank issuing the rating, a media source, a customer,
+a location, a size comparison"). The schema has two `anyOf` branches, so the decoder
+cannot pair those roles with a directional label, and the validator checks it again.
+Thirteen synthetic examples are checked by the tests. Each entity carries an exact
+evidence excerpt; this improves traceability but proves neither the right parent nor
+completeness.
 
-`reference.py` construit une référence humaine à l'aveugle (tous les désaccords
-entre versions et des contrôles aléatoires du consensus) et estime l'exactitude
-de chaque version. Le modèle n'y intervient pas.
+## Reliability mechanisms
 
-`evaluation.py` compare deux propositions sans en désigner une comme vérité,
-prépare un échantillon humain éditable et mesure ensuite leur accord avec les
-décisions renseignées. Cette évaluation ne modifie jamais les classifications.
+- **Validation**: unknown keys, tickers outside the universe, invalid labels or roles,
+  duplicates, evidence that is not an exact excerpt, incomplete or refused responses
+  are all errors; nothing is converted to `neutral`.
+- **Validator feedback**: a rejected answer is retried with the fixed rejection reason
+  (never the rejected text). Attempts are bounded (3 by default in `run`) and billed.
+- **Coverage checks**: a reliable alias missing from the answer (for example the Wall
+  Street Journal → NWSA) triggers an `additions-only` review; a forbidden association
+  (social network X → Block, SpaceX → Exxon) triggers a targeted review that may
+  remove it. Hints never add an entity or a label by themselves.
+- **Independent passes and vote**: with `--passes 3` each pass uses its own cache
+  replica (`replica` enters the cache key; replica 0 shares the ordinary cache).
+  `majority_vote` keeps pairs proposed by a strict majority with their majority label;
+  a label tie becomes `neutral` and is counted. This trades about 1.5 times the cost
+  for less sampling variance and a per-pair agreement level.
+- **Fail closed**: an unresolved blocking alert is exported only by `run`, with status
+  `completed_with_alerts` and `ready_for_scoring: false`; `export` alone refuses it.
+  A transport error, an exhausted budget or an unknown cost stops the run.
 
-`review.py` ajoute une seconde passe facultative, séquentielle, avec le même modèle.
-Le code recherche les noms du référentiel, leurs formes sans suffixe juridique et
-les tickers explicitement balisés. Ces indices sont consultatifs : aucun préfiltre,
-aucun ajout automatique et aucun label décidé par correspondance lexicale.
-L'article et le référentiel complets restent transmis. Les propositions initiales
-et les indices sont des données non fiables dans un message distinct.
-`ReviewClassifier` réutilise les protections du runner et produit un rapport des
-différences, avec un cache séparé dont la clé inclut aussi la proposition initiale.
-Ce n'est pas une validation indépendante : le modèle peut maintenir une erreur ou
-introduire une régression. L'essai sur dix articles a récupéré NWSA mais perdu P ;
-ses résultats restent séparés de la première passe et soumis à la revue.
+## Reproducibility and errors
 
-La version 2 charge `entity_aliases.json`, configuration applicative versionnée et
-incluse dans les empreintes du run. Les variantes de noms juridiques sont générées
-à partir du référentiel ; seules quelques relations certaines et ambiguïtés utiles
-sont configurées. Un alias certain absent de la proposition ou toute ambiguïté
-sélectionne l'article pour `review`. L'option `--all` conserve le diagnostic large.
-Les alias ne créent aucune entité ni aucun label dans le code. Le dernier test
-ciblé résout les deux omissions et préserve les deux Everpure, avec un désaccord
-de sentiment NFLX encore explicite.
+The SHA-256 cache key covers normalised content, date, canonical universe,
+normalisation version, prompt, schema, model, parameters and replica. The article id
+is excluded: two ids with identical content and date may share an analysis while
+remaining two articles for scoring. A cached answer is validated again on replay; a
+corrupted cache entry stops the run. Outputs are sorted and sums use `math.fsum`. A new
+API call may vary; the cache replays a validated result exactly.
 
-Le passage aux 100 articles a révélé que les formes courtes de sociétés peuvent
-être des mots ordinaires ou des noms de personnes. `entity-coverage-v3` bloque ces
-formes identifiées (`Target`, `Block`, `Southern`, `Rollins`) tout en autorisant
-leurs noms juridiques complets, et abandonne l'hypothèse qu'un acronyme entre
-parenthèses est nécessairement un ticker. Les alertes passent de 45 à huit sans
-modifier les classifications. La relecture de ces huit cas n'effectue que des
-ajouts ; la composition reste une responsabilité déterministe du lot 3.
+A 429 error explicitly coded `rate_limit_exceeded` allows a bounded wait and retry
+without releasing the reserved cost. A network interruption, a key or quota error or
+unverifiable consumption stops the run; there is no implicit transport retry.
+Validation errors are recorded as fixed reasons in `validation_error`, never with the
+rejected content. Final exports are written only after complete processing.
 
-## Stratégie modèle initiale
+## Usage and cost
 
-Le prompt actif `entity-sentiment-v5-rcorcf` suit Rôle, Contexte, Objectif,
-Résultat, Contraintes, Format et contient douze exemples fictifs vérifiés par les
-tests. Le pilote API v4 récupère la mention Waymo/Alphabet manquante en v2 ;
-un test ultérieur sur dix autres articles révèle encore deux omissions de
-mentions secondaires et un sentiment à arbitrer. Les décisions et
-la signification des versions sont dans [PROMPT_DESIGN.md](docs/PROMPT_DESIGN.md).
-
-Un article complet par requête, accompagné de la liste canonique des entreprises.
-Le modèle doit considérer toutes les entreprises mentionnées, y compris les acteurs
-neutres. Demander des objets structurés : ticker, label et extrait justificatif.
-Utiliser Responses avec `text.format` en JSON Schema strict, `reasoning.effort=low`,
-`store=false`, `service_tier=default` et 4 096 tokens de sortie maximum par défaut.
-Ces possibilités ont été vérifiées dans la [fiche du modèle](https://developers.openai.com/api/docs/models/gpt-5.6-terra)
-et le [guide Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs).
-La compatibilité de la clé a été confirmée le 13 octobre. En cas d'indisponibilité, arrêter sans
-substitution. Le client impose l'endpoint OpenAI et refuse les redirections HTTP.
-
-Le contexte inclut l'implication pour la valeur à la date de publication, sans
-prédiction de rendement. Les articles peuvent favoriser une entreprise et en
-défavoriser une autre. Le code ne déduit pas un sentiment global unique.
-
-Une preuve doit correspondre au texte normalisé ; elle améliore la traçabilité
-mais ne garantit ni le bon parent d'une marque ni l'exhaustivité. Un préfiltre et
-des alias supplémentaires ne seront ajoutés que si une évaluation en justifie le
-gain sans perte de rappel. Pas de nouvelles ou de cours externes.
-
-## Reproductibilité et erreurs
-
-La clé de cache SHA-256 inclut contenu normalisé, date, univers canonique, version
-de normalisation, prompt, schéma, modèle et paramètres. L'identifiant de l'article
-est exclu : deux identifiants au contenu et à la date identiques peuvent partager
-une analyse, tout en restant deux articles distincts pour le calcul. Le modèle,
-la version du prompt, les réservations et les empreintes sont consignés.
-Une réponse relue du cache est revalidée ; un cache corrompu fait échouer le run.
-Les sorties validées seront triées et l'agrégation utilisera un ordre stable.
-Un nouvel appel API peut varier ; le cache permet de rejouer un résultat validé.
-
-Par défaut, deux tentatives au maximum par article (configurable de 1 à 3).
-Une réponse structurée invalide peut être redemandée ; chaque tentative est
-comptabilisée. Une erreur 429 explicitement `rate_limit_exceeded` permet une reprise
-avec attente bornée, sans effacer la réservation de coût inconnu. Une interruption
-réseau, une erreur de clé/quota ou une consommation non vérifiable arrête le run.
-Il n'y a pas de reprise implicite du transport. Une réponse
-invalide n'est ni ignorée ni convertie en neutralité. Une erreur définitive fait
-échouer le run avec diagnostic et conserve le cache réutilisable. Les exports
-finaux ne sont publiés dans le dossier de run qu'après traitement complet.
-Les erreurs de validation consignent un motif fixe dans `validation_error`,
-sans recopier le contenu de la réponse rejetée.
-
-## Usage et coût
-
-Suivre chaque tentative : article, statut, modèle, identifiant de requête lorsque
-disponible, tokens d'entrée, lecture et écriture du cache fournisseur, tokens de
-sortie (raisonnement inclus) et durée.
-La réponse de l'API fait foi pour les tokens ; les valeurs manquantes restent
-inconnues. Le cache local et le cache de tokens du fournisseur sont distincts.
-
-Calcul en USD avec tarifs standard de contexte court, vérifiés le 12 octobre
-2026 : entrée ordinaire 2 USD/million, lecture cache 0,20, écriture cache 2,50,
-sortie 12. Sources : [modèle](https://developers.openai.com/api/docs/models/gpt-5.6-terra)
-et [catégories du cache fournisseur](https://developers.openai.com/api/docs/guides/prompt-caching).
+Every attempt records article, status, model, response id, input tokens, provider
+cache reads and writes, output tokens (reasoning included) and duration. API usage is
+authoritative; missing values stay unknown, never zero. Prices for the standard tier
+and short context, checked on 2026-10-12: input 2 USD per million tokens, cache read
+0.20, cache write 2.50, output 12
+([model page](https://developers.openai.com/api/docs/models/gpt-5.6-terra),
+[prompt caching](https://developers.openai.com/api/docs/guides/prompt-caching)).
 
 ```text
-coût = ((entrée - lecture_cache - écriture_cache) × tarif_entrée
-        + lecture_cache × tarif_lecture_cache
-        + écriture_cache × tarif_écriture_cache
-        + sortie × tarif_sortie) / 1_000_000
+cost = ((input - cache_read - cache_write) × input_price
+        + cache_read × cache_read_price
+        + cache_write × cache_write_price
+        + output × output_price) / 1_000_000
 ```
 
-Les deux catégories de cache sont distinctes et incluses dans l'entrée totale.
-Un champ d'usage manquant, un modèle ou un niveau de service inattendu provoque
-un arrêt avec coût inconnu, jamais zéro par défaut.
-`run_report.json` et la commande `usage` agrègent ces rapports : appels, reprises,
-tokens et coût par catégorie, coût par étape et par article. Le run réel
-`run-final-v1` coûte 3,0187697 USD, soit 0,0302 USD par article, dont 2,589 USD
-(86 %) d'écriture au cache fournisseur. Chaque requête répète environ 14 000 tokens
-de consignes et d'univers, mais seuls 36 % sont relus depuis le cache ; le reste est
-écrit au tarif majoré de 2,50 USD par million. C'est le principal levier d'une
-optimisation de coût (préfiltrage de l'univers ou meilleure réutilisation du cache).
+Cost per article of a full run = total cost of its attempts / number of articles.
+`run_report.json` and `aie2609 usage` report calls, retries, local cache replays,
+tokens and cost per category, per step and per article, and warn when replays make
+the figure lower than a cold run. Measured: one cold pass costs 0.030 USD per article
+(`run-final-v1`: 3.02 USD, 86 % of it provider cache writes, because each request
+repeats a ~14,000-token prefix of instructions, universe and schema). Passes 2 and 3
+read that prefix from the provider cache and cost about 0.006 USD per article, so
+three passes cost about 0.045 USD per article. The main lever for further savings is
+reusing that cached prefix, for example by running passes or batches back to back.
 
-Coût/article du run complet = coût total de ses tentatives / nombre d'articles
-traités (100 pour les données fournies). Rapporter séparément appels, reprises,
-hits de cache local et run initial sans cache. Ne pas présenter un replay gratuit
-comme le coût de classification initial. Comparer au relevé fournisseur si disponible.
+Before each call a conservative reservation (UTF-8 bytes of the request plus 4,096,
+plus the maximum output) is checked against the budget and written before sending; it
+is replaced by the measured cost afterwards. Requests above 200,000 estimated tokens
+are refused. After an interruption the reservation remains and `total_cost_usd` is
+`null`, distinct from zero dollars. This local control is not a provider-side ceiling;
+the key's own spend cap is an additional protection.
 
-Avant chaque appel, réserver une estimation prudente incluant entrée et sortie
-maximale ; bloquer si le budget ne permet pas cet appel. L'estimation d'entrée
-utilise le nombre d'octets UTF-8 de la requête plus 4 096, sans prétendre être un
-compteur de tokens exact. Au-delà de 200 000 tokens estimés, refuser la requête
-pour rester dans le contexte court. La réservation est écrite avant l'appel puis
-remplacée par le coût mesuré ; un dépassement stoppe les appels suivants. Ce
-contrôle local ne garantit pas un plafond absolu côté fournisseur. Après une
-interruption, la réservation persiste et `total_cost_usd` reste nul au sens JSON
-(`null`), distinct de zéro dollar. Le cap de la clé est une protection supplémentaire.
+## Security and proportion
 
-## Sécurité et proportion
-
-Clé en variable d'environnement, caches et artefacts ignorés, logs sans secrets.
-Depuis le 13 octobre, `config.py` charge aussi `OPENAI_API_KEY` depuis `.env` dans
-le dossier courant, seulement avant une classification ou relecture avec budget.
-Une variable existante non vide est prioritaire. Chargeur limité à cette clé,
-sans recherche dans les dossiers parents, interpolation ou exécution du contenu.
-Erreurs sans valeur secrète ; `.env` ignoré, `.env.example` vide versionnable.
-Texte des articles isolé des instructions, sans outils accessibles au modèle.
-Pas de télémétrie ou d'envoi externe autre que l'API exigée lors d'un run autorisé.
-Ne pas ouvrir de services réseau. Préserver les sources et refuser les collisions
-entre chemins d'entrée et de sortie. Les tests utilisent des réponses simulées.
+The key comes from `OPENAI_API_KEY` or a local `.env` loaded only by paid commands; an
+existing non-empty variable wins; the loader reads that single key, does no parent
+directory search, interpolation or execution, and never prints it. Caches, run
+outputs and `.env` are ignored by Git. No telemetry and no network access other than
+the required API during an authorised run. Input files are never written; output
+paths that would overwrite an input or the cache are refused. Tests use simulated
+responses and make no network call.

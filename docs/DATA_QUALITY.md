@@ -1,40 +1,31 @@
-# Inspection initiale des données
+# Data quality report
 
-Inspection en lecture seule le 12 octobre 2026 avec PowerShell et Node, sans API.
-L'audit Python du lot 1 confirme les comptages, la plage des dates, les classes
-canoniques et les deux anomalies U+200B sur les fichiers fournis.
+Read-only inspection on 12 October 2026 with PowerShell and Node, without the API, then
+confirmed by the Python audit (`python -m aie2609 audit`) and completed on 14 October.
 
-| Contrôle | Résultat observé |
-| --- | --- |
-| Articles | 100 |
-| Champs présents | `id`, `date`, `headline`, `body` |
-| Identifiants dupliqués | Aucun |
-| Champs requis vides ou non textuels | Aucun dans le contrôle initial |
-| Format textuel des dates | 100 conformes à `YYYY-MM-DDTHH:MM` |
-| Plage des dates | 2026-08-25T06:53 à 2026-09-28T16:20 |
-| Lignes du référentiel | 503 |
-| Symboles dupliqués | Aucun |
-| Secteurs distincts | 11 |
-| Contenus identiques après normalisation exploratoire | Aucun |
-| Caractère de remplacement U+FFFD | Aucun trouvé dans les articles |
-| Caractères invisibles U+200B | Détectés dans `N027` et `N100` |
+| Check | Observed result | What the pipeline does |
+| --- | --- | --- |
+| Articles | 100 | Generic loader, no hard-coded count |
+| Fields | `id`, `date`, `headline`, `body` everywhere | Missing or non-string fields are rejected; extra fields are reported and ignored |
+| Duplicate ids or JSON keys | None | Rejected if present |
+| Date format | 100 match `YYYY-MM-DDTHH:MM` | Strict pattern; ambiguous or nonexistent New York times and dates after `as_of` are rejected |
+| Date range | 2026-08-25T06:53 to 2026-09-28T16:20 | Elapsed time measured in UTC |
+| Reference rows | 503 rows, 11 sectors, no duplicate symbol | Duplicates and malformed rows rejected |
+| Dual share classes | `GOOGL/GOOG`, `FOXA/FOX`, `NWSA/NWS`, plus `BRK.B` | Canonicalised to 500 companies; one row per company per article |
+| Identical content after normalisation | None | Repeated content would be reported, never silently merged |
+| Replacement character U+FFFD | None in the articles | — |
+| Zero-width space U+200B | 6 in N027 and 10 in N100, splitting the name "Tesla" and the ticker | Removed from the in-memory copy and reported by the audit |
+| Cyrillic look-alike letters | N003 and N098 write "Tesla" with Cyrillic Т, е, ѕ and а | Not normalised (no arbitrary transliteration); the model recognises Tesla from context and the coverage alert flags the missing lexical anchor; TSLA is found in every run |
+| Non-ASCII names in the reference file | `Brown–Forman` (en dash), `Estée Lauder` | Kept as is |
+| Companies named by their brand or publication | Waymo, YouTube, The Wall Street Journal, CNN, CNBC, iShares, SPDR, Xbox, KeyBanc, Visible Alpha… | Model maps to the parent; `entity_aliases.json` triggers a review if a known alias is missing |
+| Words that are also ticker names | "Target", "Block", "Southern", "X" (social network), index "Nasdaq" | Short generic names are excluded from lexical hints; `X → XYZ` and `SpaceX → XOM` are forbidden associations |
 
-Dans `N027` et `N100`, U+200B coupe le nom Tesla et/ou le ticker TSLA. Un simple
-matching brut peut donc manquer ces entités. Prévoir un nettoyage ciblé en mémoire,
-un signalement dans l'audit et des tests de non-régression. L'exploration a aussi
-comparé les corps après retrait des caractères U+200B à U+200F et U+FEFF pour
-chercher des doublons ; ce nettoyage large n'est pas la politique retenue en production.
+In N027 and N100, U+200B splits the Tesla name and/or the TSLA ticker: a plain lexical
+match would miss these entities. The look-alike Unicode letters in N003 and N098 are a
+case a production pipeline should flag explicitly; the current audit reports only
+U+200B, which is a known limit.
 
-Le référentiel contient `GOOGL/GOOG`, `FOXA/FOX`, `NWSA/NWS` et `BRK.B`. Les 503
-lignes ne doivent pas être ramenées arbitrairement à 500 ; appliquer les règles
-de classes du sujet au moment de construire l'univers canonique.
-
-Contrôles restant à automatiser : parsing strict incluant les clés dupliquées,
-validité calendaire et fuseaux, anomalies du référentiel, caractères confondables,
-champs supplémentaires, sorties du modèle et invariance sur entrées équivalentes.
-Aucune conclusion sur la qualité sémantique des articles ou les sentiments à ce stade.
-
-## Empreintes SHA-256 des sources
+## SHA-256 of the sources
 
 ```text
 AIE2609_Project.pdf
@@ -47,4 +38,5 @@ sp500.csv
 ce3136f433a6bd493a0c5b7a4d1e18e40f58f5fdf13bf989402cc6e0bffb7b7c
 ```
 
-Ces empreintes permettent de vérifier que les entrées n'ont pas changé.
+These hashes let anyone check that the inputs did not change; every run manifest
+records them too.

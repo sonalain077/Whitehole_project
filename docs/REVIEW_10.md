@@ -1,173 +1,168 @@
-# Test RCORCF sur dix autres articles — 13 octobre 2026
+# RCORCF test on ten other articles — 13 October 2026
 
-## Sélection et attentes avant les appels
+## Selection and expectations before the calls
 
-Prompt figé : `entity-sentiment-v4-rcorcf`, modèle `gpt-5.6-terra`, effort low,
-une tentative maximum par article. Aucun de ces dix articles n'a été traité dans
-les pilotes précédents. Sélection ciblée pour varier les difficultés, non aléatoire.
-Certains thèmes ressemblent aux exemples du prompt, notamment le client pilote
-Microsoft ; ce n'est pas un test entièrement indépendant des choix de conception.
+Frozen prompt: `entity-sentiment-v4-rcorcf`, model `gpt-5.6-terra`, low effort, at most
+one attempt per article. None of these ten articles had been processed in the earlier
+pilots. Targeted, non-random selection to vary the difficulties. Some themes resemble
+the prompt examples, notably the Microsoft pilot customer; this is not a test fully
+independent of the design choices.
 
-Les attentes ci-dessous sont établies par l'agent après lecture des textes et du
-référentiel, AVANT de demander les prédictions. Ce sont des annotations provisoires
-à faire relire par un humain, pas une vérité terrain certifiée. Les faits du jeu
-sont traités comme données du sujet, sans vérification externe.
+The expectations below were set by the agent after reading the texts and the reference
+file, BEFORE requesting the predictions. They are provisional annotations to be checked
+by a human, not certified ground truth. The facts in the dataset are treated as given,
+without external verification.
 
-| Article | Attentes provisoires | Point de contrôle |
+| Article | Provisional expectations | Checkpoint |
 | --- | --- | --- |
-| N003 | F negative ; TSLA negative | Homoglyphes de Tesla et TSLA, contexte Cybertruck ; Rivian et Reuters hors univers |
-| N029 | MSFT neutral | Pilote sans engagement commercial ; startup et TSMC hors univers |
-| N054 | DAL, HD, KO, UPS neutral | Entreprises citées sans perturbation opérationnelle établie malgré le titre négatif |
-| N063 | AAPL, GOOGL neutral | Retrait d'application, plateformes explicitement non impliquées dans la fuite ; banques non nommées exclues |
-| N064 | COIN positive ; AAPL, MSFT, NVDA, TSLA, NWSA neutral | Opportunité de nouveaux contrats pour Coinbase, sous-jacents sans impact propre ; WSJ comme source |
-| N070 | JNJ positive ; JPM neutral | Produit et filiale rattachés à J&J, conférence JP Morgan incidente |
-| N077 | GOOGL positive ou neutral ; NFLX positive ou neutral ; NWSA neutral | Nouvelles initiatives favorables face à une concurrence accrue ; sentiment net ambigu à arbitrer |
-| N084 | PNR negative ; CMG neutral ; P neutral | Everpure filtration appartient à Pentair ; homonyme P distinct, baisse temporaire puis récupération ; client sans fermeture |
-| N096 | Aucune entité éligible | Ne pas ajouter les investisseurs ou partenaires non nommés d'OpenAI/Anthropic |
-| N097 | BA negative ; GE negative ou neutral ; RTX, LMT, NWSA, BLK, STT neutral | Effet principal Boeing ; petit mouvement GE à arbitrer ; WSJ et marques de fonds iShares/SPDR |
+| N003 | F negative; TSLA negative | Homoglyphs of Tesla and TSLA, Cybertruck context; Rivian and Reuters outside the universe |
+| N029 | MSFT neutral | Pilot with no commercial commitment; startup and TSMC outside the universe |
+| N054 | DAL, HD, KO, UPS neutral | Companies named without established operational disruption despite the negative headline |
+| N063 | AAPL, GOOGL neutral | App removal, platforms explicitly not involved in the leak; unnamed banks excluded |
+| N064 | COIN positive; AAPL, MSFT, NVDA, TSLA, NWSA neutral | New contract opportunity for Coinbase, underlyings with no implication of their own; WSJ as source |
+| N070 | JNJ positive; JPM neutral | Product and subsidiary mapped to J&J, incidental JP Morgan conference |
+| N077 | GOOGL positive or neutral; NFLX positive or neutral; NWSA neutral | Favourable new initiatives facing stronger competition; ambiguous net sentiment to adjudicate |
+| N084 | PNR negative; CMG neutral; P neutral | Everpure filtration belongs to Pentair; homonym P is distinct, temporary drop then recovery; customer without closures |
+| N096 | No eligible entity | Do not add unnamed investors or partners of OpenAI/Anthropic |
+| N097 | BA negative; GE negative or neutral; RTX, LMT, NWSA, BLK, STT neutral | Main effect on Boeing; small GE move to adjudicate; WSJ and iShares/SPDR fund brands |
 
-Les liens WSJ → News Corp, iShares → BlackRock et SPDR → State Street sont des
-inférences d'identité connues par l'agent, pas des relations fournies par le CSV.
-Leur inclusion et la mention de JPM dans un nom de conférence méritent une revue
-humaine explicite. Les alternatives de sentiment sont déclarées à l'avance pour
-ne pas transformer après coup toute prédiction en résultat correct.
+The links WSJ → News Corp, iShares → BlackRock and SPDR → State Street are identity
+inferences known to the agent, not relationships supplied by the CSV. Their inclusion
+and the mention of JPM in a conference name deserve explicit human review. Alternative
+sentiments are declared in advance so that no prediction can be turned into a correct
+result after the fact.
 
-Trente paires article/ticker sont proposées au total, sous réserve de ces
-arbitrages. Une liste vide est attendue pour N096. Comparer séparément la présence
-des entreprises, les sentiments et l'exactitude textuelle des preuves. Ne pas
-modifier les sorties pour les faire correspondre aux attentes.
+Thirty article/ticker pairs are proposed in total, subject to these adjudications. An
+empty list is expected for N096. Compare company presence, sentiments and textual
+exactness of evidence separately. Never change outputs to match the expectations.
 
-## Résultats
+## Results
 
-Run complet : `output/review-010-resume/classifications.json`.
+Complete run: `output/review-010-resume/classifications.json`.
 
-| Article | Résultat obtenu | Comparaison aux attentes préalables |
+| Article | Result | Comparison with the prior expectations |
 | --- | --- | --- |
-| N003 | F negative ; TSLA negative | Conforme ; le nom Tesla en caractères ressemblants est reconnu |
-| N029 | MSFT neutral | Conforme ; aucun bénéfice attribué au simple client pilote |
-| N054 | DAL, HD, KO, UPS neutral | Conforme ; aucune contamination par le ton négatif du fait divers |
-| N063 | AAPL, GOOGL neutral | Conforme ; plateformes sans implication propre dans la fuite |
-| N064 | COIN positive ; AAPL, MSFT, NVDA, NWSA, TSLA neutral | Conforme après reprise technique ; WSJ rattaché à News Corp |
-| N070 | JNJ positive | JPM absent malgré « JP Morgan Healthcare Conference » ; omission au regard de notre règle de mentions incidentes, à confirmer humainement |
-| N077 | GOOGL neutral ; NFLX negative | NWSA absent malgré WSJ ; label Netflix en désaccord avec les alternatives préalables, à arbitrer |
-| N084 | CMG neutral ; P neutral ; PNR negative | Conforme ; les deux Everpure sont distingués et le client n'hérite pas du rappel |
-| N096 | Liste vide | Conforme ; aucun investisseur ou partenaire non nommé ajouté |
-| N097 | BA negative ; GE, RTX, LMT, NWSA, BLK, STT neutral | Conforme aux alternatives préalables, sous réserve des inférences de marques et du label GE |
+| N003 | F negative; TSLA negative | As expected; the Tesla name written with look-alike characters is recognised |
+| N029 | MSFT neutral | As expected; no benefit attributed to the mere pilot customer |
+| N054 | DAL, HD, KO, UPS neutral | As expected; no contamination by the negative tone of the incident |
+| N063 | AAPL, GOOGL neutral | As expected; platforms with no implication of their own in the leak |
+| N064 | COIN positive; AAPL, MSFT, NVDA, NWSA, TSLA neutral | As expected after a technical retry; WSJ mapped to News Corp |
+| N070 | JNJ positive | JPM missing despite "JP Morgan Healthcare Conference"; an omission under our incidental-mention rule, to confirm with a human |
+| N077 | GOOGL neutral; NFLX negative | NWSA missing despite the WSJ; Netflix label disagrees with the prior alternatives, to adjudicate |
+| N084 | CMG neutral; P neutral; PNR negative | As expected; the two Everpure companies are distinguished and the customer does not inherit the recall |
+| N096 | Empty list | As expected; no unnamed investor or partner added |
+| N097 | BA negative; GE, RTX, LMT, NWSA, BLK, STT neutral | Within the prior alternatives, subject to the brand inferences and the GE label |
 
-Vingt-huit paires produites sur les trente proposées dans la revue provisoire,
-sans paire supplémentaire. Deux omissions et un désaccord de sentiment sont
-signalés. Huit articles correspondent entièrement aux attentes ou alternatives
-déclarées avant les appels. Cela mesure l'accord avec CETTE revue de l'agent,
-pas une précision de production certifiée ni une validation humaine indépendante.
+Twenty-eight pairs produced out of the thirty proposed in the provisional review, with
+no extra pair. Two omissions and one sentiment disagreement are reported. Eight
+articles fully match the expectations or alternatives declared before the calls. This
+measures agreement with THIS agent review, not certified production accuracy or an
+independent human validation.
 
-Pour Netflix, la preuve choisie mentionne la baisse d'engagement, alors que le
-texte traite aussi d'acquisition de contenus pour la compenser. Le label négatif
-peut refléter cette difficulté ; il faut arbitrer l'implication nette sans changer
-les attentes après coup pour cacher le désaccord. L'omission de News Corp est
-distincte de cet arbitrage : WSJ est explicitement cité dans l'article.
+For Netflix, the chosen evidence mentions falling engagement, while the text also
+covers content acquisitions meant to offset it. The negative label may reflect that
+difficulty; the net implication must be adjudicated without changing the expectations
+afterwards to hide the disagreement. The News Corp omission is separate from that
+adjudication: the WSJ is explicitly cited in the article.
 
-## Exécution et coût
+## Execution and cost
 
-Le premier run `output/review-010` s'arrête sur N064 après quatre résultats valides
-et une réponse rejetée. Son motif précis n'était pas conservé par le journal
-initial et la réponse invalide n'a pas été sauvegardée : ne pas inventer la cause.
-Ajout d'un diagnostic fixe `validation_error` aux erreurs futures, sans texte de
-réponse ni clé ; les tests de non-divulgation et la suite complète passent (63).
-Le prompt, le schéma et les validations restent inchangés.
+The first run `output/review-010` stopped on N064 after four valid results and one
+rejected answer. Its exact reason was not kept by the initial log and the invalid
+answer was not saved: do not invent the cause. A fixed `validation_error` diagnostic
+was added for future errors, without answer text or key; the non-disclosure tests and
+the full suite pass (63). Prompt, schema and validations unchanged.
 
-La reprise dans un nouveau dossier réutilise les quatre résultats en cache et
-termine les six autres sans nouvel échec. N064 a donc nécessité deux appels au
-total, tous comptabilisés. Les résultats du modèle n'ont pas été retouchés.
+The resumed run in a new directory reuses the four cached results and completes the
+other six without a new failure. N064 therefore needed two calls in total, all counted.
+Model results were not edited.
 
-| Exécution | Appels | Cache local | Coût USD |
+| Run | Calls | Local cache | Cost USD |
 | --- | --- | --- | --- |
-| review-010, interrompu | 5 | 0 | 0,1322405 |
-| review-010-resume, terminé | 6 | 4 | 0,1469120 |
-| Total du test sur dix articles | 11 | 4 relectures | 0,2791525 |
+| review-010, interrupted | 5 | 0 | 0.1322405 |
+| review-010-resume, completed | 6 | 4 | 0.1469120 |
+| Total for the ten-article test | 11 | 4 replays | 0.2791525 |
 
-Tokens cumulés : 149 790 en entrée, dont 60 340 en lecture cache et 89 417 en
-écriture cache fournisseur ; 3 623 en sortie. Coût par article du test complet,
-réponse rejetée comprise : 0,02791525 USD. Le coût de la seule reprise ne doit pas
-être présenté comme celui des dix classifications initiales.
+Cumulative tokens: 149,790 input, of which 60,340 provider cache reads and 89,417
+provider cache writes; 3,623 output. Cost per article of the complete test, rejected
+answer included: 0.02791525 USD. The cost of the resume alone must not be presented as
+the cost of the ten initial classifications.
 
-Coût connu cumulé du projet : 0,6048610 USD ; réservation inconnue conservée du
-premier échec réseau : 0,173757 USD ; solde prudent des 5 USD : 4,2213820 USD.
+Known cumulative project cost: 0.6048610 USD; unknown reservation kept from the first
+network failure: 0.173757 USD; conservative balance of the 5 USD: 4.2213820 USD.
 
-Contrôles : dix identifiants distincts, manifeste terminé, bonne version et bonnes
-empreintes de requêtes, revalidation des 28 entrées et preuves exactes, deux
-sources intactes. Les données, sorties et caches n'ont pas été modifiés manuellement.
+Checks: ten distinct ids, completed manifest, correct version and request hashes,
+revalidation of the 28 entries and exact evidence, both sources intact. Data, outputs
+and caches were not edited by hand.
 
-Suite proposée : revue humaine des cas signalés, puis amélioration ciblée du
-contrôle des mentions secondaires. Ne pas conclure que la seule présence des
-exemples RCORCF garantit l'exhaustivité sur les 100 articles.
+Proposed next step: human review of the reported cases, then a targeted improvement of
+the secondary-mention check. Do not conclude that the RCORCF examples alone guarantee
+completeness on the 100 articles.
 
-## Seconde passe expérimentale — 13 octobre 2026
+## Experimental second pass — 13 October 2026
 
-Exécution `output/verification-010`, prompt `entity-review-v1` ajouté au RCORCF v4,
-même modèle et effort low. La proposition initiale et les indices lexicaux sont
-transmis, mais pas les attentes de cette revue. Aucun résultat initial modifié.
+Run `output/verification-010`, prompt `entity-review-v1` added to RCORCF v4, same model
+and low effort. The initial proposal and the lexical hints are sent, but not the
+expectations of this review. No initial result modified.
 
-| Cas | Première passe | Seconde passe | Bilan provisoire |
+| Case | First pass | Second pass | Provisional assessment |
 | --- | --- | --- | --- |
-| N077, News Corp | NWSA absent | NWSA neutral, extrait citant The Wall Street Journal | Omission corrigée |
-| N070, conférence | JPM absent | JPM toujours absent | Omission maintenue, à arbitrer humainement |
-| N084, Everpure stockage | P neutral | P supprimé | Régression : l'entreprise distincte est explicitement nommée ; contrôle lexical P non couvert |
-| N077, Netflix | NFLX negative | NFLX negative | Désaccord de sentiment inchangé |
+| N077, News Corp | NWSA missing | NWSA neutral, excerpt quoting The Wall Street Journal | Omission fixed |
+| N070, conference | JPM missing | JPM still missing | Omission kept, to adjudicate with a human |
+| N084, Everpure storage | P neutral | P removed | Regression: the distinct company is explicitly named; lexical check does not cover P |
+| N077, Netflix | NFLX negative | NFLX negative | Sentiment disagreement unchanged |
 
-Les huit autres articles conservent les mêmes tickers et labels. Total toujours
-28 paires : un ajout, une suppression, aucun changement de sentiment. Deux paires
-manquent par rapport aux trente attendues provisoirement (JPM et désormais P).
-Sept articles correspondent entièrement aux attentes initiales, contre huit
-avant relecture. Cela reste un accord avec les annotations de l'agent, pas un
-score de précision établi sur un jeu validé humainement.
+The other eight articles keep the same tickers and labels. Still 28 pairs in total: one
+addition, one removal, no sentiment change. Two pairs are missing compared with the
+thirty provisionally expected (JPM and now P). Seven articles fully match the initial
+expectations, against eight before the review. This is still agreement with the
+agent's annotations, not an accuracy score on a human-validated set.
 
-Les indices lexicaux signalent aussi NDAQ dans N003 et N070, à cause de Nasdaq :
-ces alertes ne justifient pas un ajout automatique de l'entreprise. Ils ne
-repèrent ni la variante JP Morgan ni la marque WSJ avec les seuls noms du CSV.
-Leur intérêt ici est de rendre visible la suppression de P, pas de garantir
-l'exhaustivité ou la justesse du rattachement des marques.
+The lexical hints also flag NDAQ in N003 and N070 because of "Nasdaq": these alerts do
+not justify automatically adding the company. With the CSV names alone they detect
+neither the JP Morgan variant nor the WSJ brand. Their value here is to make the
+removal of P visible, not to guarantee completeness or correct brand mapping.
 
-**Décision :** conserver cette sortie comme proposition à examiner. La première
-passe reste le point de comparaison ; aucune fusion ni correction manuelle.
-Avant de retenir une nouvelle stratégie, arbitrer les cas humains et vérifier
-les régressions sur les mêmes critères, puis sur des articles distincts.
+**Decision:** keep this output as a proposal to examine. The first pass remains the
+comparison point; no merge and no manual correction. Before adopting a new strategy,
+adjudicate the human cases and check regressions on the same criteria, then on
+distinct articles.
 
-**Exécution :** dix appels, zéro reprise, zéro cache local ; 141 562 tokens
-d'entrée (44 496 lecture cache, 97 036 écriture cache), 1 911 de sortie.
-Coût additionnel **0,2744812 USD** ; cumul connu **0,8793422 USD**, réservation
-inconnue conservée **0,173757 USD**, solde prudent **3,9469008 USD**.
-71 tests hors réseau passent. Dix requêtes et 28 paires revalidées, empreintes des
-sources et du résultat initial inchangées ; `.env`, cache et sorties ignorés par Git.
+**Execution:** ten calls, zero retries, zero local cache; 141,562 input tokens (44,496
+cache reads, 97,036 cache writes), 1,911 output. Additional cost **0.2744812 USD**;
+known cumulative **0.8793422 USD**, unknown reservation kept **0.173757 USD**,
+conservative balance **3.9469008 USD**. 71 offline tests pass. Ten requests and 28 pairs
+revalidated, hashes of the sources and of the initial result unchanged; `.env`, cache
+and outputs ignored by Git.
 
-## Relecture ciblée v2 — 13 octobre 2026
+## Targeted review v2 — 13 October 2026
 
-Après gel du registre `entity-aliases-v1` et des règles `entity-coverage-v2`, le
-dry-run sélectionne uniquement N070, N077 et N084. Le mode ciblé n'a reçu ni les
-attentes de ce document ni les corrections attendues ; il reçoit l'article, le
-référentiel, la première proposition et les indices déterministes.
+After freezing registry `entity-aliases-v1` and rules `entity-coverage-v2`, the dry run
+selects only N070, N077 and N084. The targeted mode received neither the expectations
+of this document nor the expected corrections; it receives the article, the reference
+file, the first proposal and the deterministic hints.
 
-| Cas | Résultat v2 ciblé | Arbitrage |
+| Case | Targeted v2 result | Adjudication |
 | --- | --- | --- |
-| N070 | JPM neutral ajouté ; JNJ positive conservé | Conforme |
-| N077 | NWSA neutral ajouté ; GOOGL neutral conservé | Couverture conforme |
-| N077 | NFLX reste negative | Désaccord maintenu avec notre préférence neutral ; cas réellement mixte |
-| N084 | P neutral, PNR negative et CMG neutral conservés | Régression v1 corrigée |
-| Nasdaq | Aucun NDAQ ajouté | Faux positif supprimé |
+| N070 | JPM neutral added; JNJ positive kept | As expected |
+| N077 | NWSA neutral added; GOOGL neutral kept | Coverage as expected |
+| N077 | NFLX stays negative | Disagreement kept with our neutral preference; a genuinely mixed case |
+| N084 | P neutral, PNR negative and CMG neutral kept | v1 regression fixed |
+| Nasdaq | No NDAQ added | False positive removed |
 
-La couverture des entités atteint les trente paires attendues provisoirement une
-fois les trois propositions ciblées appliquées aux sept résultats inchangés.
-Cette mesure dépend toujours de l'annotation de l'agent. Le résultat v2 reste un
-artefact séparé ; aucune fusion manuelle ou automatique n'a été effectuée.
+Entity coverage reaches the thirty provisionally expected pairs once the three targeted
+proposals are applied to the seven unchanged results. This measurement still depends
+on the agent's annotation. The v2 result remains a separate artifact; no manual or
+automatic merge was made.
 
-Exécution `output/targeted-review-003` : trois appels, aucune reprise ni cache
-local, 43 025 tokens d'entrée (9 976 en lecture et 33 040 en écriture cache),
-679 tokens de sortie, **0,0927612 USD**. C'est environ 66 % moins cher que la
-relecture générale des dix articles (0,2744812 USD), tout en corrigeant sa
-régression observée. Ce rapport ne prédit pas la proportion d'alertes sur 100
-articles. Cumul connu **0,9721034 USD**, réservation inconnue **0,173757 USD**,
-solde prudent **3,8541396 USD**.
+Run `output/targeted-review-003`: three calls, no retry or local cache, 43,025 input
+tokens (9,976 cache reads and 33,040 cache writes), 679 output tokens,
+**0.0927612 USD**. That is about 66 % cheaper than the general review of the ten
+articles (0.2744812 USD), while fixing its observed regression. This ratio does not
+predict the share of alerts on 100 articles. Known cumulative **0.9721034 USD**,
+unknown reservation **0.173757 USD**, conservative balance **3.8541396 USD**.
 
-Les 74 tests hors réseau passent. Les trois réponses, preuves, clés de requête,
-empreintes du registre, de la classification initiale et des deux sources ont été
-revalidées. La prochaine itération peut porter sur l'agrégation et les CSV, en
-conservant le désaccord NFLX dans les limites de qualité.
+The 74 offline tests pass. The three answers, evidence, request keys, hashes of the
+registry, of the initial classification and of both sources were revalidated. The next
+iteration can address aggregation and the CSV files, keeping the NFLX disagreement
+among the quality limits.

@@ -1,102 +1,101 @@
-# Revue des analyses — échantillon initial
+# Review of the analyses — initial sample
 
-Statut : N001, N002 et N027 analysés par API et relus par l'agent le 13 octobre ;
-pas de validation humaine indépendante. Ce document n'est pas un jeu de vérité terrain et ne
-permet pas de revendiquer un score de précision. Les faits des articles sont
-traités dans le cadre du sujet, sans vérification ou enrichissement externe.
+Status: N001, N002 and N027 analysed through the API and reviewed by the agent on
+13 October; no independent human validation. This document is not a ground-truth set
+and does not support an accuracy claim. Article facts are treated within the
+assignment, without external verification or enrichment.
 
-## Sélection
+## Selection
 
-| Article | Point à vérifier en lisant le texte entier |
+| Article | What to check while reading the full text |
 | --- | --- |
-| N001 | Distinguer la société évaluée de la banque émettant une recommandation ; conserver les mentions neutres |
-| N002 | Classifier séparément chaque société et conserver uniquement l'univers fourni |
-| N003 | Reconnaître les graphies Unicode ressemblantes avec le contexte des produits ; distinguer nouvelles et rappels historiques |
-| N027 | Vérifier les mentions après retrait des U+200B, sans altérer les sources |
-| N029 | Le sujet principal peut être hors univers ; un client pilote n'hérite pas automatiquement du sentiment de la levée de fonds |
-| N070 | Rattacher produit et filiale au parent explicite ; examiner aussi les mentions incidentes, dont le nom d'une conférence |
-| N077 | Évaluer séparément les concurrents, rattacher les marques et examiner la source médiatique ; éviter les doubles classes |
-| N096 | Une entreprise hors univers ne devient pas éligible parce qu'un investisseur ou partenaire est connu ; examiner la possibilité d'une liste vide |
+| N001 | Distinguish the rated company from the bank issuing the recommendation; keep neutral mentions |
+| N002 | Classify each company separately and keep only the supplied universe |
+| N003 | Recognise look-alike Unicode spellings from the product context; distinguish news from past recalls |
+| N027 | Check mentions after U+200B removal, without altering the sources |
+| N029 | The main subject may be outside the universe; a pilot customer does not automatically inherit the sentiment of the fundraising |
+| N070 | Map product and subsidiary to the explicit parent; also examine incidental mentions, including a conference name |
+| N077 | Assess competitors separately, map brands and examine the media source; avoid dual classes |
+| N096 | A company outside the universe does not become eligible because an investor or partner is known; consider an empty list |
 
-Premier essai technique exécuté : `N001 N002 N027`. Étendre ensuite à des articles
-distincts ci-dessus selon le budget, après consolidation des omissions observées.
+First technical trial run on `N001 N002 N027`. Extend later to the distinct articles
+above within budget, after consolidating the observed omissions.
 
-## Revue assistée du pilote — 13 octobre 2026
+## Assisted review of the pilot — 13 October 2026
 
-Relecteur : agent Codex, après lecture des prédictions et du texte complet.
-Il ne s'agit donc pas d'annotations indépendantes ni d'un benchmark.
+Reviewer: Codex agent, after reading the predictions and the full text. These are
+therefore neither independent annotations nor a benchmark.
 
-| Article / ticker | Attendu selon la revue | v1 (pilot-002) | v2 (pilot-003, retenu) | Motif |
+| Article / ticker | Expected by the review | v1 (pilot-002) | v2 (pilot-003, retained) | Reason |
 | --- | --- | --- | --- | --- |
-| N001 / FIS | negative | negative | negative | Dégradation et baisse des prévisions |
-| N001 / FISV | negative | negative | negative | Problèmes de prévisions mentionnés pour Fiserv |
-| N001 / MS, WFC | neutral | neutral | neutral | Banques émettant les recommandations, sans impact propre établi |
-| N002 / COIN, XYZ | positive | positive | positive | Relèvement des objectifs avec recommandation favorable |
-| N002 / GS | neutral | omis | neutral | Goldman Sachs émet la recommandation ; mention éligible |
-| N027 / TSLA | negative | negative | negative | Chute du titre et enquête |
-| N027 / GOOGL | neutral | omis | omis | Waymo sert de comparaison de flotte ; lien au parent inféré, absent du CSV |
+| N001 / FIS | negative | negative | negative | Downgrade and lower guidance |
+| N001 / FISV | negative | negative | negative | Guidance problems mentioned for Fiserv |
+| N001 / MS, WFC | neutral | neutral | neutral | Banks issuing the recommendations, no established implication of their own |
+| N002 / COIN, XYZ | positive | positive | positive | Raised targets with a favourable recommendation |
+| N002 / GS | neutral | omitted | neutral | Goldman Sachs issues the recommendation; eligible mention |
+| N027 / TSLA | negative | negative | negative | Share drop and investigation |
+| N027 / GOOGL | neutral | omitted | omitted | Waymo is a fleet comparison; parent link inferred, absent from the CSV |
 
-Microstrategy et Circle sont hors de l'univers fourni ; leur omission n'est pas
-une erreur. La mention de l'indice Nasdaq dans N001 ne suffit pas à identifier
-l'entreprise opératrice NDAQ. Le rattachement Waymo/Alphabet est une inférence de
-connaissance du modèle/agent à faire valider en revue ; aucune source métier
-externe n'a été consultée.
+Microstrategy and Circle are outside the supplied universe; omitting them is not an
+error. The mention of the Nasdaq index in N001 is not enough to identify the operating
+company NDAQ. The Waymo/Alphabet link is a knowledge inference of the model/agent to be
+validated in review; no external business source was consulted.
 
-Le prompt v2 demande un inventaire de chaque paragraphe avant l'attribution des
-labels, notamment banques, sources et comparaisons. Une variante v3 clarifiant
-le recours aux liens de filiation connus et utilisant `reasoning.effort=medium`
-a été testée dans `pilot-004` : GS et GOOGL y manquent. Cette variante n'est pas
-retenue. Ni les résultats ni les caches n'ont été corrigés manuellement.
+Prompt v2 asks for an inventory of every paragraph before assigning labels, notably
+banks, sources and comparisons. A v3 variant clarifying the use of known parent links
+and using `reasoning.effort=medium` was tested in `pilot-004`: GS and GOOGL are missing
+there. That variant is not retained. Neither results nor caches were corrected by hand.
 
-Limite actuelle : la complétude des extractions n'est pas garantie par le schéma
-JSON ni par une instruction supplémentaire. Avant un run complet, envisager une
-vérification dédiée des mentions oubliées et l'évaluer sur les autres articles
-de revue, sans se limiter aux trois cas ayant servi à ajuster le prompt.
+Current limit: extraction completeness is guaranteed neither by the JSON schema nor by
+an extra instruction. Before a full run, consider a dedicated check of forgotten
+mentions and evaluate it on the other review articles, not only on the three cases used
+to tune the prompt.
 
-Refonte ultérieure demandée par l'utilisateur : v4 RCORCF et dix exemples
-pédagogiques. Le résultat API v4 est maintenant dans `output/pilot-005`. N027 est désormais
-un cas de développement enseigné explicitement via un exemple fictif Waymo ;
-ne pas le compter comme évaluation indépendante de la nouvelle version.
+Later redesign requested by the user: RCORCF v4 and ten teaching examples. The v4 API
+result is in `output/pilot-005`. N027 is now a development case taught explicitly
+through a synthetic Waymo example; do not count it as an independent evaluation of the
+new version.
 
-## Retest RCORCF v4 — 13 octobre 2026
+## RCORCF v4 retest — 13 October 2026
 
-| Article | Classifications obtenues |
+| Article | Classifications obtained |
 | --- | --- |
-| N001 | FIS negative ; FISV negative ; MS neutral ; WFC neutral |
-| N002 | COIN positive ; GS neutral ; XYZ positive |
-| N027 | GOOGL neutral ; TSLA negative |
+| N001 | FIS negative; FISV negative; MS neutral; WFC neutral |
+| N002 | COIN positive; GS neutral; XYZ positive |
+| N027 | GOOGL neutral; TSLA negative |
 
-Les neuf paires correspondent à notre revue assistée de ces trois articles.
-Par rapport à v2, GOOGL est ajouté via l'extrait de comparaison avec Waymo ;
-aucun autre ticker ou label ne change. Goldman Sachs, récupéré par v2 et perdu
-dans l'essai v3, est bien conservé. Les extraits passent le contrôle de présence
-exacte dans le texte normalisé. Aucun résultat n'a été retouché.
+The nine pairs match our assisted review of these three articles. Compared with v2,
+GOOGL is added through the Waymo comparison excerpt; no other ticker or label changes.
+Goldman Sachs, recovered by v2 and lost in the v3 trial, is kept. The excerpts pass the
+exact-presence check in the normalised text. No result was edited.
 
-Trois appels, aucune reprise, aucun cache local utilisé : 0,0888659 USD,
-40 884 tokens d'entrée et 677 de sortie. Ce petit ensemble déjà utilisé pour
-concevoir le prompt ne démontre pas la qualité sur le reste des articles.
+Three calls, no retry, no local cache used: 0.0888659 USD, 40,884 input tokens and 677
+output tokens. This small set, already used to design the prompt, does not demonstrate
+quality on the other articles.
 
-## Méthode
+## Method
 
-Extension exécutée sur dix autres articles, avec attentes de l'agent consignées
-avant les appels : [REVIEW_10.md](REVIEW_10.md). Les désaccords y sont conservés ;
-il ne s'agit toujours pas d'annotations humaines indépendantes.
+Extension run on ten other articles, with the agent's expectations recorded before the
+calls: [REVIEW_10.md](REVIEW_10.md). Disagreements are kept there; these are still not
+independent human annotations.
 
-1. Avant de consulter la prédiction, lire le titre et le corps normalisés. Relever
-   toutes les entreprises identifiables, leur ticker canonique dans le CSV, leur
-   rôle, le label attendu et l'extrait justificatif. Noter les cas incertains.
-2. Comparer aux objets de `classifications.json` : omissions, ajouts injustifiés,
-   parent incorrect, sentiment attribué à la mauvaise entreprise, ancien fait
-   dominant abusivement la nouvelle information, neutralité oubliée.
-3. Consigner les décisions dans une table de revue : `article_id`, `ticker`,
-   `expected_label`, `predicted_label`, `error_type`, `rationale`, `reviewer`.
-   Ne pas modifier directement les résultats produits par la pipeline.
-4. Corriger le prompt ou le code pour une erreur récurrente ; changer sa version,
-   régénérer sous budget et conserver la trace du désaccord. Réserver quelques
-   autres articles à une vérification après correction pour limiter le surajustement.
+1. Before looking at the prediction, read the normalised headline and body. Note every
+   identifiable company, its canonical ticker in the CSV, its role, the expected label
+   and the supporting excerpt. Note uncertain cases.
+2. Compare with the objects in `classifications.json`: omissions, unjustified additions,
+   wrong parent, sentiment attributed to the wrong company, an old fact wrongly
+   dominating new information, forgotten neutrality.
+3. Record the decisions in a review table: `article_id`, `ticker`, `expected_label`,
+   `predicted_label`, `error_type`, `rationale`, `reviewer`. Never edit the results
+   produced by the pipeline directly.
+4. Fix the prompt or the code for a recurring error; change its version, regenerate
+   within budget and keep the trace of the disagreement. Keep a few other articles for
+   a check after the fix to limit overfitting.
 
-Quand les annotations existent, mesurer séparément précision/rappel des paires
-article-ticker et exactitude des labels sur les paires correctement détectées.
-Indiquer le nombre de cas, les arbitrages et la taille limitée de l'échantillon.
-La présence d'un extrait exact valide la traçabilité textuelle, pas la justesse du
-label, du lien marque-parent ou l'exhaustivité des entreprises trouvées.
+When annotations exist, measure separately the precision/recall of article-ticker pairs
+and the label accuracy on correctly detected pairs. Report the number of cases, the
+adjudications and the limited sample size. An exact excerpt validates textual
+traceability, not the correctness of the label, of the brand-parent link or the
+completeness of the companies found.
+
+The later, larger measurement is [`review/reference-v1`](../review/reference-v1/README.md).

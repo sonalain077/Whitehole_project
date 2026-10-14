@@ -90,6 +90,6 @@ refuses a composition with blocking alerts.
 1. Offline tests pass, and new behaviour has its own test with a fake client.
 2. If a paid run happened: `usage` totals, `status`, blocking alerts and a diff
    against the retained outputs are reported, with the cost per article.
-3. README "État actuel", IMPLEMENTATION_PLAN and a dated WORK_LOG entry are updated
+3. README "Current state", IMPLEMENTATION_PLAN and a dated WORK_LOG entry are updated
    with the commands actually run and their results, including failures.
 4. Speak to the user in French; code, identifiers and output contracts stay English.

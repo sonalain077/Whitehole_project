@@ -1,197 +1,136 @@
-# Test de classification sur les 100 articles — 13 octobre 2026
+# Full runs on the 100 articles
 
-## Périmètre
+This document records the successive full runs and why each result was or was not
+retained. The retained version and its measurement are summarised at the end; the
+command-by-command trace is in [WORK_LOG.md](WORK_LOG.md).
 
-Exécution demandée avant l'agrégation. Sources inchangées : `news.json` et
-`sp500.csv`. Modèle `gpt-5.6-terra`, prompt `entity-sentiment-v4-rcorcf`, effort
-low, sortie structurée et validation habituelle. Budget disponible au départ :
-3,8541396 USD, après conservation de la réservation inconnue antérieure.
+## First full pass — prompt v4 (13 October)
 
-La première passe se trouve dans `output/full-100-v4`. Elle contient les 100
-articles et reste l'artefact complet de référence. La relecture ciblée se trouve
-dans `output/full-100-targeted-review` et contient uniquement les huit articles
-signalés. Aucune fusion ou correction manuelle des classifications n'a été faite.
+Run requested before aggregation. Unchanged sources: `news.json` and `sp500.csv`.
+Model `gpt-5.6-terra`, prompt `entity-sentiment-v4-rcorcf`, low effort, structured output
+and the usual validation. Budget available at the start: 3.8541396 USD, after keeping
+the earlier unknown reservation.
 
-## Première passe
+The first pass is in `output/full-100-v4`, with all 100 articles. The targeted review is
+in `output/full-100-targeted-review` and contains only the eight flagged articles. No
+manual merge or correction of classifications was made.
 
-- 100 articles terminés, 87 appels et 13 résultats repris d'un cache compatible.
-- Aucune reprise, aucun coût inconnu dans ce run.
-- 217 paires article/ticker : 70 positive, 93 neutral et 54 negative.
-- 11 articles avec une liste vide validée.
-- 1 186 925 tokens d'entrée, dont 401 276 lus et 785 388 écrits au cache
-  fournisseur ; 16 733 tokens de sortie.
-- Coût du run : **2,2450432 USD**. Il ne représente pas le coût initial des 13
-  résultats locaux réutilisés, déjà comptabilisé dans les essais précédents.
+- 100 articles completed, 87 calls and 13 results reused from a compatible cache.
+- No retry, no unknown cost in this run.
+- 217 article/ticker pairs: 70 positive, 93 neutral and 54 negative.
+- 11 articles with a validated empty list.
+- 1,186,925 input tokens, of which 401,276 provider cache reads and 785,388 provider
+  cache writes; 16,733 output tokens.
+- Run cost: **2.2450432 USD**. It does not include the original cost of the 13 locally
+  reused results, already counted in earlier trials.
 
-## Ajustement du contrôle déterministe
+### Adjusting the deterministic check
 
-La première mesure a produit 45 alertes. La majorité était fausse : les mots
-ordinaires `target`, `block` et `southern`, le nom de personne Rollins, ainsi que
-les acronymes entre parenthèses `(MA)` et `(CMS)`, étaient confondus avec des
-entreprises ou tickers.
+The first measurement produced 45 alerts. Most were false: the ordinary words
+`target`, `block` and `southern`, the person's name Rollins, and the parenthesised
+acronyms `(MA)` and `(CMS)` were confused with companies or tickers.
 
-La correction `entity-coverage-v3` et le registre `entity-aliases-v2` :
+The fix `entity-coverage-v3` with registry `entity-aliases-v2`:
 
-- excluent les formes courtes ambiguës tout en conservant les noms juridiques
-  complets et les tickers explicitement balisés ;
-- ne considèrent plus toute parenthèse en majuscules comme un ticker ;
-- conservent les alias certains et l'ambiguïté Everpure sans ajout automatique.
+- excludes ambiguous short forms while keeping full legal names and explicitly tagged
+  tickers;
+- no longer treats every upper-case parenthesis as a ticker;
+- keeps certain aliases and the Everpure ambiguity without automatic addition.
 
-Après correction, huit articles seulement sont signalés : N012, N013, N038,
-N070, N076, N077, N084 et N091. Les 75 tests hors réseau passent.
+After the fix, only eight articles are flagged: N012, N013, N038, N070, N076, N077,
+N084 and N091. The 75 offline tests pass.
 
-## Relecture ciblée
+### Targeted review
 
-Huit appels, aucune reprise ni cache local, pour **0,2281222 USD**. 115 346 tokens
-d'entrée, dont 34 916 lus et 80 406 écrits au cache fournisseur ; 1 673 de sortie.
+Eight calls, no retry or local cache, **0.2281222 USD**. 115,346 input tokens, of which
+34,916 cache reads and 80,406 cache writes; 1,673 output.
 
-| Article | Ajouts proposés | Motif |
+| Article | Proposed additions | Reason |
 | --- | --- | --- |
-| N012 | STT neutral | marque SPDR |
-| N013 | NWSA neutral ; WBD neutral | Wall Street Journal ; CNN retrouvé par la relecture |
-| N038 | SBUX neutral | Starbucks comme lieu incident |
-| N070 | JPM neutral | nom de la conférence JP Morgan |
-| N076 | BLK neutral | marque iShares |
+| N012 | STT neutral | SPDR brand |
+| N013 | NWSA neutral; WBD neutral | Wall Street Journal; CNN found by the review |
+| N038 | SBUX neutral | Starbucks as an incidental location |
+| N070 | JPM neutral | Name of the JP Morgan conference |
+| N076 | BLK neutral | iShares brand |
 | N077 | NWSA neutral | Wall Street Journal |
-| N084 | aucun | P, PNR et CMG déjà correctement distingués |
+| N084 | none | P, PNR and CMG already correctly distinguished |
 | N091 | IVZ neutral | Invesco QQQ Trust |
 
-Aucune suppression ni modification de label. Toutes les alertes fiables sont
-couvertes. N084 conserve un motif d'ambiguïté par conception, mais la proposition
-contient bien P neutral et PNR negative avec des preuves distinctes.
+No removal and no label change. If the eight proposals replaced their eight initial
+rows, the result would have 225 pairs: 70 positive, 101 neutral and 54 negative.
 
-Si les huit propositions remplaçaient leurs huit lignes initiales, le résultat
-aurait 225 paires : 70 positive, 101 neutral et 54 negative. Cette composition
-est seulement vérifiée en mémoire ; elle n'est pas écrite avant l'implémentation
-d'une composition explicite et testée au lot suivant.
+The success of structural validation does not prove the semantic correctness of the
+100 articles. The review uses the same model, so it is not independent ground truth.
+Additional cost of this test: **2.4731654 USD**.
 
-## Contrôles, coût et limites
+## Prompt v5 pass
 
-Les deux manifestes sont `completed`. Les 100 identifiants, 225 paires composées,
-preuves, tickers, labels, clés des huit requêtes, empreintes des sources, du registre
-et de la première classification ont été revalidés. Les sources sont intactes ;
-clé, caches et sorties sont ignorés par Git.
+Prompt `entity-sentiment-v5-rcorcf` adds a rule and two synthetic examples to separate
+central news from historical performance or a small peer move cited as a comparison,
+and handles separately the effects of an agreement for each party. Registry
+`entity-aliases-v3` adds CNN → WBD.
 
-Coût additionnel de ce test : **2,4731654 USD**. Coût connu cumulé du projet :
-**3,4452688 USD** ; réservation inconnue conservée : **0,173757 USD** ; solde
-prudent du budget de 5 USD : **1,3809742 USD**.
+The coherent full result is in `output/full-100-v5-final`: 100 articles, 220 pairs
+(62 positive, 105 neutral, 53 negative), 11 empty articles. Compared with the v4
+composition plus targeted review, 29 articles change: seven pairs added, twelve
+removed and 23 label changes. The intended fixes are obtained (NVDA/N069,
+GOOGL-NFLX-RDDT/N091 and AAPL/N095 become neutral), but the pass is not better overall:
+it drops neutral sources, brands or subsidiaries (STT, NWSA, WBD, SBUX, BLK in eight
+articles, PCAR/N078, CMCSA/N082), adds two false `XYZ` in N023 and N100 by confusing the
+social network X with Block, labels BAC/N092 negative for publishing a downgrade of Nike
+(against the analyst-bank rule), and labels NVDA/N076 positive from old results despite
+the central unfavourable insider-selling topic. Known cost of the v5 runs:
+**2.6571634 USD**.
 
-Le succès structurel ne prouve pas la justesse sémantique des 100 articles. Seul
-le petit jeu documenté a reçu une revue humaine assistée détaillée ; NFLX/N077
-reste notamment un sentiment mixte discuté. La relecture utilise le même modèle,
-donc elle n'est pas une vérité terrain indépendante.
+Conclusion at that time: keep the v5 rule, but do not promote its raw JSON.
 
-## Dernière passe v5 après la revue
+## Composition and deterministic safeguards
 
-Le prompt `entity-sentiment-v5-rcorcf` ajoute une règle et deux exemples fictifs
-pour distinguer une information centrale d'une performance historique ou d'un
-faible mouvement de pair cité en comparaison. Il traite aussi séparément les
-effets d'un accord pour chacune de ses parties. Le registre `entity-aliases-v3`
-ajoute CNN → WBD. Ces changements sont couverts par les tests hors réseau.
+`compose` materialised the v4 + targeted review composition in
+`output/composition-audit-v3/`: 100 articles and 225 pairs, but `ready_for_scoring` is
+`false`. Seven alerts block it: CMCSA missing in N030, N047 and N061; CMCSA and PSKY
+missing in N048; NWSA missing in N066; XOM/N100 based on the false SpaceX → Exxon Mobil
+match. The v5 candidate has fifteen blocking alerts and differs on 29 articles.
 
-Le résultat complet cohérent est dans `output/full-100-v5-final`. Son manifeste
-est `completed` : 100 articles, 90 résultats repris du cache compatible et dix
-appels dans le run final. Les 220 paires se répartissent en 62 positive,
-105 neutral et 53 negative ; 11 articles restent sans entreprise éligible.
-Les preuves, tickers, labels, identifiants et empreintes des sources sont valides.
+Registry `entity-aliases-v5`: CNBC and NBC News → CMCSA, CBS and CBS News → PSKY,
+Barron's → NWSA, Kenworth → PCAR; `X → XYZ` and `SpaceX → XOM` forbidden. The checks
+never change a classification: they only keep a doubtful composition out of scoring.
 
-Par rapport à la composition conceptuelle v4 + revue ciblée, 29 articles changent :
-sept paires sont ajoutées, douze retirées et 23 labels changent. Les changements
-recherchés sont obtenus : NVDA/N069, GOOGL-NFLX-RDDT/N091 et AAPL/N095 deviennent
-neutral. QCOM/N095 reste positive. GS et MS/N047 deviennent aussi neutral comme
-mouvements secondaires de marché.
+A first joint review of the six articles added all the sources and removed XOM/N100,
+but also changed three labels and removed SCHW/N066; that batch was rejected. The
+`additions-only` mode then made the invariants executable: any removal or change of an
+existing label invalidates the answer. The retained composition,
+`output/composition-final-v3/`, has 230 pairs (70 positive, 106 neutral, 54 negative),
+zero blocking alerts and `ready_for_scoring=true`. Exported to `output/final-results-v1/`
+(111 tickers). This phase added **0.3314652 USD** of known cost.
 
-La passe n'est cependant pas meilleure dans son ensemble. Elle omet notamment
-des sources, marques ou filiales neutres ; le contrôle déterministe signale STT,
-NWSA, WBD, SBUX et BLK dans huit articles. PCAR/N078 et CMCSA/N082 disparaissent
-également sans être couverts par ces alias. Deux faux `XYZ` sont ajoutés dans
-N023 et N100 parce que le réseau social X est confondu avec Block. BAC/N092 reçoit
-à tort `negative` pour avoir publié une dégradation sur Nike, en contradiction
-avec la règle explicite sur les banques analystes. NVDA/N076 reçoit `positive`
-à partir d'anciens résultats malgré le sujet central défavorable des ventes
-d'initié. D'autres désaccords, comme ADBE/N039, restent discutables.
+This manual chain of runs is not reproducible by a single command, and its baseline
+prompt (v4) is no longer in the code. It was therefore replaced.
 
-Le coût connu des exécutions v5 est **2,6571634 USD**. Le coût connu cumulé du
-projet est **6,1024322 USD**. Deux réservations inconnues totalisent 0,349960 USD,
-soit un engagement prudent de **6,4523922 USD** sur le plafond de 10 USD.
+## End-to-end command, prompt v5 (`run-final-v1`)
 
-Conclusion : conserver la règle v5, mais ne pas promouvoir son JSON brut. Aucun
-résultat n'a été retouché manuellement.
+`run --max-cost-usd 4 --output-dir output/run-final-v1`: `completed`, zero blocking
+alerts, 232 pairs (63 positive, 119 neutral, 50 negative), 112 tickers. 114 calls for
+3.0187697 USD, i.e. **0.030 USD per article** for one cold pass (0.026 classification,
+0.004 for 13 targeted reviews). 86 % of the cost is provider cache writes.
 
-## Composition et garde-fous déterministes
+## Prompt v6 with roles, three passes and vote (`run-v6-vote3`, retained)
 
-La commande `compose` a matérialisé la composition v4 + revue ciblée dans
-`output/composition-audit-v3/`. Elle vérifie les empreintes des artefacts, refuse
-une revue incomplète, conserve la provenance des huit articles remplacés et
-compare la candidate v5 sans la promouvoir. Le résultat contient 100 articles et
-225 paires, mais `ready_for_scoring` vaut `false`.
+Prompt `entity-sentiment-v6-roles` asks for the role of every company and forbids a
+directional label for the roles the assignment defines as neutral. A first single-pass
+run stopped on N064 (an evidence excerpt paraphrased twice); retries now carry the
+validator's reason. `run --passes 3 --max-attempts 3`: `completed`, zero blocking
+alerts, 233 pairs (61 positive, 117 neutral, 55 negative), 112 tickers. The three
+passes agree on 224 of 239 proposed pairs (93.7 %); the vote keeps 9 pairs by majority
+and drops 6 proposed by a single pass. Passes 2 and 3 cost about 0.006 USD per article
+thanks to the provider cache.
 
-Sept alertes bloquent la composition : CMCSA manque dans N030, N047 et N061 ;
-CMCSA et PSKY manquent dans N048 ; NWSA manque dans N066 ; XOM/N100 repose sur
-le faux rapprochement entre SpaceX et Exxon Mobil. Ces cas correspondent à des
-alias explicites nouvellement versionnés ou à un alias interdit, pas à une simple
-variation arbitraire du modèle.
+## Measurement and choice
 
-La candidate v5 comporte quinze alertes bloquantes : omissions STT/N012,
-NWSA-WBD/N013, SBUX/N038, BLK/N043, CMCSA/N047, STT/N049, CMCSA/N061,
-BLK/N076, PCAR/N078, CMCSA/N082, STT/N089 et NWSA/N097, plus les faux XYZ/N023
-et XYZ/N100. Elle diffère de la composition sur 29 articles. Le contrôle de rôle
-signale aussi BAC/N092 comme possible transfert de sentiment depuis Nike ; ce
-signal reste consultatif pour éviter de transformer une heuristique lexicale en
-décision métier.
-
-Le registre est `entity-aliases-v5` : CNBC et NBC News sont rattachés à CMCSA,
-CBS et CBS News à PSKY, Barron's à NWSA et Kenworth à PCAR. `X → XYZ` et
-`SpaceX → XOM` sont interdits. Les contrôles ne modifient aucune classification :
-ils empêchent seulement une composition douteuse d'entrer dans le calcul.
-
-## Résolution des blocages
-
-Une première relecture commune des six articles a ajouté toutes les sources et
-retiré XOM/N100, mais elle a aussi changé trois labels et supprimé SCHW/N066. Ce
-lot a été rejeté. Le mode `additions-only` a ensuite rendu les invariants
-exécutables : toute suppression ou modification d'un label existant invalide la
-réponse. Quatre réponses conformes ont été conservées depuis le cache ; N066 a
-nécessité deux tentatives avant de préserver SCHW tout en ajoutant NWSA. N100 a
-été isolé et sa réponse validée retire uniquement XOM.
-
-La composition retenue se trouve dans `output/composition-final-v3/`. Elle couvre
-100 articles et 230 paires : 70 positive, 106 neutral et 54 negative ; 11 articles
-restent sans entité. Par rapport à la composition de 225 paires, elle ajoute
-CMCSA/N030, CMCSA/N047, CMCSA-PSKY/N048, CMCSA/N061 et NWSA/N066, tous neutral,
-et retire XOM/N100. Aucun label existant ne change. Le rapport compte zéro alerte
-bloquante, 60 alertes consultatives et indique `ready_for_scoring=true`.
-
-Cette phase ajoute **0,3314652 USD** de coût connu. Une tentative N100 interrompue
-conserve en plus une réservation prudente de 0,179378 USD. Le cumul projet devient
-6,4338974 USD connus et 0,529338 USD inconnus/réservés, soit 6,9632354 USD engagés
-sur 10 USD. Les 86 tests hors réseau passent ; la compilation Python et les
-empreintes identiques des compositions finales v1/v2 confirment que le dernier
-durcissement n'a pas modifié les 230 classifications.
-
-## Export temporel
-
-`output/final-results-v1/` est généré sans réseau depuis la composition approuvée.
-`entities.csv` contient 230 lignes triées par `(id, ticker)` et `scores.csv`
-111 lignes triées par ticker, dont 26 valeurs nulles. Le calcul utilise la
-référence du 29 septembre 2026 à minuit à New York, convertit les instants en UTC,
-applique la demi-vie de sept jours et additionne avec `math.fsum`.
-
-Le manifeste final est `completed`, lie les empreintes des données, de la
-composition et des deux CSV, et refuse toute composition modifiée ou non prête.
-Les scores positifs les plus élevés commencent par GOOGL, AMD, UAL, DAL et QCOM ;
-les plus négatifs commencent par NKE, BX, BA, TSLA et CMCSA. Ces valeurs sont des
-agrégats du jeu fourni, pas des recommandations d'investissement.
-
-## Évaluation humaine à compléter
-
-Une comparaison directe entre la composition finale et v5 produit 39 décisions
-différentes sur 27 articles. Le dossier `review/human-evaluation-v1/` contient la
-liste complète et un échantillon de dix cas variés avec le texte intégral, les
-deux labels et leurs preuves. Les annotations sont volontairement vides : aucune
-version n'est utilisée comme vérité de référence.
-
-Après remplissage de `human_decision`, la commande `evaluate` mesurera séparément
-l'accord de la composition finale et de v5. Les CSV de `final-results-v1` doivent
-être considérés comme provisoires sur le plan sémantique jusqu'à cet arbitrage,
-même si leurs schémas, calculs et empreintes sont valides.
+All six complete versions were compared on every disagreement plus 25 random checks of
+the consensus ([`review/reference-v1`](../review/reference-v1/README.md), adjudicated by
+the agent). Estimated pair accuracy: manual composition 0.878, `run-final-v1` 0.907,
+single v6 passes 0.920–0.924, **three passes with vote 0.933**. The ranking holds on
+the 20 non-debatable disputed cases (9, 17, 16–17 and 19 correct). The retained version
+is `output/run-v6-vote3/final/`, copied to `results/`. These values describe the
+supplied articles only and are not investment recommendations.

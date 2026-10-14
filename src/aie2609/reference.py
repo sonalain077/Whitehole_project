@@ -26,13 +26,13 @@ REFERENCE_VERSION = "reference-adjudication-v1"
 CASE_FIELDS = ["case", "id", "ticker", "company", "human_decision", "human_notes"]
 DECISIONS = {"", "positive", "neutral", "negative", ABSENT, "uncertain"}
 
-GUIDE_HEADER = """# Référence arbitrée à l'aveugle
+GUIDE_HEADER = """# Blind adjudication reference
 
-Pour chaque cas, lis l'article et renseigne `human_decision` dans `cases.csv` :
-`positive`, `neutral`, `negative`, `absent` ou `uncertain`. Tu ne vois pas quelle
-version a proposé quoi : c'est voulu. Ne pas ouvrir `key.json` avant la fin.
+For each case, read the article and fill `human_decision` in `cases.csv` with
+`positive`, `neutral`, `negative`, `absent` or `uncertain`. The cases do not show
+which version proposed what, on purpose. Do not open `key.json` until the end.
 
-Applique les définitions du sujet, pas une intuition de marché :
+Apply the assignment's definitions, not a market intuition:
 
 > For every (article, company) pair, the implication of the article for the
 > company's value at publication time. An article can be positive for one company
@@ -42,20 +42,20 @@ Applique les définitions du sujet, pas une intuition de marché :
 > - **neutral** — mentioned without implication: the bank issuing the rating, a media
 >   source, a customer, a location, a size comparison.
 
-Repères :
+Guidelines:
 
-- Juge à partir de l'article seul, au moment de sa publication.
-- Une action citée seulement pour comparer (performance passée, autre titre qui
-  « a aussi monté ») est `neutral`, sauf si l'article établit une conséquence
-  propre à cette entreprise.
-- `absent` : l'entreprise n'est pas réellement mentionnée, ou le rattachement est
-  faux (par exemple le réseau social X n'est pas Block).
-- `uncertain` : à réserver aux cas vraiment indécidables ; ils sont exclus du score.
-- Si une entreprise du référentiel manque, note-la dans `human_notes`
+- Judge from the article alone, at its publication time.
+- A stock cited only for comparison (past performance, another stock that "also
+  rose") is `neutral`, unless the article establishes a consequence specific to that
+  company.
+- `absent`: the company is not really mentioned, or the mapping is wrong (for example
+  the social network X is not Block).
+- `uncertain`: only for genuinely undecidable cases; they are excluded from the score.
+- If a company of the universe is missing, note it in `human_notes`
   (`missing: TICKER`).
 
-Certains cas sont des contrôles tirés au hasard parmi les décisions unanimes : ils
-servent à mesurer les erreurs que toutes les versions partagent.
+Some cases are random checks drawn from unanimous decisions: they measure the errors
+that every version shares.
 """
 
 
@@ -122,7 +122,7 @@ def prepare_reference(*, articles: list[Article], universe: Universe,
         if article_id != current:
             current = article_id
             guide += ["---", "", f"## {article_id} — {article.headline}", "",
-                      f"*Publié le {article.date_raw.strip()} (New York)*", "", article.body, ""]
+                      f"*Published {article.date_raw.strip()} (New York)*", "", article.body, ""]
         guide += [f"**{case} — {ticker} ({names[ticker]})**", ""]
         guide += [f"> {excerpt}" for excerpt in excerpts] + [""]
 

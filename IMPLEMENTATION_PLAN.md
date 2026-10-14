@@ -1,170 +1,164 @@
-# Plan d'implémentation
+# Implementation plan
 
-Objectif : livrer une solution simple, reproductible et expliquée dans l'enveloppe
-de 4 à 6 heures indiquée par le sujet. Les durées ci-dessous sont indicatives,
-hors attente d'accès, installation et latence API. Un lot actif à la fois.
+Goal: deliver a simple, reproducible and explained solution within the 4 to 6 hour
+envelope given by the assignment. Durations are indicative, excluding waiting for
+access, installation and API latency. One active batch at a time.
 
-| Lot | Périmètre | Critère de sortie | Estimation | État |
+| Batch | Scope | Exit criterion | Estimate | Status |
 | --- | --- | --- | --- | --- |
-| 0 | Lire le sujet, inspecter les entrées, préparer les cinq documents requis et le squelette | Contrats tracés, risques identifiés, sources intactes | 25 min | Terminé |
-| 1 | Environnement, CLI, chargement strict, Unicode, dates, univers canonique, audit sans API | Tests des entrées et fuseaux passés ; commande d'audit sur les fichiers réels | 45 min | Terminé |
-| 2 | Client du modèle imposé, prompt versionné, schéma, validation, cache, budget et métriques | Tests simulés hors réseau ; erreurs explicites ; petit essai réel borné si accès disponible | 70 min | Validé techniquement et essai réel réussi ; omissions documentées pour la revue |
-| 3 | Composition contrôlée, agrégation, exports stables et manifeste de run | Tests mathématiques et intégration simulée passés ; aucune sortie finale partielle | 40 min | Terminé |
-| 4 | Exécution complète, revue humaine, analyse d'erreurs et correction ciblée | 100 articles traités ; sorties validées ; appels, tokens et coût/article mesurés | 55 min | Exécution terminée ; échantillon humain de 10 désaccords prêt à annoter |
-| 5 | Analyse des résultats, présentation et répétition de remise | Commande testée dans un environnement propre, livrables et limites relus | 35 min | Version livrée choisie par mesure : `output/run-v6-vote3/final/` (prompt v6 avec rôles, 3 passes + vote, exactitude estimée 0,933 sur `review/reference-v1`) ; présentation et dépôt Git à faire |
+| 0 | Read the assignment, inspect inputs, draft the five required documents and the skeleton | Contracts traced, risks identified, sources intact | 25 min | Done |
+| 1 | Environment, CLI, strict loading, Unicode, dates, canonical universe, audit without API | Input and time-zone tests pass; audit command on the real files | 45 min | Done |
+| 2 | Client for the mandatory model, versioned prompt, schema, validation, cache, budget and metrics | Offline simulated tests; explicit errors; small bounded real trial if access available | 70 min | Done; omissions documented for review |
+| 3 | Controlled composition, aggregation, stable exports and run manifest | Arithmetic tests and simulated integration pass; no partial final output | 40 min | Done |
+| 4 | Full run, review, error analysis and targeted correction | 100 articles processed; outputs validated; calls, tokens and cost per article measured | 55 min | Done |
+| 5 | End-to-end command, reliability measurement, choice of the delivered version | One command produces the CSV files; accuracy measured per version | — | Done: `output/run-v6-vote3/final/` (prompt v6 with roles, 3 passes + vote, estimated accuracy 0.933 on `review/reference-v1`) |
+| 6 | Results analysis, presentation and submission | Clean-clone check, deliverables and limits reviewed | 35 min | Repository published and checked from a clean clone; presentation to do |
 
-Total indicatif : 4 h 30. Garder une marge pour les anomalies et accès API.
+Indicative total for batches 0 to 4 and 6: 4 h 30. Batch 5 went beyond the core
+envelope at the user's request (best result and measured reliability). Keep a margin
+for anomalies and API access.
 
-## Lot 1 — première itération de code
+## Batch 1 — first code iteration
 
-1. Rendre Python et Git disponibles ; créer le venv, initialiser Git localement,
-   contrôler les exclusions. Aucun remote ou push implicite.
-2. Installer uniquement les dépendances retenues ; produire un verrou et relever
-   les versions effectivement testées, dont les données de fuseau sur Windows.
-3. Implémenter `python -m aie2609 --help` et un mode d'audit sans réseau.
-4. Charger les deux formats avec erreurs contextualisées, préserver les sources,
-   normaliser uniquement les copies et canonicaliser les classes.
-5. Tester données invalides, doublons, U+200B, fuseaux et invariance à l'ordre.
+1. Make Python and Git available; create the venv, initialise Git locally, check the
+   exclusions. No remote or implicit push.
+2. Install only the retained dependencies; produce a lock file and record the versions
+   actually tested, including time-zone data on Windows.
+3. Implement `python -m aie2609 --help` and an offline audit mode.
+4. Load both formats with contextual errors, preserve the sources, normalise only the
+   copies and canonicalise share classes.
+5. Test invalid data, duplicates, U+200B, time zones and order invariance.
 
-Preuve attendue : commande, résumé d'audit réel et tests passés dans le journal.
+Expected evidence: command, real audit summary and passing tests in the log.
 
-## Lot 2 — extraction et classification
+## Batch 2 — extraction and classification
 
-Traiter l'article entier avec le référentiel complet de noms et tickers canoniques
-au départ. Éviter un préfiltre lexical qui pourrait perdre les marques et filiales.
-Faire identifier les entreprises et leur implication par le modèle, avec une
-preuve textuelle interne. Le code valide ensuite la structure et les contraintes.
+Process the whole article with the complete reference list of canonical names and
+tickers from the start. Avoid a lexical prefilter that could lose brands and
+subsidiaries. Let the model identify the companies and their implication, with an
+internal textual evidence. Code then validates structure and constraints.
 
-Écrire des réponses simulées pour : modèle qui invente un ticker, label inconnu,
-JSON cassé, doublons, preuves absentes, interruption réseau et dépassement de budget.
-Préparer un petit ensemble de revue humaine couvrant plusieurs rôles d'entreprises.
-Documenter les limites des liens marque/parent qui ne peuvent être certifiés par
-le seul référentiel. Aucun benchmark de précision inventé sans annotations.
+Write simulated answers for: a model that invents a ticker, unknown label, broken JSON,
+duplicates, missing evidence, network interruption and budget overrun. Prepare a small
+human review set covering several company roles. Document the limits of brand/parent
+links that the reference file alone cannot certify. No invented accuracy benchmark
+without annotations.
 
-Prérequis du test réel : clé disponible localement, accès à `gpt-5.6-terra`, tarif
-vérifié et budget choisi. Ne pas changer de modèle pour contourner un accès manquant.
+Prerequisites for the real test: key available locally, access to `gpt-5.6-terra`,
+price checked and budget chosen. Never switch model to work around missing access.
 
-État du 12 octobre : commande `classify`, prévisualisation, cache validé, rapports
-durables et tests simulés disponibles. Tarifs et contrat Responses vérifiés dans
-la documentation officielle. Budget utilisateur reçu : 5 USD maximum pour le
-premier essai, reprises comprises. Clé absente du processus et des variables
-Windows utilisateur/machine inspectées : aucun appel réel. Le [jeu de revue](docs/REVIEW_SET.md)
-est sélectionné, sans annotations de référence ni mesure de précision.
+Status on 12 October: `classify` command, preview, validated cache, durable reports and
+simulated tests available. Prices and the Responses contract checked in the official
+documentation. User budget: 5 USD maximum for the first trial, retries included. Key
+absent from the process and from the inspected Windows user/machine variables: no real
+call. The [review set](docs/REVIEW_SET.md) is selected, with no reference annotations
+and no accuracy measurement.
 
-Complément du 13 octobre : à la demande de l'utilisateur, chargement automatique
-de la clé depuis un `.env` local ignoré par Git, sans nouvelle dépendance. Modèle
-et budget inchangés ; les tests de configuration et la suite hors réseau passent.
-L'utilisateur peut maintenant renseigner la clé directement dans ce fichier.
+Addition on 13 October: at the user's request, automatic loading of the key from a
+local `.env` ignored by Git, without a new dependency. Model and budget unchanged;
+configuration tests and the offline suite pass.
 
-Essai du 13 octobre exécuté : accès confirmé, trois articles traités par variante.
-Version retenue `entity-sentiment-v2`, résultat `output/pilot-003`. Goldman Sachs
-est récupéré dans N002 ; Alphabet via Waymo manque encore dans N027. Une variante
-v3 avec rattachement plus explicite et raisonnement medium n'a pas amélioré le
-résultat ; retour à v2, sans retouche des sorties. Avant le lot 4 : consolider la
-détection des marques et mentions secondaires sur un échantillon distinct.
-Coût connu cumulé 0,2368426 USD ; réservation inconnue 0,173757 USD ; solde prudent
-4,5894004 USD. Voir le journal pour le détail de chaque tentative.
+Trial on 13 October: access confirmed, three articles processed per variant. Retained
+version `entity-sentiment-v2`, result `output/pilot-003`. Goldman Sachs is recovered in
+N002; Alphabet via Waymo is still missing in N027. A v3 variant with more explicit
+parent mapping and medium reasoning did not improve the result; back to v2, with no
+editing of outputs. Known cumulative cost 0.2368426 USD; unknown reservation 0.173757
+USD; conservative balance 4.5894004 USD. Details of every attempt in the log.
 
-Refonte demandée ensuite par l'utilisateur : prompt v4 RCORCF, dix exemples
-fictifs et documentation des versions. Validation hors réseau uniquement :
-62 tests passent ; aucune nouvelle dépense. Le résultat v2 reste le point de
-comparaison API, sans prétendre mesurer v4. Avant extension, évaluer v4 sur les
-régressions connues et un échantillon distinct des cas enseignés dans le prompt.
+Redesign requested by the user: RCORCF prompt v4, ten synthetic examples and version
+documentation. Offline validation only: 62 tests pass; no new spend. The v2 result
+remains the API comparison point, without claiming to measure v4.
 
-Retest RCORCF demandé et exécuté : `output/pilot-005`, trois réponses validées,
-neuf paires article/ticker. GS reste neutre et GOOGL via Waymo est maintenant
-présent en neutre ; aucune autre variation de label ou de couverture par rapport
-à v2. Coût du retest 0,0888659 USD ; solde prudent actualisé 4,5005345 USD.
-Il s'agit de cas de développement connus, pas d'une mesure indépendante de qualité.
+RCORCF retest requested and run: `output/pilot-005`, three validated answers, nine
+article/ticker pairs. GS stays neutral and GOOGL via Waymo is now present as neutral;
+no other label or coverage change compared with v2. Retest cost 0.0888659 USD;
+conservative balance 4.5005345 USD. These are known development cases, not an
+independent quality measurement.
 
-Test suivant demandé : dix articles distincts, attentes consignées avant les
-appels dans `docs/REVIEW_10.md`. Run terminé après une reprise technique :
-28 paires, omissions JPM/N070 et NWSA/N077, désaccord NFLX/N077. Le prompt v4 est
-resté figé. Coût du test 0,2791525 USD ; 63 tests passent après ajout du motif de
-validation aux diagnostics. À résoudre en revue avant généralisation.
+Next test requested: ten distinct articles, expectations recorded before the calls in
+`docs/REVIEW_10.md`. Run completed after one technical retry: 28 pairs, omissions
+JPM/N070 and NWSA/N077, disagreement NFLX/N077. Prompt v4 frozen. Test cost 0.2791525
+USD; 63 tests pass after adding the validation reason to diagnostics.
 
-Extension demandée et exécutée : contrôle lexical consultatif et commande
-`review`, prompt de relecture `entity-review-v1`. Les 71 tests hors réseau passent.
-Run `output/verification-010` : dix appels, 0,2744812 USD ; ajout de NWSA/N077,
-suppression régressive de P/N084, JPM/N070 toujours absent. Les deux résultats
-restent séparés : aucun gain net démontré et pas de promotion automatique.
-La suppression de P est signalée par le contrôle lexical. Prochain travail de
-qualité : arbitrage humain des cas consignés dans `docs/REVIEW_10.md`, puis une
-correction ciblée avec contrôle des régressions. Le jeu de référence humain
-reste à valider ; la relecture par le même modèle ne le remplace pas.
+Extension requested and run: advisory lexical check and `review` command, review prompt
+`entity-review-v1`. 71 offline tests pass. Run `output/verification-010`: ten calls,
+0.2744812 USD; NWSA/N077 added, P/N084 regressively removed, JPM/N070 still missing.
+Both results stay separate: no net gain shown and no automatic promotion.
 
-Correction ciblée suivante terminée : registre `entity-aliases-v1`, couverture
-`entity-coverage-v2` et prompt `entity-review-v2-targeted`. La commande sélectionne
-les omissions fiables et mentions ambiguës par défaut, avec `--all` pour le mode
-général. Sur N070/N077/N084 : JPM et NWSA ajoutés, P conservé, aucun NDAQ ; NFLX
-reste negative. Trois appels, 0,0927612 USD. Les 74 tests passent. Le mécanisme
-améliore la couverture de cet échantillon à coût réduit, sans constituer une mesure
-généralisable ni une validation humaine indépendante. La proposition n'est pas
-fusionnée automatiquement avant le calcul.
+Next targeted correction done: registry `entity-aliases-v1`, coverage
+`entity-coverage-v2` and prompt `entity-review-v2-targeted`. The command selects
+reliable omissions and ambiguous mentions by default, with `--all` for the general
+mode. On N070/N077/N084: JPM and NWSA added, P kept, no NDAQ; NFLX stays negative.
+Three calls, 0.0927612 USD. 74 tests pass. The mechanism improves coverage of this
+sample at low cost, without being a generalisable measurement.
 
-Test complet demandé ensuite : 100 articles terminés dans `output/full-100-v4`,
-87 appels et 13 caches, coût 2,2450432 USD. L'analyse initiale des alertes a révélé
-37 faux signaux dus à des mots communs ou acronymes ; `entity-coverage-v3` et
-`entity-aliases-v2` les éliminent et laissent huit cas plausibles. Leur relecture
-coûte 0,2281222 USD et ajoute huit paires neutres sans suppression ou changement
-de label. Les 75 tests passent. Composition finale à implémenter explicitement au
-lot 3 avant les CSV ; pas de fusion manuelle des artefacts.
+Full test requested next: 100 articles completed in `output/full-100-v4`, 87 calls and
+13 cache replays, cost 2.2450432 USD. The first alert analysis showed 37 false signals
+caused by common words or acronyms; `entity-coverage-v3` and `entity-aliases-v2` remove
+them and leave eight plausible cases. Their review costs 0.2281222 USD and adds eight
+neutral pairs with no removal or label change. 75 tests pass.
 
-Avant la composition, le prompt v5 ajoute une règle et deux exemples synthétiques
-pour les comparaisons de marché incidentes et les accords asymétriques ; le registre
-v3 ajoute CNN → WBD. Les tests hors réseau passent. La passe complète v5 produit
-220 paires et corrige les cas visés, mais introduit des omissions et deux faux XYZ.
-Le lot 3 doit donc composer des propositions validées et conserver les alertes,
-sans promouvoir automatiquement la dernière passe.
+Before composition, prompt v5 adds a rule and two synthetic examples for incidental
+market comparisons and asymmetric agreements; registry v3 adds CNN → WBD. The full v5
+pass produces 220 pairs and fixes the targeted cases, but introduces omissions and two
+false XYZ. Batch 3 therefore composes validated proposals and keeps alerts, without
+automatically promoting the latest pass.
 
-Composition déterministe maintenant implémentée avec provenance, empreintes,
-validation des revues et comparaison facultative d'une candidate. Le registre
-`entity-aliases-v5` ajoute CNBC, CBS News, Barron's et Kenworth, et interdit les
-associations `X → XYZ` et `SpaceX → XOM`. Sur les 100 articles, la composition
-v4 + huit revues contient 225 paires mais reste bloquée par sept alertes ; v5
-compte quinze alertes bloquantes et 29 désaccords. Le scoring ne démarre pas tant
-que ces cas n'ont pas une décision reproductible.
+Deterministic composition implemented with provenance, hashes, review validation and
+optional comparison with a candidate. Registry `entity-aliases-v5` adds CNBC, CBS News,
+Barron's and Kenworth, and forbids `X → XYZ` and `SpaceX → XOM`. On the 100 articles,
+the v4 + eight reviews composition has 225 pairs but is blocked by seven alerts; v5 has
+fifteen blocking alerts and 29 disagreements.
 
-Les six articles concernés ont ensuite été relus par groupes bornés. Le mode
-`additions-only` refuse au validateur toute suppression ou modification de label ;
-il a empêché la suppression régressive de SCHW/N066. La composition finale v2
-contient 230 paires, zéro blocage et `ready_for_scoring=true`. Les seuls écarts
-avec les 225 paires précédentes sont six ajouts neutres (CMCSA quatre fois, PSKY
-et NWSA) et le retrait du faux XOM/N100. Le calcul peut partir de ce fichier.
+The six affected articles were then reviewed in bounded groups. The `additions-only`
+mode makes the validator reject any removal or label change; it prevented the
+regressive removal of SCHW/N066. The final v2 composition has 230 pairs, zero blocking
+alerts and `ready_for_scoring=true`.
 
-Calcul et export terminés avec `time-decay-v1`. La commande `export` refuse un
-rapport non approuvé ou une empreinte de classifications différente, calcule les
-durées en UTC depuis la référence fixe, utilise `math.fsum` puis écrit les deux
-CSV et leur manifeste. `output/final-results-v1/` contient 230 entités et 111
-tickers. Les tests couvrent 0/7/14 jours, fraction de jour, changement d'heure,
-annulation, score neutre nul, date future, tri, empreintes et contrat CSV.
+Scoring and export done with `time-decay-v1`: `output/final-results-v1/` has 230
+entities and 111 tickers. Tests cover 0/7/14 days, fraction of a day, daylight-saving
+change, cancellation, zero neutral score, future date, sorting, hashes and the CSV
+contract.
 
-## Lot 3 — calcul et contrat de sortie
+## Batch 3 — scoring and output contract
 
-Tester les poids à 0, 7 et 14 jours, une fraction de jour et un passage d'heure
-saisonnière. Vérifier score négatif, annulation, entreprise uniquement neutre et
-une ligne par paire canonique. Trier les exports. Le run réussit seulement lorsque
-chaque article a un résultat validé, y compris une liste vide justifiée.
+Test the weights at 0, 7 and 14 days, a fraction of a day and a daylight-saving change.
+Check a negative score, cancellation, a neutral-only company and one row per canonical
+pair. Sort the exports. A run succeeds only when every article has a validated result,
+including a justified empty list.
 
-## Lots 4 et 5 — résultat et remise
+## Batch 5 — end-to-end command and measured choice
 
-- Lancer un petit essai pour mesurer le coût avant d'étendre aux 100 articles.
-- Réutiliser le cache valide ; séparer coût du run avec cache et coût d'un run complet.
-- Examiner notamment banques analystes, filiales, classes multiples, noms ambigus
-  et textes avec caractères invisibles. Conserver le jeu de revue et ses limites.
-- Expliquer les tickers saillants avec leurs articles et contributions pondérées,
-  la concentration de couverture et les limites de confiance.
-- Toute correction déclenche une régénération ; ne pas retoucher les CSV.
-- Faire une répétition de la commande complète dans un environnement propre.
-- Vérifier confidentialité, absence de secrets et présence de chaque livrable.
+- `run` chains classification, targeted reviews, composition and export; `run_report`
+  and `usage` report calls, tokens and cost per article (one cold pass: 0.030 USD).
+- Prompt v6 adds a role per company and a two-branch schema that forces `neutral` for
+  the roles the assignment defines as neutral; rejected answers are retried with the
+  validator's reason.
+- `--passes 3` runs independent passes and keeps the majority; passes agree on 93.7 %
+  of pairs.
+- `prepare-reference` / `score-reference` measure every candidate version on all their
+  disagreements plus spot checks of the consensus. Retained: three passes with vote
+  (0.933), ahead of one v6 pass (0.920–0.924), `run-final-v1` (0.907) and the manual
+  composition (0.878).
 
-## Décisions et points à résoudre
+## Batch 6 — results and submission
 
-| Point | Position actuelle | Moment de résolution |
+- Explain the salient tickers with their articles and weighted contributions, coverage
+  concentration and confidence limits.
+- Every correction triggers a regeneration; never edit the CSV files.
+- Rehearse the command from a clean clone (done: 92 tests pass, 8 skipped without the
+  supplied data).
+- Check confidentiality, absence of secrets and presence of every deliverable (done
+  before publication).
+
+## Decisions and open points
+
+| Point | Current position | When resolved |
 | --- | --- | --- |
-| Python / Git absents du terminal | Runtimes locaux vérifiés dans les dossiers ignorés `.tools`; `.venv` reproductible | Résolu au lot 1 |
-| Accès et tarif du modèle imposé | Tarifs vérifiés le 12 octobre ; accès Responses confirmé le 13 octobre | Résolu au lot 2 |
-| Budget utilisateur | 100 USD autorisés le 14 octobre ; 14,1736621 USD connus + 0,529338 USD réservés pour tentatives inconnues ; engagement prudent 14,7030001 USD | Suivi dans les rapports et le journal |
-| Fuseau et échéance « CET » | Entrées New York certaines ; ambiguïté de remise à clarifier | Avant remise |
-| Filiales non décrites par le CSV | Inférence modèle traçable + revue ; pas de source externe | Lot 2 / revue lot 4 |
-| Stabilité du modèle | Cache et contrats stables ; pas de promesse de déterminisme de l'API | Lots 2 et 4 |
+| Python / Git missing from the terminal | Local runtimes checked in the ignored `.tools` folder; reproducible `.venv` | Batch 1 |
+| Access and price of the mandatory model | Prices checked on 12 October; Responses access confirmed on 13 October | Batch 2 |
+| User budget | 100 USD authorised on 14 October; 14.1736621 USD known + 0.529338 USD reserved for unknown attempts; conservative commitment 14.7030001 USD | Tracked in reports and the log |
+| Time zone and "CET" deadline | New York inputs certain; submission on 14 October, 18:00 Paris time | Before submission |
+| Subsidiaries not described by the CSV | Traceable model inference + review + versioned registry; no external source | Batches 2, 4 and 5 |
+| Model stability | Cache and contracts stable; no promise of API determinism; three-pass vote measured | Batches 2, 4 and 5 |
+| Publication | Public repository without the supplied data, the PDF or files quoting articles | Batch 6 |
