@@ -1,0 +1,115 @@
+{
+  "version": "entity-aliases-v6",
+  "blocked_generated_names": [
+    "Block",
+    "Everpure",
+    "Nasdaq",
+    "Rollins",
+    "Southern",
+    "Target"
+  ],
+  "forbidden_aliases": [
+    {
+      "name": "X",
+      "ticker": "XYZ",
+      "reason": "social_network_not_company"
+    },
+    {
+      "name": "SpaceX",
+      "ticker": "XOM",
+      "reason": "substring_not_company"
+    }
+  ],
+  "aliases": [
+    {
+      "names": ["The Wall Street Journal", "Wall Street Journal", "WSJ"],
+      "tickers": ["NWSA"],
+      "type": "publication"
+    },
+    {
+      "names": ["J.P. Morgan", "JP Morgan", "JPMorgan"],
+      "tickers": ["JPM"],
+      "type": "name_variant"
+    },
+    {
+      "names": ["YouTube"],
+      "tickers": ["GOOGL"],
+      "type": "subsidiary"
+    },
+    {
+      "names": ["Waymo"],
+      "tickers": ["GOOGL"],
+      "type": "subsidiary"
+    },
+    {
+      "names": ["CNN"],
+      "tickers": ["WBD"],
+      "type": "brand"
+    },
+    {
+      "names": ["CNBC", "NBC News"],
+      "tickers": ["CMCSA"],
+      "type": "publication"
+    },
+    {
+      "names": ["CBS", "CBS News"],
+      "tickers": ["PSKY"],
+      "type": "publication"
+    },
+    {
+      "names": ["Barron's"],
+      "tickers": ["NWSA"],
+      "type": "publication"
+    },
+    {
+      "names": ["Kenworth"],
+      "tickers": ["PCAR"],
+      "type": "subsidiary"
+    },
+    {
+      "names": ["Google"],
+      "tickers": ["GOOGL"],
+      "type": "brand"
+    },
+    {
+      "names": ["iShares"],
+      "tickers": ["BLK"],
+      "type": "brand"
+    },
+    {
+      "names": ["SPDR"],
+      "tickers": ["STT"],
+      "type": "brand"
+    },
+    {
+      "names": ["Xbox"],
+      "tickers": ["MSFT"],
+      "type": "brand"
+    },
+    {
+      "names": ["Citi"],
+      "tickers": ["C"],
+      "type": "name_variant"
+    },
+    {
+      "names": ["KeyBanc"],
+      "tickers": ["KEY"],
+      "type": "subsidiary"
+    },
+    {
+      "names": ["Truist", "Truist Securities"],
+      "tickers": ["TFC"],
+      "type": "name_variant"
+    },
+    {
+      "names": ["Visible Alpha"],
+      "tickers": ["SPGI"],
+      "type": "subsidiary"
+    },
+    {
+      "names": ["Everpure"],
+      "tickers": ["P", "PNR"],
+      "type": "ambiguous"
+    }
+  ]
+}
