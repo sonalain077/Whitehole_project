@@ -12,7 +12,7 @@ Delivered in small batches, one at a time, each closed by offline tests and a da
 | 4 | Codex | Full 100-article runs (prompts v4, v5), error analysis | Calls, tokens and cost measured | Done |
 | 5 | Claude Code | Audit, one-command `run`, usage report, prompt v6 with roles, 3-pass vote | Evaluators can run it; CSV reproducible from the code | Done |
 | 6 | Claude Code | Accuracy reference, choice of the delivered version, publication | Every version scored; clean-clone check | Done (0.933 retained) |
-| 7 | User | Presentation of approach, results and limits | — | To do |
+| 7 | User | Presentation of approach, results and limits | — | Done|
 
 Batches 0–4 fit the 4–6 hour envelope of the assignment; batches 5–6 went beyond it at the
 user's request, to obtain a reproducible command and a measured result.
