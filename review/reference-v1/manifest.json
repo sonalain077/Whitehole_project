@@ -1,0 +1,36 @@
+{
+  "cases": 61,
+  "disputed_pairs": 36,
+  "pairs": 239,
+  "reference_version": "reference-adjudication-v1",
+  "schema_version": 1,
+  "seed": 20260929,
+  "spot_checks": 25,
+  "unanimous_pairs": 203,
+  "versions": {
+    "manuel": {
+      "path": "output\\composition-final-v3\\classifications.json",
+      "sha256": "5f9b4000a6aafe23deb9bf06d668508257145713420c3d6b7c8d9f1184d8be26"
+    },
+    "run-final-v1": {
+      "path": "output\\run-final-v1\\compose\\classifications.json",
+      "sha256": "f693508d477236c57a8d149fa7524a3823b27bdcc1e3f74dc3b9e753cf3eda5f"
+    },
+    "v6-passe1": {
+      "path": "output\\run-v6-vote3\\pass-1\\compose\\classifications.json",
+      "sha256": "214b88a81968e4bd2a32966dbb857336ab1df520e000376616fcc97559f42ec4"
+    },
+    "v6-passe2": {
+      "path": "output\\run-v6-vote3\\pass-2\\compose\\classifications.json",
+      "sha256": "a3a8ffd2e84eba6b76af0d2f1b33a6699fde71a8780ea837f19ab8fc70956e84"
+    },
+    "v6-passe3": {
+      "path": "output\\run-v6-vote3\\pass-3\\compose\\classifications.json",
+      "sha256": "d5fd282ab84f2357056d1f74cccb8d27e552a23fc7c2d9a14ed2b14c5363e50e"
+    },
+    "v6-vote3": {
+      "path": "output\\run-v6-vote3\\compose\\classifications.json",
+      "sha256": "d0684b2d957ff589267dc619330a3e48e929bfa7385db231dd2f821d8d6ba633"
+    }
+  }
+}

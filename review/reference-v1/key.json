@@ -1,0 +1,891 @@
+{
+  "cases": [
+    {
+      "case": "R001",
+      "id": "N001",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "MS"
+    },
+    {
+      "case": "R002",
+      "id": "N010",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "positive",
+        "v6-passe1": "positive",
+        "v6-passe2": "positive",
+        "v6-passe3": "positive",
+        "v6-vote3": "positive"
+      },
+      "ticker": "CAT"
+    },
+    {
+      "case": "R003",
+      "id": "N010",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "absent",
+        "run-final-v1": "absent",
+        "v6-passe1": "absent",
+        "v6-passe2": "neutral",
+        "v6-passe3": "absent",
+        "v6-vote3": "absent"
+      },
+      "ticker": "CRWD"
+    },
+    {
+      "case": "R004",
+      "id": "N020",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "negative",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "PCG"
+    },
+    {
+      "case": "R005",
+      "id": "N023",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "absent",
+        "run-final-v1": "absent",
+        "v6-passe1": "neutral",
+        "v6-passe2": "absent",
+        "v6-passe3": "absent",
+        "v6-vote3": "absent"
+      },
+      "ticker": "XYZ"
+    },
+    {
+      "case": "R006",
+      "id": "N025",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "negative",
+        "run-final-v1": "negative",
+        "v6-passe1": "negative",
+        "v6-passe2": "negative",
+        "v6-passe3": "negative",
+        "v6-vote3": "negative"
+      },
+      "ticker": "COIN"
+    },
+    {
+      "case": "R007",
+      "id": "N026",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "negative",
+        "v6-passe2": "negative",
+        "v6-passe3": "neutral",
+        "v6-vote3": "negative"
+      },
+      "ticker": "INTC"
+    },
+    {
+      "case": "R008",
+      "id": "N028",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "positive",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "AMZN"
+    },
+    {
+      "case": "R009",
+      "id": "N028",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "positive",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "HD"
+    },
+    {
+      "case": "R010",
+      "id": "N034",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "absent",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "C"
+    },
+    {
+      "case": "R011",
+      "id": "N036",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "negative",
+        "run-final-v1": "negative",
+        "v6-passe1": "negative",
+        "v6-passe2": "negative",
+        "v6-passe3": "negative",
+        "v6-vote3": "negative"
+      },
+      "ticker": "SYK"
+    },
+    {
+      "case": "R012",
+      "id": "N038",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "absent",
+        "run-final-v1": "absent",
+        "v6-passe1": "absent",
+        "v6-passe2": "absent",
+        "v6-passe3": "neutral",
+        "v6-vote3": "absent"
+      },
+      "ticker": "GM"
+    },
+    {
+      "case": "R013",
+      "id": "N039",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "negative",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "negative",
+        "v6-passe3": "negative",
+        "v6-vote3": "negative"
+      },
+      "ticker": "ADBE"
+    },
+    {
+      "case": "R014",
+      "id": "N039",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "ADSK"
+    },
+    {
+      "case": "R015",
+      "id": "N039",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "CRM"
+    },
+    {
+      "case": "R016",
+      "id": "N043",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "BLK"
+    },
+    {
+      "case": "R017",
+      "id": "N045",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "positive",
+        "v6-passe1": "positive",
+        "v6-passe2": "positive",
+        "v6-passe3": "positive",
+        "v6-vote3": "positive"
+      },
+      "ticker": "D"
+    },
+    {
+      "case": "R018",
+      "id": "N047",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "negative",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "GS"
+    },
+    {
+      "case": "R019",
+      "id": "N047",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "negative",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "MS"
+    },
+    {
+      "case": "R020",
+      "id": "N048",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "negative",
+        "run-final-v1": "neutral",
+        "v6-passe1": "negative",
+        "v6-passe2": "neutral",
+        "v6-passe3": "negative",
+        "v6-vote3": "negative"
+      },
+      "ticker": "AMZN"
+    },
+    {
+      "case": "R021",
+      "id": "N049",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "negative",
+        "v6-passe2": "neutral",
+        "v6-passe3": "negative",
+        "v6-vote3": "negative"
+      },
+      "ticker": "CCL"
+    },
+    {
+      "case": "R022",
+      "id": "N049",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "positive",
+        "v6-passe1": "negative",
+        "v6-passe2": "positive",
+        "v6-passe3": "positive",
+        "v6-vote3": "positive"
+      },
+      "ticker": "RCL"
+    },
+    {
+      "case": "R023",
+      "id": "N051",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "absent",
+        "run-final-v1": "absent",
+        "v6-passe1": "absent",
+        "v6-passe2": "absent",
+        "v6-passe3": "neutral",
+        "v6-vote3": "absent"
+      },
+      "ticker": "MCO"
+    },
+    {
+      "case": "R024",
+      "id": "N051",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "NWSA"
+    },
+    {
+      "case": "R025",
+      "id": "N051",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "absent",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "TJX"
+    },
+    {
+      "case": "R026",
+      "id": "N054",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "DAL"
+    },
+    {
+      "case": "R027",
+      "id": "N055",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "positive",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "RCL"
+    },
+    {
+      "case": "R028",
+      "id": "N057",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "C"
+    },
+    {
+      "case": "R029",
+      "id": "N058",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "absent",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "MSFT"
+    },
+    {
+      "case": "R030",
+      "id": "N058",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "neutral",
+        "v6-passe1": "positive",
+        "v6-passe2": "positive",
+        "v6-passe3": "positive",
+        "v6-vote3": "positive"
+      },
+      "ticker": "TTWO"
+    },
+    {
+      "case": "R031",
+      "id": "N059",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "positive",
+        "v6-passe1": "positive",
+        "v6-passe2": "positive",
+        "v6-passe3": "positive",
+        "v6-vote3": "positive"
+      },
+      "ticker": "UAL"
+    },
+    {
+      "case": "R032",
+      "id": "N060",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "negative",
+        "run-final-v1": "negative",
+        "v6-passe1": "negative",
+        "v6-passe2": "negative",
+        "v6-passe3": "negative",
+        "v6-vote3": "negative"
+      },
+      "ticker": "V"
+    },
+    {
+      "case": "R033",
+      "id": "N061",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "CMCSA"
+    },
+    {
+      "case": "R034",
+      "id": "N062",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "JPM"
+    },
+    {
+      "case": "R035",
+      "id": "N062",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "negative",
+        "run-final-v1": "negative",
+        "v6-passe1": "negative",
+        "v6-passe2": "negative",
+        "v6-passe3": "negative",
+        "v6-vote3": "negative"
+      },
+      "ticker": "NKE"
+    },
+    {
+      "case": "R036",
+      "id": "N064",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "MSFT"
+    },
+    {
+      "case": "R037",
+      "id": "N066",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "absent",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "NWSA"
+    },
+    {
+      "case": "R038",
+      "id": "N067",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "positive",
+        "v6-passe1": "positive",
+        "v6-passe2": "positive",
+        "v6-passe3": "positive",
+        "v6-vote3": "positive"
+      },
+      "ticker": "TSLA"
+    },
+    {
+      "case": "R039",
+      "id": "N069",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "positive",
+        "v6-passe1": "positive",
+        "v6-passe2": "positive",
+        "v6-passe3": "positive",
+        "v6-vote3": "positive"
+      },
+      "ticker": "AMD"
+    },
+    {
+      "case": "R040",
+      "id": "N069",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "NVDA"
+    },
+    {
+      "case": "R041",
+      "id": "N070",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "positive",
+        "v6-passe1": "positive",
+        "v6-passe2": "positive",
+        "v6-passe3": "positive",
+        "v6-vote3": "positive"
+      },
+      "ticker": "JNJ"
+    },
+    {
+      "case": "R042",
+      "id": "N071",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "positive",
+        "v6-passe1": "positive",
+        "v6-passe2": "positive",
+        "v6-passe3": "positive",
+        "v6-vote3": "positive"
+      },
+      "ticker": "C"
+    },
+    {
+      "case": "R043",
+      "id": "N071",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "positive",
+        "v6-passe1": "positive",
+        "v6-passe2": "positive",
+        "v6-passe3": "positive",
+        "v6-vote3": "positive"
+      },
+      "ticker": "JPM"
+    },
+    {
+      "case": "R044",
+      "id": "N077",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "positive",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "GOOGL"
+    },
+    {
+      "case": "R045",
+      "id": "N078",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "PCAR"
+    },
+    {
+      "case": "R046",
+      "id": "N078",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "positive",
+        "v6-passe1": "positive",
+        "v6-passe2": "positive",
+        "v6-passe3": "positive",
+        "v6-vote3": "positive"
+      },
+      "ticker": "TSLA"
+    },
+    {
+      "case": "R047",
+      "id": "N079",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "negative",
+        "v6-passe2": "negative",
+        "v6-passe3": "negative",
+        "v6-vote3": "negative"
+      },
+      "ticker": "TGT"
+    },
+    {
+      "case": "R048",
+      "id": "N081",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "GOOGL"
+    },
+    {
+      "case": "R049",
+      "id": "N087",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "C"
+    },
+    {
+      "case": "R050",
+      "id": "N087",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "absent",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "KEY"
+    },
+    {
+      "case": "R051",
+      "id": "N087",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "neutral",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "STT"
+    },
+    {
+      "case": "R052",
+      "id": "N088",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "JBL"
+    },
+    {
+      "case": "R053",
+      "id": "N091",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "GOOGL"
+    },
+    {
+      "case": "R054",
+      "id": "N091",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "NFLX"
+    },
+    {
+      "case": "R055",
+      "id": "N091",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "RDDT"
+    },
+    {
+      "case": "R056",
+      "id": "N092",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "absent",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "SPGI"
+    },
+    {
+      "case": "R057",
+      "id": "N093",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "positive",
+        "v6-passe1": "positive",
+        "v6-passe2": "positive",
+        "v6-passe3": "positive",
+        "v6-vote3": "positive"
+      },
+      "ticker": "AMD"
+    },
+    {
+      "case": "R058",
+      "id": "N094",
+      "kind": "spot_check",
+      "labels": {
+        "manuel": "negative",
+        "run-final-v1": "negative",
+        "v6-passe1": "negative",
+        "v6-passe2": "negative",
+        "v6-passe3": "negative",
+        "v6-vote3": "negative"
+      },
+      "ticker": "META"
+    },
+    {
+      "case": "R059",
+      "id": "N095",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "positive",
+        "run-final-v1": "neutral",
+        "v6-passe1": "neutral",
+        "v6-passe2": "neutral",
+        "v6-passe3": "neutral",
+        "v6-vote3": "neutral"
+      },
+      "ticker": "AAPL"
+    },
+    {
+      "case": "R060",
+      "id": "N099",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "absent",
+        "run-final-v1": "absent",
+        "v6-passe1": "absent",
+        "v6-passe2": "absent",
+        "v6-passe3": "neutral",
+        "v6-vote3": "absent"
+      },
+      "ticker": "BBY"
+    },
+    {
+      "case": "R061",
+      "id": "N100",
+      "kind": "disputed",
+      "labels": {
+        "manuel": "absent",
+        "run-final-v1": "absent",
+        "v6-passe1": "absent",
+        "v6-passe2": "absent",
+        "v6-passe3": "neutral",
+        "v6-vote3": "absent"
+      },
+      "ticker": "RDDT"
+    }
+  ],
+  "disputed_pairs": 36,
+  "pairs": 239,
+  "reference_version": "reference-adjudication-v1",
+  "schema_version": 1,
+  "seed": 20260929,
+  "spot_checks": 25,
+  "unanimous_pairs": 203,
+  "versions": {
+    "manuel": {
+      "path": "output\\composition-final-v3\\classifications.json",
+      "sha256": "5f9b4000a6aafe23deb9bf06d668508257145713420c3d6b7c8d9f1184d8be26"
+    },
+    "run-final-v1": {
+      "path": "output\\run-final-v1\\compose\\classifications.json",
+      "sha256": "f693508d477236c57a8d149fa7524a3823b27bdcc1e3f74dc3b9e753cf3eda5f"
+    },
+    "v6-passe1": {
+      "path": "output\\run-v6-vote3\\pass-1\\compose\\classifications.json",
+      "sha256": "214b88a81968e4bd2a32966dbb857336ab1df520e000376616fcc97559f42ec4"
+    },
+    "v6-passe2": {
+      "path": "output\\run-v6-vote3\\pass-2\\compose\\classifications.json",
+      "sha256": "a3a8ffd2e84eba6b76af0d2f1b33a6699fde71a8780ea837f19ab8fc70956e84"
+    },
+    "v6-passe3": {
+      "path": "output\\run-v6-vote3\\pass-3\\compose\\classifications.json",
+      "sha256": "d5fd282ab84f2357056d1f74cccb8d27e552a23fc7c2d9a14ed2b14c5363e50e"
+    },
+    "v6-vote3": {
+      "path": "output\\run-v6-vote3\\compose\\classifications.json",
+      "sha256": "d0684b2d957ff589267dc619330a3e48e929bfa7385db231dd2f821d8d6ba633"
+    }
+  }
+}

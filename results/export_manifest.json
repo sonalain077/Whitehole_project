@@ -1,0 +1,25 @@
+{
+  "as_of": "2026-09-29T00:00",
+  "composition_version": "classification-composition-v1",
+  "counts": {
+    "articles": 100,
+    "entities": 233,
+    "tickers": 112
+  },
+  "half_life_days": 7,
+  "output_sha256": {
+    "entities.csv": "8222886633ce93a5052e7267ce547bee6259a0f7b846e6af558cf249b6dfbc2a",
+    "scores.csv": "84bb12116d582cf085e6c8dafe623e633083e5f2990152b175e312486b369d58"
+  },
+  "ready_for_scoring": true,
+  "schema_version": 1,
+  "scoring_version": "time-decay-v1",
+  "source_sha256": {
+    "news.json": "2bd735fcee63c39d6a41c7a07764bd09b9199d3eeedda951b2546fb94ebc6354",
+    "output\\run-v6-vote3\\compose\\classifications.json": "d0684b2d957ff589267dc619330a3e48e929bfa7385db231dd2f821d8d6ba633",
+    "output\\run-v6-vote3\\compose\\composition_report.json": "8d491582ce4251a0c9a27a8450251a2be426f5f288256e04c40d9c6b4b6bfeb3",
+    "sp500.csv": "ce3136f433a6bd493a0c5b7a4d1e18e40f58f5fdf13bf989402cc6e0bffb7b7c"
+  },
+  "status": "completed",
+  "timezone": "America/New_York"
+}

@@ -1,0 +1,781 @@
+{
+  "articles": 100,
+  "budget_usd": "15",
+  "composition": {
+    "advisory_alerts": 50,
+    "articles": 100,
+    "blocking_alerts": 0,
+    "entities": 233,
+    "ready_for_scoring": true,
+    "reviewed_articles": 0
+  },
+  "cost": {
+    "api_calls": 278,
+    "api_seconds": 1135.4,
+    "articles": 100,
+    "budget_committed_usd": "2.9692577",
+    "cost_by_category_usd": {
+      "cache_write": "1.4420175",
+      "cached_input": "0.7250282",
+      "input": "0.001668",
+      "output": "0.800544"
+    },
+    "cost_per_article_usd": "0.029692577",
+    "includes_local_cache_replays": true,
+    "known_cost_usd": "2.9692577",
+    "local_cache_hits": 65,
+    "retries": 5,
+    "steps": {
+      "pass-1/classify": {
+        "api_calls": 36,
+        "known_cost_usd": "0.9290421"
+      },
+      "pass-1/review/N012": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0444175"
+      },
+      "pass-1/review/N013": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0268104"
+      },
+      "pass-1/review/N038": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0265554"
+      },
+      "pass-1/review/N043": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0304139"
+      },
+      "pass-1/review/N047": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0293819"
+      },
+      "pass-1/review/N049": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0304484"
+      },
+      "pass-1/review/N058": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0271569"
+      },
+      "pass-1/review/N066": {
+        "api_calls": 3,
+        "known_cost_usd": "0.0373436"
+      },
+      "pass-1/review/N070": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0275524"
+      },
+      "pass-1/review/N076": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0266774"
+      },
+      "pass-1/review/N089": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0282849"
+      },
+      "pass-1/review/N092": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0265344"
+      },
+      "pass-1/review/N097": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0316434"
+      },
+      "pass-1/review/N099": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0262609"
+      },
+      "pass-1/review/N100": {
+        "api_calls": 1,
+        "known_cost_usd": "0.040246"
+      },
+      "pass-2/classify": {
+        "api_calls": 100,
+        "known_cost_usd": "0.5759272"
+      },
+      "pass-2/review/N012": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0286294"
+      },
+      "pass-2/review/N013": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0049978"
+      },
+      "pass-2/review/N038": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0054718"
+      },
+      "pass-2/review/N043": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0287489"
+      },
+      "pass-2/review/N049": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0305714"
+      },
+      "pass-2/review/N058": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0050308"
+      },
+      "pass-2/review/N061": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0264949"
+      },
+      "pass-2/review/N076": {
+        "api_calls": 1,
+        "known_cost_usd": "0.005567"
+      },
+      "pass-2/review/N089": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0280904"
+      },
+      "pass-2/review/N092": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0265489"
+      },
+      "pass-2/review/N100": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0261574"
+      },
+      "pass-3/classify": {
+        "api_calls": 102,
+        "known_cost_usd": "0.5946080"
+      },
+      "pass-3/review/N012": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0290249"
+      },
+      "pass-3/review/N013": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0052618"
+      },
+      "pass-3/review/N038": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0070918"
+      },
+      "pass-3/review/N043": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0294849"
+      },
+      "pass-3/review/N047": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0063896"
+      },
+      "pass-3/review/N049": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0307034"
+      },
+      "pass-3/review/N058": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0049108"
+      },
+      "pass-3/review/N070": {
+        "api_calls": 1,
+        "known_cost_usd": "0.005985"
+      },
+      "pass-3/review/N076": {
+        "api_calls": 1,
+        "known_cost_usd": "0.005567"
+      },
+      "pass-3/review/N082": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0326434"
+      },
+      "pass-3/review/N091": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0309359"
+      },
+      "pass-3/review/N092": {
+        "api_calls": 1,
+        "known_cost_usd": "0.0056458"
+      }
+    },
+    "token_totals": {
+      "cache_write_tokens": 576807,
+      "cached_tokens": 3625141,
+      "input_tokens": 4202782,
+      "output_tokens": 66712
+    },
+    "total_cost_usd": "2.9692577",
+    "unknown_cost_attempts": 0
+  },
+  "model": "gpt-5.6-terra",
+  "outputs": {
+    "articles": 100,
+    "entities": 233,
+    "entities_csv": "output\\run-v6-vote3\\final\\entities.csv",
+    "scores_csv": "output\\run-v6-vote3\\final\\scores.csv",
+    "tickers": 112
+  },
+  "pass_results": [
+    {
+      "classification": {
+        "api_calls": 36,
+        "known_cost_usd": "0.9290421",
+        "local_cache_hits": 65,
+        "total_cost_usd": "0.9290421",
+        "unknown_cost_attempts": 0
+      },
+      "composition": {
+        "advisory_alerts": 51,
+        "articles": 100,
+        "blocking_alerts": 1,
+        "entities": 233,
+        "ready_for_scoring": false,
+        "reviewed_articles": 14
+      },
+      "replica": 0,
+      "reviews": [
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:STT"
+          ],
+          "id": "N012",
+          "known_cost_usd": "0.0444175",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0444175",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:WBD"
+          ],
+          "id": "N013",
+          "known_cost_usd": "0.0268104",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0268104",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:SBUX"
+          ],
+          "id": "N038",
+          "known_cost_usd": "0.0265554",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0265554",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:BLK"
+          ],
+          "id": "N043",
+          "known_cost_usd": "0.0304139",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0304139",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:CMCSA"
+          ],
+          "id": "N047",
+          "known_cost_usd": "0.0293819",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0293819",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:STT"
+          ],
+          "id": "N049",
+          "known_cost_usd": "0.0304484",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0304484",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:MSFT"
+          ],
+          "id": "N058",
+          "known_cost_usd": "0.0271569",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0271569",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 3,
+          "blocking_before": [
+            "missing:NWSA"
+          ],
+          "id": "N066",
+          "known_cost_usd": "0.0373436",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "reason": "Article classification failed after bounded attempts: Additions-only review removed an entity or changed an existing label.",
+          "status": "rejected",
+          "total_cost_usd": "0.0373436",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:JPM"
+          ],
+          "id": "N070",
+          "known_cost_usd": "0.0275524",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0275524",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:BLK"
+          ],
+          "id": "N076",
+          "known_cost_usd": "0.0266774",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0266774",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:STT"
+          ],
+          "id": "N089",
+          "known_cost_usd": "0.0282849",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0282849",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:SPGI"
+          ],
+          "id": "N092",
+          "known_cost_usd": "0.0265344",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0265344",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:BLK",
+            "missing:STT"
+          ],
+          "id": "N097",
+          "known_cost_usd": "0.0316434",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0316434",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:HLT"
+          ],
+          "id": "N099",
+          "known_cost_usd": "0.0262609",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0262609",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "forbidden_alias:XYZ:X"
+          ],
+          "id": "N100",
+          "known_cost_usd": "0.040246",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted",
+          "status": "applied",
+          "total_cost_usd": "0.040246",
+          "unknown_cost_attempts": 0
+        }
+      ]
+    },
+    {
+      "classification": {
+        "api_calls": 100,
+        "known_cost_usd": "0.5759272",
+        "local_cache_hits": 0,
+        "total_cost_usd": "0.5759272",
+        "unknown_cost_attempts": 0
+      },
+      "composition": {
+        "advisory_alerts": 60,
+        "articles": 100,
+        "blocking_alerts": 0,
+        "entities": 233,
+        "ready_for_scoring": true,
+        "reviewed_articles": 11
+      },
+      "replica": 1,
+      "reviews": [
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:STT"
+          ],
+          "id": "N012",
+          "known_cost_usd": "0.0286294",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0286294",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:WBD"
+          ],
+          "id": "N013",
+          "known_cost_usd": "0.0049978",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0049978",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:SBUX"
+          ],
+          "id": "N038",
+          "known_cost_usd": "0.0054718",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0054718",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:BLK"
+          ],
+          "id": "N043",
+          "known_cost_usd": "0.0287489",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0287489",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:STT"
+          ],
+          "id": "N049",
+          "known_cost_usd": "0.0305714",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0305714",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:MSFT"
+          ],
+          "id": "N058",
+          "known_cost_usd": "0.0050308",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0050308",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:CMCSA"
+          ],
+          "id": "N061",
+          "known_cost_usd": "0.0264949",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0264949",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:BLK"
+          ],
+          "id": "N076",
+          "known_cost_usd": "0.005567",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.005567",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:STT"
+          ],
+          "id": "N089",
+          "known_cost_usd": "0.0280904",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0280904",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:SPGI"
+          ],
+          "id": "N092",
+          "known_cost_usd": "0.0265489",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0265489",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "forbidden_alias:XYZ:X"
+          ],
+          "id": "N100",
+          "known_cost_usd": "0.0261574",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted",
+          "status": "applied",
+          "total_cost_usd": "0.0261574",
+          "unknown_cost_attempts": 0
+        }
+      ]
+    },
+    {
+      "classification": {
+        "api_calls": 102,
+        "known_cost_usd": "0.5946080",
+        "local_cache_hits": 0,
+        "total_cost_usd": "0.5946080",
+        "unknown_cost_attempts": 0
+      },
+      "composition": {
+        "advisory_alerts": 55,
+        "articles": 100,
+        "blocking_alerts": 0,
+        "entities": 237,
+        "ready_for_scoring": true,
+        "reviewed_articles": 12
+      },
+      "replica": 2,
+      "reviews": [
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:STT"
+          ],
+          "id": "N012",
+          "known_cost_usd": "0.0290249",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0290249",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:WBD"
+          ],
+          "id": "N013",
+          "known_cost_usd": "0.0052618",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0052618",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:SBUX"
+          ],
+          "id": "N038",
+          "known_cost_usd": "0.0070918",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0070918",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:BLK"
+          ],
+          "id": "N043",
+          "known_cost_usd": "0.0294849",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0294849",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:CMCSA"
+          ],
+          "id": "N047",
+          "known_cost_usd": "0.0063896",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0063896",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:STT"
+          ],
+          "id": "N049",
+          "known_cost_usd": "0.0307034",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0307034",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:MSFT"
+          ],
+          "id": "N058",
+          "known_cost_usd": "0.0049108",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0049108",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:JPM"
+          ],
+          "id": "N070",
+          "known_cost_usd": "0.005985",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.005985",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:BLK"
+          ],
+          "id": "N076",
+          "known_cost_usd": "0.005567",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.005567",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:CMCSA"
+          ],
+          "id": "N082",
+          "known_cost_usd": "0.0326434",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0326434",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:GOOGL",
+            "missing:IVZ"
+          ],
+          "id": "N091",
+          "known_cost_usd": "0.0309359",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0309359",
+          "unknown_cost_attempts": 0
+        },
+        {
+          "api_calls": 1,
+          "blocking_before": [
+            "missing:SPGI"
+          ],
+          "id": "N092",
+          "known_cost_usd": "0.0056458",
+          "local_cache_hits": 0,
+          "mode": "entity-review-v2-targeted-additions-only",
+          "status": "applied",
+          "total_cost_usd": "0.0056458",
+          "unknown_cost_attempts": 0
+        }
+      ]
+    }
+  ],
+  "passes": 3,
+  "pipeline_version": "end-to-end-v2",
+  "prompt_version": "entity-sentiment-v6-roles",
+  "schema_version": 1,
+  "status": "completed",
+  "vote": {
+    "dropped_minority": 6,
+    "label_tie": 0,
+    "majority": 9,
+    "unanimous": 224
+  }
+}

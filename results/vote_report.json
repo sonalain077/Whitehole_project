@@ -1,0 +1,2642 @@
+{
+  "counts": {
+    "dropped_minority": 6,
+    "label_tie": 0,
+    "majority": 9,
+    "unanimous": 224
+  },
+  "pairs": [
+    {
+      "agreement": "unanimous",
+      "id": "N001",
+      "label": "negative",
+      "ticker": "FIS",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N001",
+      "label": "negative",
+      "ticker": "FISV",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N001",
+      "label": "neutral",
+      "ticker": "MS",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N001",
+      "label": "neutral",
+      "ticker": "WFC",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N002",
+      "label": "positive",
+      "ticker": "COIN",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N002",
+      "label": "neutral",
+      "ticker": "GS",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N002",
+      "label": "positive",
+      "ticker": "XYZ",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N003",
+      "label": "negative",
+      "ticker": "F",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N003",
+      "label": "negative",
+      "ticker": "TSLA",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N004",
+      "label": "positive",
+      "ticker": "COIN",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N004",
+      "label": "neutral",
+      "ticker": "GS",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N004",
+      "label": "positive",
+      "ticker": "HOOD",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N005",
+      "label": "positive",
+      "ticker": "DAL",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N005",
+      "label": "positive",
+      "ticker": "UAL",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N007",
+      "label": "negative",
+      "ticker": "TMUS",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N008",
+      "label": "positive",
+      "ticker": "CMG",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N009",
+      "label": "negative",
+      "ticker": "HOOD",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N010",
+      "label": "positive",
+      "ticker": "CAT",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "dropped_minority",
+      "id": "N010",
+      "label": "absent",
+      "ticker": "CRWD",
+      "votes": [
+        "absent",
+        "neutral",
+        "absent"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N011",
+      "label": "negative",
+      "ticker": "EIX",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N012",
+      "label": "neutral",
+      "ticker": "CAT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N012",
+      "label": "positive",
+      "ticker": "DE",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N012",
+      "label": "neutral",
+      "ticker": "STT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N013",
+      "label": "negative",
+      "ticker": "AMZN",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N013",
+      "label": "neutral",
+      "ticker": "NWSA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N013",
+      "label": "neutral",
+      "ticker": "WBD",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N015",
+      "label": "negative",
+      "ticker": "CHTR",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N017",
+      "label": "negative",
+      "ticker": "DVA",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N018",
+      "label": "negative",
+      "ticker": "MCD",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "majority",
+      "id": "N020",
+      "label": "neutral",
+      "ticker": "PCG",
+      "votes": [
+        "neutral",
+        "neutral",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N021",
+      "label": "positive",
+      "ticker": "COP",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N021",
+      "label": "positive",
+      "ticker": "PFE",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N021",
+      "label": "neutral",
+      "ticker": "TFC",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N022",
+      "label": "positive",
+      "ticker": "ULTA",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N023",
+      "label": "positive",
+      "ticker": "TSLA",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "dropped_minority",
+      "id": "N023",
+      "label": "absent",
+      "ticker": "XYZ",
+      "votes": [
+        "neutral",
+        "absent",
+        "absent"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N024",
+      "label": "neutral",
+      "ticker": "CVX",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N024",
+      "label": "positive",
+      "ticker": "D",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N024",
+      "label": "positive",
+      "ticker": "NEE",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N024",
+      "label": "neutral",
+      "ticker": "XOM",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N025",
+      "label": "negative",
+      "ticker": "COIN",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N025",
+      "label": "neutral",
+      "ticker": "GS",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "majority",
+      "id": "N026",
+      "label": "negative",
+      "ticker": "INTC",
+      "votes": [
+        "negative",
+        "negative",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N027",
+      "label": "neutral",
+      "ticker": "GOOGL",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N027",
+      "label": "negative",
+      "ticker": "TSLA",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N028",
+      "label": "neutral",
+      "ticker": "AMZN",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N028",
+      "label": "neutral",
+      "ticker": "HD",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N028",
+      "label": "positive",
+      "ticker": "WMT",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N029",
+      "label": "neutral",
+      "ticker": "MSFT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N030",
+      "label": "neutral",
+      "ticker": "CMCSA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N030",
+      "label": "positive",
+      "ticker": "WMT",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N031",
+      "label": "neutral",
+      "ticker": "BA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N031",
+      "label": "positive",
+      "ticker": "GE",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N031",
+      "label": "neutral",
+      "ticker": "HON",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N031",
+      "label": "neutral",
+      "ticker": "LMT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N031",
+      "label": "neutral",
+      "ticker": "RTX",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N033",
+      "label": "negative",
+      "ticker": "DECK",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N033",
+      "label": "negative",
+      "ticker": "LULU",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N033",
+      "label": "negative",
+      "ticker": "NKE",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N033",
+      "label": "neutral",
+      "ticker": "ULTA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N034",
+      "label": "neutral",
+      "ticker": "C",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N034",
+      "label": "neutral",
+      "ticker": "CME",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N034",
+      "label": "negative",
+      "ticker": "LOW",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N034",
+      "label": "negative",
+      "ticker": "LULU",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N035",
+      "label": "positive",
+      "ticker": "CBRE",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N035",
+      "label": "positive",
+      "ticker": "JPM",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N035",
+      "label": "neutral",
+      "ticker": "TFC",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N036",
+      "label": "negative",
+      "ticker": "SYK",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N036",
+      "label": "neutral",
+      "ticker": "WFC",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N037",
+      "label": "positive",
+      "ticker": "DECK",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N037",
+      "label": "neutral",
+      "ticker": "MS",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N037",
+      "label": "negative",
+      "ticker": "NKE",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N038",
+      "label": "neutral",
+      "ticker": "BAC",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "dropped_minority",
+      "id": "N038",
+      "label": "absent",
+      "ticker": "GM",
+      "votes": [
+        "absent",
+        "absent",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N038",
+      "label": "neutral",
+      "ticker": "SBUX",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N038",
+      "label": "neutral",
+      "ticker": "WFC",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "majority",
+      "id": "N039",
+      "label": "negative",
+      "ticker": "ADBE",
+      "votes": [
+        "neutral",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N039",
+      "label": "neutral",
+      "ticker": "ADSK",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N039",
+      "label": "neutral",
+      "ticker": "CRM",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N040",
+      "label": "positive",
+      "ticker": "EW",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N040",
+      "label": "positive",
+      "ticker": "MDT",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N042",
+      "label": "neutral",
+      "ticker": "AMZN",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N042",
+      "label": "negative",
+      "ticker": "EBAY",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N042",
+      "label": "positive",
+      "ticker": "WMT",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N043",
+      "label": "negative",
+      "ticker": "AMD",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N043",
+      "label": "neutral",
+      "ticker": "BLK",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N043",
+      "label": "negative",
+      "ticker": "INTC",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N043",
+      "label": "negative",
+      "ticker": "MU",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N043",
+      "label": "negative",
+      "ticker": "SNDK",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N044",
+      "label": "positive",
+      "ticker": "CEG",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N045",
+      "label": "positive",
+      "ticker": "D",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N045",
+      "label": "positive",
+      "ticker": "NEE",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N046",
+      "label": "positive",
+      "ticker": "LH",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N047",
+      "label": "negative",
+      "ticker": "BAC",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N047",
+      "label": "positive",
+      "ticker": "C",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N047",
+      "label": "neutral",
+      "ticker": "CMCSA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N047",
+      "label": "neutral",
+      "ticker": "GS",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N047",
+      "label": "neutral",
+      "ticker": "MS",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "majority",
+      "id": "N048",
+      "label": "negative",
+      "ticker": "AMZN",
+      "votes": [
+        "negative",
+        "neutral",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N048",
+      "label": "neutral",
+      "ticker": "BA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N048",
+      "label": "neutral",
+      "ticker": "CMCSA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N048",
+      "label": "neutral",
+      "ticker": "PSKY",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "majority",
+      "id": "N049",
+      "label": "negative",
+      "ticker": "CCL",
+      "votes": [
+        "negative",
+        "neutral",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N049",
+      "label": "negative",
+      "ticker": "NCLH",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "majority",
+      "id": "N049",
+      "label": "positive",
+      "ticker": "RCL",
+      "votes": [
+        "negative",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N049",
+      "label": "neutral",
+      "ticker": "STT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N049",
+      "label": "neutral",
+      "ticker": "WFC",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N050",
+      "label": "positive",
+      "ticker": "NOW",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N051",
+      "label": "neutral",
+      "ticker": "BBY",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "dropped_minority",
+      "id": "N051",
+      "label": "absent",
+      "ticker": "MCO",
+      "votes": [
+        "absent",
+        "absent",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N051",
+      "label": "neutral",
+      "ticker": "NWSA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N051",
+      "label": "negative",
+      "ticker": "SPG",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "majority",
+      "id": "N051",
+      "label": "neutral",
+      "ticker": "TJX",
+      "votes": [
+        "neutral",
+        "absent",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N052",
+      "label": "negative",
+      "ticker": "COIN",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N053",
+      "label": "positive",
+      "ticker": "FDX",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N054",
+      "label": "neutral",
+      "ticker": "DAL",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N054",
+      "label": "neutral",
+      "ticker": "HD",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N054",
+      "label": "neutral",
+      "ticker": "KO",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N054",
+      "label": "neutral",
+      "ticker": "UPS",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N055",
+      "label": "positive",
+      "ticker": "CCL",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N055",
+      "label": "neutral",
+      "ticker": "NCLH",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N055",
+      "label": "neutral",
+      "ticker": "RCL",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N056",
+      "label": "positive",
+      "ticker": "CVX",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N056",
+      "label": "neutral",
+      "ticker": "GS",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N056",
+      "label": "neutral",
+      "ticker": "MSFT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N057",
+      "label": "neutral",
+      "ticker": "ABT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N057",
+      "label": "negative",
+      "ticker": "BSX",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N057",
+      "label": "neutral",
+      "ticker": "C",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N058",
+      "label": "neutral",
+      "ticker": "MSFT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N058",
+      "label": "positive",
+      "ticker": "TTWO",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N059",
+      "label": "positive",
+      "ticker": "DAL",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N059",
+      "label": "positive",
+      "ticker": "LUV",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N059",
+      "label": "positive",
+      "ticker": "UAL",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N060",
+      "label": "negative",
+      "ticker": "MA",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N060",
+      "label": "negative",
+      "ticker": "V",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N061",
+      "label": "neutral",
+      "ticker": "CMCSA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N061",
+      "label": "negative",
+      "ticker": "ORCL",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N062",
+      "label": "neutral",
+      "ticker": "AAPL",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N062",
+      "label": "neutral",
+      "ticker": "JPM",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N062",
+      "label": "negative",
+      "ticker": "NKE",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N063",
+      "label": "neutral",
+      "ticker": "AAPL",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N063",
+      "label": "neutral",
+      "ticker": "GOOGL",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N064",
+      "label": "neutral",
+      "ticker": "AAPL",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N064",
+      "label": "positive",
+      "ticker": "COIN",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N064",
+      "label": "neutral",
+      "ticker": "MSFT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N064",
+      "label": "neutral",
+      "ticker": "NVDA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N064",
+      "label": "neutral",
+      "ticker": "NWSA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N064",
+      "label": "neutral",
+      "ticker": "TSLA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "majority",
+      "id": "N066",
+      "label": "neutral",
+      "ticker": "NWSA",
+      "votes": [
+        "absent",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N066",
+      "label": "negative",
+      "ticker": "SCHW",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N067",
+      "label": "positive",
+      "ticker": "TSLA",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N069",
+      "label": "positive",
+      "ticker": "AMD",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N069",
+      "label": "neutral",
+      "ticker": "META",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N069",
+      "label": "neutral",
+      "ticker": "MSFT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N069",
+      "label": "neutral",
+      "ticker": "NVDA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N070",
+      "label": "positive",
+      "ticker": "JNJ",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N070",
+      "label": "neutral",
+      "ticker": "JPM",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N071",
+      "label": "positive",
+      "ticker": "C",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N071",
+      "label": "positive",
+      "ticker": "GS",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N071",
+      "label": "positive",
+      "ticker": "JPM",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N071",
+      "label": "positive",
+      "ticker": "MS",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N071",
+      "label": "neutral",
+      "ticker": "SPGI",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N071",
+      "label": "neutral",
+      "ticker": "TSLA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N072",
+      "label": "negative",
+      "ticker": "LH",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N073",
+      "label": "neutral",
+      "ticker": "TFC",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N073",
+      "label": "positive",
+      "ticker": "VRTX",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N074",
+      "label": "positive",
+      "ticker": "DAL",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N074",
+      "label": "positive",
+      "ticker": "UAL",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N075",
+      "label": "positive",
+      "ticker": "NVDA",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N076",
+      "label": "neutral",
+      "ticker": "BLK",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N076",
+      "label": "negative",
+      "ticker": "NVDA",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "majority",
+      "id": "N077",
+      "label": "neutral",
+      "ticker": "GOOGL",
+      "votes": [
+        "neutral",
+        "positive",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N077",
+      "label": "negative",
+      "ticker": "NFLX",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N077",
+      "label": "neutral",
+      "ticker": "NWSA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N078",
+      "label": "neutral",
+      "ticker": "MSFT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N078",
+      "label": "neutral",
+      "ticker": "PCAR",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N078",
+      "label": "neutral",
+      "ticker": "PEP",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N078",
+      "label": "positive",
+      "ticker": "TSLA",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N079",
+      "label": "negative",
+      "ticker": "TGT",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N081",
+      "label": "neutral",
+      "ticker": "AMZN",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N081",
+      "label": "neutral",
+      "ticker": "GOOGL",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N081",
+      "label": "neutral",
+      "ticker": "NFLX",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N081",
+      "label": "negative",
+      "ticker": "WBD",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N081",
+      "label": "neutral",
+      "ticker": "WFC",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N082",
+      "label": "neutral",
+      "ticker": "CMCSA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N082",
+      "label": "positive",
+      "ticker": "GOOGL",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N082",
+      "label": "negative",
+      "ticker": "NFLX",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N082",
+      "label": "neutral",
+      "ticker": "SPGI",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N082",
+      "label": "neutral",
+      "ticker": "WFC",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N083",
+      "label": "negative",
+      "ticker": "SBUX",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N083",
+      "label": "neutral",
+      "ticker": "TGT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N084",
+      "label": "neutral",
+      "ticker": "CMG",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N084",
+      "label": "neutral",
+      "ticker": "P",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N084",
+      "label": "negative",
+      "ticker": "PNR",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N085",
+      "label": "negative",
+      "ticker": "F",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N085",
+      "label": "positive",
+      "ticker": "GM",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N085",
+      "label": "neutral",
+      "ticker": "JPM",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N087",
+      "label": "neutral",
+      "ticker": "C",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N087",
+      "label": "negative",
+      "ticker": "CMCSA",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N087",
+      "label": "neutral",
+      "ticker": "KEY",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N087",
+      "label": "neutral",
+      "ticker": "STT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N087",
+      "label": "positive",
+      "ticker": "T",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N087",
+      "label": "positive",
+      "ticker": "VZ",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N088",
+      "label": "positive",
+      "ticker": "AKAM",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N088",
+      "label": "neutral",
+      "ticker": "JBL",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N089",
+      "label": "positive",
+      "ticker": "HUM",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N089",
+      "label": "neutral",
+      "ticker": "STT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N089",
+      "label": "neutral",
+      "ticker": "UNH",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N090",
+      "label": "positive",
+      "ticker": "PYPL",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N091",
+      "label": "neutral",
+      "ticker": "GOOGL",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N091",
+      "label": "neutral",
+      "ticker": "IVZ",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N091",
+      "label": "positive",
+      "ticker": "META",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N091",
+      "label": "neutral",
+      "ticker": "NFLX",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N091",
+      "label": "neutral",
+      "ticker": "RDDT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N092",
+      "label": "neutral",
+      "ticker": "BAC",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N092",
+      "label": "neutral",
+      "ticker": "MS",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N092",
+      "label": "negative",
+      "ticker": "NKE",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N092",
+      "label": "neutral",
+      "ticker": "SPGI",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N093",
+      "label": "neutral",
+      "ticker": "AKAM",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N093",
+      "label": "positive",
+      "ticker": "AMD",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N093",
+      "label": "neutral",
+      "ticker": "BAC",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N094",
+      "label": "negative",
+      "ticker": "META",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N095",
+      "label": "neutral",
+      "ticker": "AAPL",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N095",
+      "label": "positive",
+      "ticker": "QCOM",
+      "votes": [
+        "positive",
+        "positive",
+        "positive"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N097",
+      "label": "negative",
+      "ticker": "BA",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N097",
+      "label": "neutral",
+      "ticker": "BLK",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N097",
+      "label": "neutral",
+      "ticker": "GE",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N097",
+      "label": "neutral",
+      "ticker": "LMT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N097",
+      "label": "neutral",
+      "ticker": "NWSA",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N097",
+      "label": "neutral",
+      "ticker": "RTX",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N097",
+      "label": "neutral",
+      "ticker": "STT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N098",
+      "label": "neutral",
+      "ticker": "GS",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N098",
+      "label": "neutral",
+      "ticker": "JPM",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N098",
+      "label": "negative",
+      "ticker": "TSLA",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "dropped_minority",
+      "id": "N099",
+      "label": "absent",
+      "ticker": "BBY",
+      "votes": [
+        "absent",
+        "absent",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N099",
+      "label": "negative",
+      "ticker": "BX",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N099",
+      "label": "neutral",
+      "ticker": "HLT",
+      "votes": [
+        "neutral",
+        "neutral",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "dropped_minority",
+      "id": "N100",
+      "label": "absent",
+      "ticker": "RDDT",
+      "votes": [
+        "absent",
+        "absent",
+        "neutral"
+      ]
+    },
+    {
+      "agreement": "unanimous",
+      "id": "N100",
+      "label": "negative",
+      "ticker": "TSLA",
+      "votes": [
+        "negative",
+        "negative",
+        "negative"
+      ]
+    }
+  ],
+  "passes": 3,
+  "schema_version": 1,
+  "vote_version": "majority-vote-v1"
+}

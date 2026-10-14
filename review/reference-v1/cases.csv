@@ -1,0 +1,62 @@
+case,id,ticker,company,human_decision,human_notes
+R001,N001,MS,Morgan Stanley,neutral,agent; Morgan Stanley only cut a target on FIS: rating issuer
+R002,N010,CAT,Caterpillar Inc.,positive,"agent; debatable: feature piece; record revenue and AI demand, no new event"
+R003,N010,CRWD,CrowdStrike,absent,agent; TechCrunch is not CrowdStrike
+R004,N020,PCG,PG&E Corporation,negative,agent; debatable: capex deferral and strategic review driven by wildfire financing risk
+R005,N023,XYZ,Block Inc.,absent,agent; Stocktwits / X are not Block
+R006,N025,COIN,Coinbase,negative,agent; shares fell 4% on rate-hike fears
+R007,N026,INTC,Intel,negative,"agent; debatable: price target cut 15.6%, Neutral kept"
+R008,N028,AMZN,Amazon,neutral,agent; debatable: $640M refund cited as a size comparison to Walmart
+R009,N028,HD,Home Depot (The),neutral,agent; debatable: $750M refund cited as a size comparison to Walmart
+R010,N034,C,Citigroup,neutral,agent; Citi issues the rating
+R011,N036,SYK,Stryker Corporation,negative,"agent; supply disruption, slower sales, shares -9.7%"
+R012,N038,GM,General Motors,neutral,"agent; debatable: Cadillac Escalade owned by the fraudster: brand mention, no implication"
+R013,N039,ADBE,Adobe Inc.,negative,agent; debatable: central fact is the 12.9% post-results selloff; bull case is one analyst
+R014,N039,ADSK,Autodesk,neutral,agent; comparison
+R015,N039,CRM,Salesforce,neutral,agent; comparison
+R016,N043,BLK,BlackRock,neutral,agent; iShares ETF price move: brand mention only
+R017,N045,D,Dominion Energy,neutral,agent; debatable: concessions cost money but raise approval odds; no clear net direction
+R018,N047,GS,Goldman Sachs,negative,agent; debatable: same-day drop after BofA warns the whole IB market is down ~10%
+R019,N047,MS,Morgan Stanley,negative,agent; debatable: same-day drop after BofA warns the whole IB market is down ~10%
+R020,N048,AMZN,Amazon,neutral,agent; debatable: customer pausing a carrier; no stated consequence for Amazon
+R021,N049,CCL,Carnival Corporation,negative,"agent; price target cut, shares -2%"
+R022,N049,RCL,Royal Caribbean Group,neutral,agent; debatable: dips 2% but presented as the resilient one
+R023,N051,MCO,Moody's Corporation,absent,agent; Morningstar is not Moody's
+R024,N051,NWSA,News Corp (Class A),neutral,agent; WSJ cited as source
+R025,N051,TJX,TJX Companies,neutral,agent; TJ Maxx as mall tenant: location
+R026,N054,DAL,Delta Air Lines,neutral,agent; no disruption: location mention
+R027,N055,RCL,Royal Caribbean Group,positive,"agent; debatable: analyst calls any weakness a buying opportunity, better positioned"
+R028,N057,C,Citigroup,neutral,agent; Citi issues the rating
+R029,N058,MSFT,Microsoft,neutral,agent; Xbox platform mention
+R030,N058,TTWO,Take-Two Interactive,positive,"agent; debatable: launch date reaffirmed, revenue guidance and strong cash flow"
+R031,N059,UAL,United Airlines Holdings,positive,"agent; Buy kept, 2027 forecasts above consensus, $150 target"
+R032,N060,V,Visa Inc.,negative,agent; debatable: antitrust class action settled for $167.5M
+R033,N061,CMCSA,Comcast,neutral,agent; CNBC cited as source
+R034,N062,JPM,JPMorgan Chase,neutral,agent; JPMorgan analyst flags a hit to Nike
+R035,N062,NKE,"Nike, Inc.",negative,"agent; debatable: board addition praised, but declines and removal from S&P 100"
+R036,N064,MSFT,Microsoft,neutral,agent; underlying of planned futures contracts
+R037,N066,NWSA,News Corp (Class A),neutral,agent; Barron's cited as source
+R038,N067,TSLA,"Tesla, Inc.",positive,"agent; stock jumps, Roadster reservations open"
+R039,N069,AMD,Advanced Micro Devices,positive,"agent; $1T valuation, record results, new deals"
+R040,N069,NVDA,Nvidia,neutral,agent; historical return comparison
+R041,N070,JNJ,Johnson & Johnson,positive,agent; Phase III trial met its endpoints
+R042,N071,C,Citigroup,positive,agent; debatable: arranged a $6.8B listing: fee-earning business win
+R043,N071,JPM,JPMorgan Chase,positive,agent; debatable: arranged a $2.6B share sale: fee-earning business win
+R044,N077,GOOGL,Alphabet Inc. (Class A),neutral,agent; debatable: defensive tools against Netflix: no clear net direction
+R045,N078,PCAR,Paccar,neutral,"agent; debatable: Kenworth only named secondary OEM, no volume stated"
+R046,N078,TSLA,"Tesla, Inc.",positive,agent; won lead supplier role
+R047,N079,TGT,Target Corporation,negative,agent; debatable: critical piece on a failed-looking employee initiative; weak implication
+R048,N081,GOOGL,Alphabet Inc. (Class A),neutral,agent; ad partner mention
+R049,N087,C,Citigroup,neutral,agent; Citi analyst cut a target on Comcast: rating issuer
+R050,N087,KEY,KeyCorp,neutral,agent; KeyBanc issues the downgrade
+R051,N087,STT,State Street Corporation,neutral,agent; SPDR ETF move: brand mention only
+R052,N088,JBL,Jabil,positive,agent; new build request: business won by Jabil
+R053,N091,GOOGL,Alphabet Inc. (Class A),neutral,agent; small peer gains cited for comparison
+R054,N091,NFLX,Netflix,neutral,agent; small peer gains cited for comparison
+R055,N091,RDDT,Reddit,neutral,agent; small peer gains cited for comparison
+R056,N092,SPGI,S&P Global,neutral,agent; Visible Alpha cited as data source
+R057,N093,AMD,Advanced Micro Devices,positive,"agent; Buy kept, price target raised"
+R058,N094,META,Meta Platforms,negative,agent; jury verdict against Meta
+R059,N095,AAPL,Apple Inc.,neutral,"agent; counterparty, no stated benefit or harm"
+R060,N099,BBY,Best Buy,absent,agent; Bloomberg is not Best Buy
+R061,N100,RDDT,Reddit,absent,agent; Stocktwits is not Reddit
