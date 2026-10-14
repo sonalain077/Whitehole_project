@@ -839,6 +839,25 @@ scores recalculés avec un écart de 0,0, manifeste `completed` et
 partagées par toutes les versions. Les erreurs restantes de la version retenue
 portent surtout sur des cas limites (GS/MS N047, PCG N020, RCL N049/N055, JBL N088).
 
+## 2026-10-14 — publication du dépôt
+
+**Demande :** dépôt GitHub public, sans les données fournies, auteur « Son ».
+
+**Préparation :** `results/` contient les copies exactes des CSV et manifestes de
+`output/run-v6-vote3` (SHA-256 identiques au manifeste). Sont exclus par
+`.gitignore` : le PDF confidentiel, `news.json`, `sp500.csv` et les quatre fichiers
+de revue qui recopient le texte des articles. Les 8 tests qui lisent les données
+réelles sont ignorés, et signalés comme tels, quand elles sont absentes. Recherche
+de secrets et de chemins personnels avant commit : aucune valeur réelle trouvée.
+README : démarrage rapide en anglais, multi-plateforme. Auteur configuré dans le
+seul dépôt local, pas en global.
+
+**Vérification :** clone propre : 69 fichiers, aucun PDF, donnée ou `.env` ; code
+chargé depuis le clone ; 92 tests passent et 8 sont ignorés. Dans l'espace de
+travail avec les données : 100 tests passent. Push vers
+`https://github.com/sonalain077/Whitehole_project` ; le commit distant est
+identique au commit local.
+
 ## Format des entrées suivantes
 
 Pour chaque lot : objectif ; changements ; décisions et alternatives utiles ;
