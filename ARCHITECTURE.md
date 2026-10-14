@@ -1,102 +1,184 @@
 # Architecture
 
-## 1. Pipeline
+This page explains how the pipeline works (part 1) and how the project itself was built with
+two coding agents (part 2). Every step is labelled **code** (deterministic Python) or
+**model** (`gpt-5.6-terra`).
+
+## Part 1 — The pipeline
 
 ```mermaid
 flowchart TD
-    IN["news.json + sp500.csv"] --> LOAD["Strict loading and normalisation<br/>(code)"]
-    LOAD --> PASS["Pass 1, 2, 3 — independent samples"]
-    PASS --> LLM["Classify each article: company, role, label, exact quote<br/>(gpt-5.6-terra, strict JSON schema)"]
-    LLM --> VAL{"Valid?<br/>(code)"}
-    VAL -- "no: retry with the validator's reason" --> LLM
-    VAL -- yes --> ALERT{"Likely omission or<br/>false match? (code)"}
-    ALERT -- yes --> REV["Targeted review of that article<br/>(gpt-5.6-terra, constrained by code)"]
-    ALERT -- no --> COMP["Composition with provenance (code)"]
-    REV --> COMP
-    COMP --> VOTE["Majority vote across the 3 passes (code)"]
-    VOTE --> SCORE["Time-decay scoring (code)"]
-    SCORE --> OUT["entities.csv + scores.csv<br/>+ run_report.json (calls, tokens, cost)"]
+    A["1. Load and check the inputs<br/>(code)"] --> P
+    subgraph P["One pass, run 3 times independently"]
+        direction TB
+        B["2. Classify each article<br/>(model)"] --> C{"3. Is the answer valid?<br/>(code)"}
+        C -- "no: ask again, with the reason" --> B
+        C -- "yes" --> D{"4. Company missing<br/>or wrongly matched?<br/>(code)"}
+        D -- "yes" --> E["5. Targeted review<br/>(model, limited by code)"]
+        D -- "no" --> F["6. Result of the pass<br/>(code)"]
+        E --> F
+    end
+    P --> G["7. Majority vote over the 3 passes<br/>(code)"]
+    G --> H["8. Scores and CSV files<br/>(code)"]
 ```
 
-### What the code does, what the model does, and why
+The examples below are real cases from the delivered run.
 
-| Step | Owner | Why |
-| --- | --- | --- |
-| Reading, schemas, dates, Unicode, share classes | Code | Deterministic and testable |
-| Finding the companies, brand → parent, role, label | `gpt-5.6-terra` | Needs reading comprehension in context |
-| Neutral label for "rating issuer", "source", "comparison", "other mention" | Schema + model | The assignment defines these as neutral; the schema makes another label impossible |
-| Validation of every answer (universe, roles, exact quote, duplicates) | Code | A model answer is not trusted data |
-| Flagging likely omissions and false matches (`entity_aliases.json`) | Code | Cheap and reproducible; only triggers a review |
-| Vote, weights, sums, CSV writing | Code | Fixed formula, reproducible arithmetic |
-| Measuring accuracy | Second-model judge + user, scored by code | Structure does not prove a label is right |
+### 1. Load and check the inputs — code
 
-The model never computes the score, never sees other articles and has no tools.
+- **In:** `news.json` (100 articles) and `sp500.csv` (503 rows).
+- **What happens:** both files are checked strictly (missing fields, duplicate ids, bad dates,
+  malformed rows) and rejected with a clear error if invalid. Invisible characters are removed
+  from an in-memory copy: in N027 the name is written `Te<U+200B>sla` with a zero-width space. The two
+  share classes of the same company are merged (`GOOG` → `GOOGL`, `FOX` → `FOXA`, `NWS` → `NWSA`).
+- **Out:** 100 clean articles and a list of 500 companies. The original files are never modified.
 
-### Key design choices
+### 2. Classify each article — model
 
-- **Whole article + full company list per request**, no lexical prefilter: a prefilter
-  would lose brands and subsidiaries (Waymo, CNBC, iShares…).
-- **Roles before labels** (prompt `entity-sentiment-v6-roles`): most errors of earlier
-  prompts were on the border between "implication" and "mere mention" (a bank issuing a
-  downgrade labelled negative, a peer's small move labelled positive).
-- **Fail closed**: invalid answers are retried with a bounded number of attempts, never
-  replaced by `neutral`; a network error or unknown cost stops the run; reviews in
-  `additions-only` mode cannot remove or relabel anything.
-- **Three passes and a vote**: the three passes agree on 93.7 % of pairs; the vote removes
-  one-off mistakes and gives an agreement level per pair, for about 1.5 times the cost of one
-  pass (passes 2–3 reuse the provider's prompt cache).
-- **Everything traceable**: each run directory keeps every pass, review, vote and manifest
-  with input hashes; `results/` is a byte-identical copy of the delivered run.
+- **In:** one request per article with the instructions, the full list of 500 companies and the
+  article (headline, body, date).
+- **What happens:** the model lists every company of the list that the article mentions,
+  directly or through a brand (YouTube → Alphabet, The Wall Street Journal → News Corp). For each
+  one it gives a **role**, a **label** and an **exact quote** from the article.
+- **Out**, for N001 *"Fidelity National Information Services Shares Fall After Wells Fargo Downgrade"*:
 
-### Modules (`src/aie2609/`)
+  | Ticker | Role | Label | Quote (shortened) |
+  | --- | --- | --- | --- |
+  | FIS | subject | negative | "FIS reduced its Capital Markets segment revenue growth forecast…" |
+  | FISV | affected_peer | negative | "peer Fiserv encountering its own guidance challenges…" |
+  | WFC | rating_issuer | neutral | "Wells Fargo downgraded the financial technology company…" |
+  | MS | rating_issuer | neutral | "UBS, Barclays, Morgan Stanley … reduced their price targets" |
 
-| Module | Responsibility |
+- **Why roles:** the assignment says the bank issuing a rating, a media source, a customer, a
+  location or a size comparison are *neutral*. The role says why a company is named, and the
+  answer format only allows `neutral` for those roles: Wells Fargo cannot be labelled negative
+  just because it wrote a downgrade.
+
+### 3. Is the answer valid? — code
+
+- **What happens:** the answer must follow the exact format; every ticker must be in the list;
+  every quote must appear word for word in the article; no company twice; no non-neutral label
+  for a neutral role.
+- **If not:** the model is asked again, with the exact reason of the rejection (at most 3
+  attempts). Example: in N064 the model paraphrased a quote; the second attempt, told that the
+  quote was not exact, succeeded. An error is never replaced by `neutral`.
+
+### 4. Company missing or wrongly matched? — code
+
+- **What happens:** the code searches the article for names it can recognise reliably: company
+  names from the CSV and a short list of brands and publications found in the data
+  (`entity_aliases.json`: CNN → WBD, Wall Street Journal → NWSA, iShares → BLK…). It also knows
+  a few false matches to forbid (the social network "X" is not Block, ticker XYZ).
+- **Examples:** N013 mentions CNN but the model did not list Warner Bros. Discovery → flagged.
+  In N100 the model linked "X" to Block → flagged.
+- **Why:** the code is good at spotting a name, not at judging its implication. It never adds or
+  changes anything itself; it only sends the article to step 5.
+
+### 5. Targeted review — model, limited by code
+
+- **In:** the flagged article, the model's first answer and the alert.
+- **What happens:** the model reviews only that article. For a missing company it runs in
+  "additions only" mode: the code rejects any answer that removes a company or changes an
+  existing label. For a forbidden match it may remove the wrong company.
+- **Examples:** N013 → WBD added as `neutral` (CNN is only a source). N100 → XYZ removed.
+  Between 11 and 15 of the 100 articles needed a review in each pass.
+
+### 6. Result of the pass — code
+
+The 100 final answers of the pass are assembled, recording for each article whether it comes
+from step 2 or from a review. A remaining alert is kept and reported, never hidden.
+
+### Why 3 passes?
+
+The model is not fully deterministic: on a borderline case it may answer `neutral` once and
+`negative` the next time. Steps 2 to 6 therefore run three times, each pass starting from
+scratch (each has its own cache entry). The three passes agreed on 93.7 % of the
+article/company pairs.
+
+### 7. Majority vote over the 3 passes — code
+
+For each article/company pair, the answer given by at least 2 of the 3 passes is kept.
+
+| Example | Pass 1 | Pass 2 | Pass 3 | Kept |
+| --- | --- | --- | --- | --- |
+| PCG in N020 | neutral | neutral | negative | neutral |
+| INTC in N026 | negative | negative | neutral | negative |
+| BBY in N099 ("Bloomberg" mistaken for Best Buy) | — | — | neutral | removed |
+
+On the 100 articles: 224 pairs unanimous, 9 decided 2 to 1, 6 pairs seen by a single pass removed.
+
+### 8. Scores and CSV files — code
+
+- Each article gets a weight that halves every 7 days before 29 September 2026, 00:00 New York
+  time. N001 was published 34.7 days earlier, so its weight is 0.5^(34.7/7) ≈ 0.032.
+- Each label counts +1, 0 or −1, multiplied by that weight: FIS gets −0.032 from N001, Wells
+  Fargo 0.
+- A ticker's score is the sum over all its articles.
+- **Out:** `entities.csv` (one row per article/company), `scores.csv` (one row per ticker) and
+  `run_report.json` (what happened in each pass, calls, tokens, cost). Everything goes into a
+  new folder `output/run-<timestamp>/`, so no run ever overwrites another.
+
+### Code or model, and why
+
+| Done by code | Done by the model |
 | --- | --- |
-| `cli.py` | Subcommands (`run`, `usage`, `audit`, diagnosis and review tools) |
-| `ingestion.py`, `normalization.py`, `dates.py`, `audit.py` | Strict loading, U+200B removal on a copy, New York time |
-| `classification.py` | Prompt, JSON schema, `validate_entities` |
-| `llm.py` | Minimal HTTPS client (standard library), no redirects, no fallback model |
-| `runner.py` | Cache, bounded retries with validator feedback, budget, checkpoints |
-| `review.py`, `composition.py`, `entity_aliases.json` | Coverage alerts, targeted review, composition |
-| `pipeline.py` | The `run` command: passes, vote, export, run report |
-| `scoring.py` | Time-decay formula and CSV export |
-| `usage.py` | Prices, token accounting, budget, usage summary |
-| `reference.py`, `evaluation.py` | Accuracy reference and per-version scoring |
+| Reading and checking files, dates, share classes | Understanding which companies an article is about |
+| Checking every answer, asking again if invalid | Mapping brands to their parent company |
+| Spotting likely missing or wrong companies | Choosing each company's role and label |
+| Majority vote, weights, sums, CSV files, cost tracking | Reviewing a flagged article |
+
+The model never computes a score, never sees other articles and has no tools. Every step in
+code is covered by offline tests with a fake model.
+
+### Where it lives (`src/aie2609/`)
+
+| Step | Module |
+| --- | --- |
+| 1 | `ingestion.py`, `normalization.py`, `dates.py` |
+| 2–3 | `classification.py` (prompt, format, validation), `llm.py` (API client), `runner.py` (retries, cache, budget) |
+| 4–6 | `review.py`, `composition.py`, `entity_aliases.json` |
+| 3 passes, 7 | `pipeline.py` (the `run` command) |
+| 8 | `scoring.py`; costs in `usage.py` |
+| Accuracy measurement | `reference.py` |
 
 ### Cost
 
-Measured per attempt from the API's own token counts, priced at 2 / 0.20 / 2.50 / 12 USD per
-million tokens (input / cache read / cache write / output, checked 12 October). One cold pass
-costs **0.030 USD per article**, 86 % of it writing the ~14k-token common prefix to the
-provider cache; passes 2–3 read it back for ~0.006 USD per article. A budget is reserved
-before each call and the run stops before exceeding `--max-cost-usd`.
+Each call is priced from the token counts returned by the API. One pass costs about
+**0.030 USD per article**: most of it is the ~14,000-token part common to every request (the
+instructions and the 500 companies). Passes 2 and 3 reuse that part from OpenAI's cache and cost
+about 0.006 USD per article, so the delivered 3-pass run costs about 0.045 USD per article. A
+budget is reserved before every call and the run stops before exceeding `--max-cost-usd`.
 
-## 2. How the project was built
+## Part 2 — How the project was built
 
 ```mermaid
 flowchart LR
-    PDF["Assignment PDF"] --> RULES["AGENTS.md<br/>rules for the agent"]
-    RULES --> CODEX["Codex builds batches 0–4<br/>tests + WORK_LOG"]
-    CODEX --> AUDIT["Claude Code, fresh context<br/>audits Codex's work"]
-    AUDIT --> FIX["Fixes: end-to-end run,<br/>prompt v6 roles, vote, usage"]
-    FIX --> RUNS["Paid runs on<br/>the 100 articles"]
-    RUNS --> JUDGE["Claude as second-model judge<br/>blind reference + user review"]
-    JUDGE --> PICK["Delivered version chosen<br/>by measured accuracy"]
-    USER(("User")) -. "budget, publication,<br/>final decisions" .-> RUNS
-    USER -.-> PICK
+    A["1. Assignment PDF"] --> B["2. AGENTS.md<br/>rules for the agent"]
+    B --> C["3. Codex builds<br/>the pipeline"]
+    C --> D["4. Claude Code<br/>audits it"]
+    D --> E["5. Fixes and<br/>paid runs"]
+    E --> F["6. Accuracy<br/>measurement"]
+    F --> G["7. Delivered version"]
+    U(("User")) -. "budget and decisions" .-> E
+    U -.-> G
 ```
 
-1. **Rules first.** The user gave Codex its rules in `AGENTS.md`, derived from the PDF:
-   business constraints, model and budget rules, a batch loop with tests and a dated log
-   entry for every step.
-2. **Build with Codex** (12–13 October): ingestion, classification client, validation,
-   cache, budget, review, composition and scoring, each batch tested offline and logged.
-3. **Audit with Claude Code** (14 October), deliberately a different agent with a fresh
-   context, like an LLM-as-judge over the first agent's work. It found that the evaluators
-   could not run the pipeline in one command and that the submitted CSV files could not be
-   reproduced by the code; `CLAUDE.md` records that role.
-4. **Fix and measure.** End-to-end `run`, usage reporting, prompt v6 with roles, three passes
-   with a vote; then every version was scored on a blind reference that Claude adjudicated
-   as a second model and the user reviewed. The best measured version was delivered.
-
-The full trace (commands, costs, failures, decisions) is in [`docs/WORK_LOG.md`](docs/WORK_LOG.md).
+1. **Assignment PDF** — the single source of requirements.
+2. **AGENTS.md** — the user turned the PDF into rules for the coding agent: what is allowed
+   (only the two input files, only `gpt-5.6-terra`, no manual edit of results), how to handle the
+   key and the budget, and a working loop where every step ends with tests and a dated entry in
+   [`docs/WORK_LOG.md`](docs/WORK_LOG.md).
+3. **Codex builds the pipeline** (12–13 October) in small batches: input checks, model client,
+   answer validation, cache and budget, reviews, scoring, first full runs.
+4. **Claude Code audits it** (14 October). A different agent, starting from a fresh context, was
+   used deliberately as a second opinion on the first agent's work, much like an LLM-as-judge. Its
+   audit found that the evaluators could not run the pipeline with one command and that the
+   submitted CSV files could not be reproduced by the code. Its rules are in [`CLAUDE.md`](CLAUDE.md),
+   which reuses `AGENTS.md`.
+5. **Fixes and paid runs** — the one-command `run`, cost reporting, the roles in the prompt and
+   the 3-pass vote, each tested offline, then run on the 100 articles within a budget set by the user.
+6. **Accuracy measurement** — every version was compared on all the cases where versions
+   disagree plus random checks; Claude judged those cases as a second model, the user reviewed the
+   debatable ones ([`review/reference-v1`](review/reference-v1/README.md)).
+7. **Delivered version** — the one with the best measured accuracy (0.933), copied to
+   [`results/`](results/README.md).
