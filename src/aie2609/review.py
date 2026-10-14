@@ -203,6 +203,8 @@ def build_review_request(article: Article, universe: Universe, initial: list[dic
 
 class ReviewClassifier(Classifier):
     prompt_version = REVIEW_VERSION
+    log_label = "review"
+    log_each_article = False  # the pipeline logs one summary line per review
 
     def __init__(self, *args, initial: dict[str, list[dict]],
                  additions_only: bool = False, **kwargs):

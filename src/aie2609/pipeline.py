@@ -16,7 +16,7 @@ from .composition import compose_classifications, quality_alerts
 from .errors import ClassificationError, RunError
 from .models import Article, Universe
 from .review import ALIAS_CONFIG_PATH, ReviewClassifier, load_initial
-from .runner import Classifier, Client, write_json
+from .runner import LOG, Classifier, Client, write_json
 from .scoring import export_scores
 from .usage import summarize_usage
 
@@ -106,10 +106,11 @@ class Pipeline:
         return remaining
 
     def _classify(self, articles: list[Article], output: Path, sources: list[Path],
-                  step: str, replica: int) -> dict:
+                  step: str, replica: int, label: str) -> dict:
         classifier = Classifier(self.client, self.universe, self.cache_root / "classifications",
                                 self._remaining(), max_attempts=self.max_attempts,
                                 max_output_tokens=self.max_output_tokens, replica=replica)
+        classifier.log_label = label + " classify"
         try:
             self.reports[step] = classifier.run(articles, output, sources)
             return self.reports[step]
@@ -117,7 +118,7 @@ class Pipeline:
             self.committed += classifier.budget.committed
 
     def _review(self, article: Article, baseline: dict[str, list[dict]], blocking: list[str],
-                output: Path, sources: list[Path], step: str, replica: int) -> dict:
+                output: Path, sources: list[Path], step: str, replica: int, label: str) -> dict:
         # A missing source only needs additions; a forbidden alias needs a review that may remove it.
         additions_only = not any(alert.startswith("forbidden_alias:") for alert in blocking)
         reviewer = ReviewClassifier(self.client, self.universe, self.cache_root / "reviews",
@@ -125,6 +126,7 @@ class Pipeline:
                                     additions_only=additions_only,
                                     max_attempts=self.max_attempts,
                                     max_output_tokens=self.max_output_tokens, replica=replica)
+        reviewer.log_label = label + " review"
         row = {"id": article.id, "mode": reviewer.prompt_version, "blocking_before": blocking}
         try:
             usage = reviewer.run([article], output, sources)
@@ -132,6 +134,7 @@ class Pipeline:
             # The validated first-pass result is kept; its alerts stay visible downstream.
             self.reports[step] = reviewer.usage_report(1, 0)
             row.update(status="rejected", reason=str(exc), **_usage(self.reports[step]))
+            LOG.warning("%s review %s: rejected, first-pass result kept", label, article.id)
             return row
         finally:
             self.committed += reviewer.budget.committed
@@ -141,25 +144,30 @@ class Pipeline:
         row.update(status="rejected" if unresolved else "applied", **_usage(usage))
         if unresolved:
             row["reason"] = "Review left reliable coverage hints unresolved: " + ", ".join(unresolved)
+        change = changes["articles"][0]
+        LOG.info("%s review %s (%s): %s, added %s, removed %s", label, article.id,
+                 ", ".join(blocking), row["status"], change["added"] or "none",
+                 change["removed"] or "none")
         return row
 
     def _pass(self, articles: list[Article], base: Path, sources: list[Path],
-              prefix: str, replica: int) -> dict:
+              prefix: str, replica: int, label: str) -> dict:
         """One classification + targeted reviews + composition; returns its report."""
+        LOG.info("%s: classifying %d articles", label, len(articles))
         result: dict = {"replica": replica}
         classification = self._classify(articles, base / "classify", sources,
-                                        prefix + "classify", replica)
+                                        prefix + "classify", replica, label)
         result["classification"] = _usage(classification)
         baseline_path = base / "classify" / "classifications.json"
         baseline = load_initial(baseline_path, articles, self.universe)
-        reviews = []
-        for article in sorted(articles, key=lambda item: item.id):
-            blocking = quality_alerts(article, baseline[article.id], self.universe)["blocking"]
-            if blocking:
-                reviews.append(self._review(
-                    article, baseline, blocking, base / "review" / article.id,
-                    [*sources, baseline_path, ALIAS_CONFIG_PATH],
-                    prefix + "review/" + article.id, replica))
+        flagged = [(article, alerts) for article in sorted(articles, key=lambda item: item.id)
+                   if (alerts := quality_alerts(article, baseline[article.id],
+                                                self.universe)["blocking"])]
+        LOG.info("%s: %d article(s) flagged for a targeted review", label, len(flagged))
+        reviews = [self._review(article, baseline, blocking, base / "review" / article.id,
+                                [*sources, baseline_path, ALIAS_CONFIG_PATH],
+                                prefix + "review/" + article.id, replica, label)
+                   for article, blocking in flagged]
         result["reviews"] = reviews
         composition = compose_classifications(
             articles=articles, universe=self.universe, baseline_path=baseline_path,
@@ -168,6 +176,8 @@ class Pipeline:
         result["composition"] = {"ready_for_scoring": composition["ready_for_scoring"],
                                  **{name: composition["counts"][name]
                                     for name in _COMPOSITION_FIELDS}}
+        LOG.info("%s: done, %d pairs, %d blocking alert(s)", label,
+                 composition["counts"]["entities"], composition["counts"]["blocking_alerts"])
         return result
 
     def _vote(self, articles: list[Article], output_dir: Path, passes: int) -> dict:
@@ -207,17 +217,21 @@ class Pipeline:
         try:
             sources = [news_path, universe_path]
             if passes == 1:
-                report.update(self._pass(articles, output_dir, sources, "", 0))
+                report.update(self._pass(articles, output_dir, sources, "", 0, "pass 1/1"))
             else:
                 report["pass_results"] = []
                 for index in range(passes):
                     step = f"pass-{index + 1}"
                     report["pass_results"].append(self._pass(
-                        articles, output_dir / step, sources, step + "/", index))
+                        articles, output_dir / step, sources, step + "/", index,
+                        f"pass {index + 1}/{passes}"))
                 step = "vote"
                 vote = self._vote(articles, output_dir, passes)
                 report["vote"] = vote["counts"]
                 report["composition"] = vote["composition"]
+                LOG.info("vote: %d unanimous, %d majority, %d tie(s), %d dropped",
+                         *(vote["counts"][name] for name in
+                           ("unanimous", "majority", "label_tie", "dropped_minority")))
 
             step = "export"
             final = output_dir / "final"
@@ -225,6 +239,8 @@ class Pipeline:
                                    composition_dir=output_dir / "compose", output_dir=final,
                                    news_path=news_path, universe_path=universe_path,
                                    allow_alerts=True)
+            LOG.info("export: %d rows in entities.csv, %d tickers in scores.csv",
+                     export["counts"]["entities"], export["counts"]["tickers"])
             report["outputs"] = {"entities_csv": str(final / "entities.csv"),
                                  "scores_csv": str(final / "scores.csv"), **export["counts"]}
             summary = summarize_usage(self.reports, len(articles))

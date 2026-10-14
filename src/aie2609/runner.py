@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 import os
 import time
 from decimal import Decimal
@@ -17,6 +18,9 @@ from .errors import ClassificationError, RunError
 from .llm import TransportError, response_text
 from .models import Article, Universe
 from .usage import Budget, Pricing, TokenUsage
+
+# Progress log: ids, steps, statuses and costs only, never article text or the key.
+LOG = logging.getLogger("aie2609")
 
 
 class Client(Protocol):
@@ -67,6 +71,8 @@ def preflight(articles: list[Article], universe: Universe, max_output_tokens: in
 
 class Classifier:
     prompt_version = PROMPT_VERSION
+    log_label = "classify"
+    log_each_article = True
 
     def request(self, article: Article) -> dict:
         return build_request(article, self.universe, self.max_output_tokens)
@@ -166,6 +172,7 @@ class Classifier:
                 checkpoint()
                 if exc.retryable and number < self.max_attempts:
                     # Unknown consumption remains reserved, never silently treated as free.
+                    LOG.warning("%s %s: rate limited, retrying", self.log_label, article.id)
                     time.sleep(min(2 ** (number - 1), 4))
                     continue
                 raise
@@ -197,6 +204,8 @@ class Classifier:
                 attempt["validation_error"] = str(exc)
                 checkpoint()
                 if number < self.max_attempts:
+                    LOG.warning("%s %s: answer rejected (%s); retrying with the reason",
+                                self.log_label, article.id, exc)
                     payload = with_validation_feedback(request, str(exc))
                     continue
                 raise ClassificationError(
@@ -244,9 +253,17 @@ class Classifier:
             write_json(output / "run_manifest.json", manifest)
             checkpoint()
             for article in articles:
+                calls, hits = len(self.attempts), self.cache_hits
                 entities = self.classify(article, checkpoint)
                 results.append({"id": article.id, "entities": entities})
                 checkpoint()
+                if self.log_each_article:
+                    source = ("local cache" if self.cache_hits > hits
+                              else f"{len(self.attempts) - calls} call(s)")
+                    LOG.info("%s %d/%d %s: %d companies (%s; %s USD this step)",
+                             self.log_label, len(results), len(articles), article.id,
+                             len(entities), source,
+                             self.usage_report(len(articles), len(results))["known_cost_usd"])
             for name, artifact in self.extra_artifacts(articles, results).items():
                 write_json(output / name, artifact)
             write_json(output / "classifications.json", {"schema_version": 1, "articles": results})

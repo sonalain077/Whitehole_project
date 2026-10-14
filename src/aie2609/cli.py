@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import sys
 from collections.abc import Sequence
 from datetime import UTC, datetime
@@ -137,6 +138,16 @@ def _print_human(report: dict[str, object]) -> None:
         print(f"- {issue['code']}{suffix}: {issue['message']}")
 
 
+def _show_progress() -> None:
+    """Print progress lines (time, step, article id, status, cost) to stderr during paid runs."""
+    logger = logging.getLogger("aie2609")
+    if not any(isinstance(handler, logging.StreamHandler) for handler in logger.handlers):
+        handler = logging.StreamHandler(sys.stderr)
+        handler.setFormatter(logging.Formatter("%(asctime)s  %(message)s", "%H:%M:%S"))
+        logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
+
+
 def _usage_steps(run_dir: Path) -> tuple[dict[str, dict], int]:
     """Read the usage.json files of a `run` directory, or of one single-step run."""
     single = run_dir / "usage.json"
@@ -189,6 +200,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 raise ValueError("A run requires --max-cost-usd; use --dry-run first.")
             output_dir = args.output_dir or Path("output") / f"run-{datetime.now(UTC):%Y%m%dT%H%M%SZ}"
             load_local_api_key()
+            _show_progress()
             pipeline = Pipeline(ResponsesClient(), universe, args.max_cost_usd,
                                 max_attempts=args.max_attempts,
                                 max_output_tokens=args.max_output_tokens)
@@ -266,6 +278,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             if args.max_cost_usd is None or args.output_dir is None:
                 raise ValueError("Review calls require --max-cost-usd and --output-dir; use --dry-run first.")
             load_local_api_key()
+            _show_progress()
             runner = ReviewClassifier(ResponsesClient(), universe, Path('.cache/reviews'),
                                       args.max_cost_usd, initial=initial,
                                       additions_only=args.additions_only,
@@ -303,6 +316,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             if args.max_cost_usd is None or args.output_dir is None:
                 raise ValueError("Actual calls require --max-cost-usd and --output-dir; use --dry-run first.")
             load_local_api_key()
+            _show_progress()
             classifier = Classifier(ResponsesClient(), universe, Path(".cache/classifications"),
                                     args.max_cost_usd, max_attempts=args.max_attempts,
                                     max_output_tokens=args.max_output_tokens)

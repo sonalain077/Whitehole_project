@@ -110,6 +110,16 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(main(["usage", "--run-dir", str(self.output)]), 0)
         self.assertIn("pass-2/review/T001", stream.getvalue())
 
+    def test_progress_is_logged_without_article_text(self):
+        with self.assertLogs("aie2609", level="INFO") as captured:
+            self.run_pipeline([api_response(APPLE_ONLY), api_response()])
+        text = "\n".join(captured.output)
+        self.assertIn("pass 1/1 classify 1/1 T001: 1 companies (1 call(s)", text)
+        self.assertIn("pass 1/1: 1 article(s) flagged for a targeted review", text)
+        self.assertIn("pass 1/1 review T001 (missing:JPM): applied, added ['JPM']", text)
+        self.assertIn("export: 2 rows in entities.csv, 2 tickers in scores.csv", text)
+        self.assertNotIn(sample_article().body, text)
+
     def test_existing_output_directory_is_refused_before_any_call(self):
         self.output.mkdir()
         with self.assertRaises(RunError):

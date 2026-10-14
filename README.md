@@ -24,8 +24,10 @@ python -m venv .venv                      # Windows: use .venv\Scripts\python.ex
 .venv/bin/python -m aie2609 run --max-cost-usd 10    # end to end, ~4.5 USD, ~25 min
 ```
 
-The run prints its status, the output paths, and calls, tokens and cost per article. The
-CSV files are in `output/run-<timestamp>/final/`. `aie2609 usage --run-dir <dir>` shows
+While it runs, one line per article and per step shows progress (pass, article id, number of
+companies, calls and cost so far; flagged articles and their review; vote; export). At the end
+it prints its status, the output paths, and calls, tokens and cost per article. The CSV files
+are in `output/run-<timestamp>/final/`. `aie2609 usage --run-dir <dir>` shows
 the same summary later; `aie2609 run --dry-run` previews the requests without a key.
 
 ## Results (submitted in [`results/`](results/README.md))

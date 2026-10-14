@@ -640,6 +640,30 @@ diagram of the pipeline and ends with a diagram of how the project was built wit
 agents. `IMPLEMENTATION_PLAN.md` reduced to the batch table (with the agent of each batch),
 the main decisions and the budget; the detailed history stays in this log.
 
+## 2026-10-14 — progress output during a run
+
+**Finding (user):** a full run printed nothing for about 25 minutes, only the final summary.
+
+**Done:** a progress log on stderr through the `aie2609` logger, enabled by the CLI for `run`,
+`classify` and `review`: one line per classified article (pass, position, id, number of
+companies, local cache or number of calls, cost of the step so far), the number of flagged
+articles, one line per targeted review (alerts, status, added and removed tickers), warnings
+for rejected answers and rate-limit retries, the vote counts and the export counts. Ids, steps,
+statuses and costs only, never article text or the key. The package installs a `NullHandler`, so
+tests and library use stay silent. **101 tests pass** (new test: progress lines present,
+article text absent).
+
+**Check:** `run --max-cost-usd 10 --output-dir output/log-demo` replayed from the local cache:
+404 progress lines, 337 cached answers and 2 real calls (0.0478937 USD). The pass-1 review of
+N066 had been rejected after three attempts in `run-v6-vote3`, so nothing was cached; this time
+it was accepted on its second attempt. The vote moved by one pair (225 unanimous, 8 majority)
+but `entities.csv` is identical to `results/entities.csv`.
+
+**Incident:** while preparing a clean clone for the user, a relative path resolved against the
+project instead of the clone, and the project's `.venv` was re-pointed to the clone's `src`. It
+was found when a new test could not see the new code, and fixed by reinstalling the project in
+editable mode; no file of the project was affected.
+
 ## Format of the next entries
 
 For each batch: goal; changes; decisions and useful alternatives; verification commands actually
