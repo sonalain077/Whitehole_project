@@ -19,8 +19,7 @@ exercise: no web app, server, database or multi-agent infrastructure.
 
 ```bash
 python -m venv .venv
-.venv/bin/python -m pip install --require-hashes -r build-requirements.lock -r requirements.lock
-.venv/bin/python -m pip install --no-deps --no-build-isolation -e .
+.venv/bin/python -m pip install -r requirements.txt     # tzdata + this project
 .venv/bin/python -m unittest discover -s tests      # must stay green, no network
 .venv/bin/python -m aie2609 audit                   # input checks, no API
 .venv/bin/python -m aie2609 run --dry-run           # preview requests, no key

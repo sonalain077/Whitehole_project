@@ -1,0 +1,4 @@
+# Only runtime dependency: time-zone data (Windows has no IANA database built in).
+tzdata==2026.5
+# Install this project itself (editable), so that `python -m aie2609` works.
+-e .
