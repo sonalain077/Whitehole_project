@@ -1,0 +1,56 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.aws/
+
+# Python environments and generated metadata
+.venv/
+venv/
+.tools/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local model responses, run artifacts, logs and scratch files
+.cache/
+output/
+outputs/
+tmp/
+*.log
+entities.csv
+scores.csv
+classifications.json
+run_manifest.json
+usage.json
+# Submitted copies of the retained run (see results/README.md)
+!results/entities.csv
+!results/scores.csv
+
+# Confidential assignment brief: never published
+AIE2609_Project.pdf
+
+# Supplied data are not published in this public repository: place your own copies
+# of news.json and sp500.csv in the root. Review files that quote article text stay local.
+/news.json
+/sp500.csv
+review/human-evaluation-v1/SAMPLE_GUIDE.md
+review/human-evaluation-v1/sample.csv
+review/human-evaluation-v1/disagreements.csv
+review/reference-v1/GUIDE.md
+
+# Machine-local agent/editor state
+.codex/
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store

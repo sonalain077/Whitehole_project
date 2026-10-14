@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools==82.0.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aie2609"
+version = "0.1.0"
+description = "Entity-level news sentiment pipeline for the supplied S&P 500 universe"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["tzdata==2026.5"]
+
+[project.scripts]
+aie2609 = "aie2609.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+aie2609 = ["entity_aliases.json"]

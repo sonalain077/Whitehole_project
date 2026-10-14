@@ -1,0 +1,6 @@
+* text=auto eol=lf
+
+# Preserve supplied source files byte for byte.
+news.json -text
+sp500.csv -text
+*.pdf binary
