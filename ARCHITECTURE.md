@@ -154,9 +154,9 @@ budget is reserved before every call and the run stops before exceeding `--max-c
 ```mermaid
 flowchart LR
     A["1. Assignment PDF"] --> B["2. AGENTS.md<br/>rules for the agent"]
-    B --> C["3. Codex builds<br/>the pipeline"]
-    C --> D["4. Claude Code<br/>audits it"]
-    D --> E["5. Fixes and<br/>paid runs"]
+    B --> C["3. Codex builds the pipeline<br/>and the first results"]
+    C --> D["4. Claude Code, fresh context<br/>audits Codex's work"]
+    D --> E["5. Claude Code<br/>finishes the work"]
     E --> F["6. Accuracy<br/>measurement"]
     F --> G["7. Delivered version"]
     U(("User")) -. "budget and decisions" .-> E
@@ -168,17 +168,20 @@ flowchart LR
    (only the two input files, only `gpt-5.6-terra`, no manual edit of results), how to handle the
    key and the budget, and a working loop where every step ends with tests and a dated entry in
    [`docs/WORK_LOG.md`](docs/WORK_LOG.md).
-3. **Codex builds the pipeline** (12–13 October) in small batches: input checks, model client,
-   answer validation, cache and budget, reviews, scoring, first full runs.
-4. **Claude Code audits it** (14 October). A different agent, starting from a fresh context, was
-   used deliberately as a second opinion on the first agent's work, much like an LLM-as-judge. Its
-   audit found that the evaluators could not run the pipeline with one command and that the
-   submitted CSV files could not be reproduced by the code. Its rules are in [`CLAUDE.md`](CLAUDE.md),
-   which reuses `AGENTS.md`.
-5. **Fixes and paid runs** — the one-command `run`, cost reporting, the roles in the prompt and
-   the 3-pass vote, each tested offline, then run on the 100 articles within a budget set by the user.
+3. **Codex builds the pipeline and produces the first results** (12–13 October), in small
+   batches: input checks, model client, answer validation, cache and budget, reviews, scoring,
+   then the first `entities.csv` and `scores.csv` on the 100 articles.
+4. **Claude Code takes over with a fresh context** (14 October). A different agent was chosen
+   deliberately to get an independent second opinion, much like an LLM-as-judge, since an agent
+   reviewing its own work shares its blind spots. Its audit of Codex's work found that the
+   evaluators could not run the pipeline with one command and that the first results could not
+   be reproduced by the code. Its rules are in [`CLAUDE.md`](CLAUDE.md), which reuses `AGENTS.md`.
+5. **Claude Code finishes the work** — the one-command `run`, cost reporting, the roles in the
+   prompt and the 3-pass vote, each tested offline, then run on the 100 articles within a budget
+   set by the user.
 6. **Accuracy measurement** — every version was compared on all the cases where versions
-   disagree plus random checks; Claude judged those cases as a second model, the user reviewed the
-   debatable ones ([`review/reference-v1`](review/reference-v1/README.md)).
+   disagree plus random checks. Here Claude acts as an LLM-as-judge in the strict sense: it judged
+   the model's outputs as a second model, and the user reviewed the debatable ones
+   ([`review/reference-v1`](review/reference-v1/README.md)).
 7. **Delivered version** — the one with the best measured accuracy (0.933), copied to
    [`results/`](results/README.md).
